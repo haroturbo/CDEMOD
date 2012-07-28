@@ -52,7 +52,7 @@ Partial Class error_window
         Me.list_load_error.Location = New System.Drawing.Point(3, 3)
         Me.list_load_error.MultiSelect = False
         Me.list_load_error.Name = "list_load_error"
-        Me.list_load_error.Size = New System.Drawing.Size(643, 104)
+        Me.list_load_error.Size = New System.Drawing.Size(643, 103)
         Me.list_load_error.TabIndex = 0
         Me.list_load_error.UseCompatibleStateImageBehavior = False
         Me.list_load_error.View = System.Windows.Forms.View.Details
@@ -96,10 +96,10 @@ Partial Class error_window
         'tab_load
         '
         Me.tab_load.Controls.Add(Me.list_load_error)
-        Me.tab_load.Location = New System.Drawing.Point(4, 21)
+        Me.tab_load.Location = New System.Drawing.Point(4, 22)
         Me.tab_load.Name = "tab_load"
         Me.tab_load.Padding = New System.Windows.Forms.Padding(3)
-        Me.tab_load.Size = New System.Drawing.Size(649, 110)
+        Me.tab_load.Size = New System.Drawing.Size(649, 109)
         Me.tab_load.TabIndex = 0
         Me.tab_load.Text = "読み込み時エラー"
         Me.tab_load.UseVisualStyleBackColor = True
@@ -107,10 +107,10 @@ Partial Class error_window
         'tab_save
         '
         Me.tab_save.Controls.Add(Me.list_save_error)
-        Me.tab_save.Location = New System.Drawing.Point(4, 21)
+        Me.tab_save.Location = New System.Drawing.Point(4, 22)
         Me.tab_save.Name = "tab_save"
         Me.tab_save.Padding = New System.Windows.Forms.Padding(3)
-        Me.tab_save.Size = New System.Drawing.Size(649, 110)
+        Me.tab_save.Size = New System.Drawing.Size(649, 109)
         Me.tab_save.TabIndex = 1
         Me.tab_save.Text = "保存時エラー"
         Me.tab_save.UseVisualStyleBackColor = True
@@ -125,29 +125,29 @@ Partial Class error_window
         Me.list_save_error.Location = New System.Drawing.Point(3, 3)
         Me.list_save_error.MultiSelect = False
         Me.list_save_error.Name = "list_save_error"
-        Me.list_save_error.Size = New System.Drawing.Size(643, 104)
+        Me.list_save_error.Size = New System.Drawing.Size(643, 103)
         Me.list_save_error.TabIndex = 0
         Me.list_save_error.UseCompatibleStateImageBehavior = False
         Me.list_save_error.View = System.Windows.Forms.View.Details
         '
         'scol_error
         '
-        Me.scol_error.Text = "Error #"
+        Me.scol_error.Text = "エラー #"
         Me.scol_error.Width = 62
         '
         'scol_game
         '
-        Me.scol_game.Text = "Game"
+        Me.scol_game.Text = "ゲーム"
         Me.scol_game.Width = 134
         '
         'scol_codetitle
         '
-        Me.scol_codetitle.Text = "Code Title"
+        Me.scol_codetitle.Text = "コード名"
         Me.scol_codetitle.Width = 167
         '
         'scol_reason
         '
-        Me.scol_reason.Text = "Save Error"
+        Me.scol_reason.Text = "保存エラー"
         Me.scol_reason.Width = 260
         '
         'error_window

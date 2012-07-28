@@ -42,6 +42,7 @@ Public Class load_db
             Dim skip As Boolean = False
             Dim NULLCODE As Boolean = False
             Dim cwcar As String = "_L"
+            Dim z As Integer = 0
             'Dim b4 As String = Nothing
 
             m.codetree.Nodes.Add(Path.GetFileNameWithoutExtension(filename)).ImageIndex = 0 ' Add the root node and set its icon
@@ -203,7 +204,7 @@ Public Class load_db
                                 skip = False
                                 cwcar = buffer(0).Substring(0, 3)
                                 If cwcar = "_M " Then
-                                    Dim z As Integer = Integer.Parse(code.ToString.Substring(0, 1))
+                                    z = Integer.Parse(code.ToString.Substring(0, 1))
                                     code.Remove(0, 1)
                                     'buffer(3) = buffer(3).Remove(0, 1)
                                     z = z And 1
@@ -211,7 +212,7 @@ Public Class load_db
                                     code.Insert(0, z.ToString())
                                     'buffer(3) = buffer(3).Insert(0, z.ToString())
                                 ElseIf cwcar = "_N " Then
-                                    Dim z As Integer = Integer.Parse(code.ToString.Substring(0, 1))
+                                    z = Integer.Parse(code.ToString.Substring(0, 1))
                                     code.Remove(0, 1)
 
                                     'buffer(3) = buffer(3).Remove(0, 1)
@@ -831,7 +832,7 @@ Public Class load_db
                         Loop
                         Array.Resize(gname, n)
                         Array.ConstrainedCopy(bs, i - n, gname, 0, n)
-                        str = System.Text.Encoding.GetEncoding(1201).GetString(gname)
+                        str = Encoding.GetEncoding(1201).GetString(gname)
                         n = 0
                         gnode = New TreeNode(str.Trim)
                         With gnode
@@ -851,7 +852,7 @@ Public Class load_db
                         s2 = Chr(Convert.ToInt32(str.Substring(2, 2), 16))
                         s3 = Chr(Convert.ToInt32(str.Substring(4, 2), 16))
                         s4 = Chr(Convert.ToInt32(str.Substring(6, 2), 16))
-                        s5 = str.Substring(8, 5)
+                        s5 = str.Substring(8, 8) 'str.Substring(8, 5)
                         sb.Append(s1)
                         sb.Append(s2)
                         sb.Append(s3)
@@ -897,8 +898,7 @@ Public Class load_db
                         sb.Append("0x")
                         sb.Append(str.Substring(0, 8))
                         sb.Append(" 0x")
-                        sb.Append(str.Substring(8, 8))
-                        sb.Append(vbCrLf)
+                        sb.AppendLine(str.Substring(8, 8))
                         b5 = sb.ToString
                         b6 &= b5
                         counts(1) += 1
@@ -1086,7 +1086,7 @@ Public Class load_db
                              ByVal game_t As String, ByVal code_t As String)
 
         Dim ew As error_window = error_window
-        If error_n - 1 > 0 AndAlso game_t <> "" AndAlso code_t <> "" Then
+        If error_n > 0 AndAlso game_t <> "" AndAlso code_t <> "" AndAlso error_t <> "" Then
             With ew.list_load_error
                 .Items.Add(error_n.ToString)
                 .Items(error_n - 1).SubItems.Add(line.ToString)
@@ -1201,6 +1201,11 @@ Public Class load_db
             '5B 43 50 39 33 36 5D
             If My.Settings.checkcpstr = True AndAlso cp(0) = &H5B Then
                 str = Encoding.GetEncoding(0).GetString(cp)
+
+                If My.Settings.autocp = True Then
+                    My.Settings.MSCODEPAGE = GetCode(cp)
+                End If
+
                 Dim r As New Regex("^\[.+\]", RegexOptions.ECMAScript)
                 Dim m As Match = r.Match(str)
                 If m.Success Then
@@ -1227,9 +1232,6 @@ Public Class load_db
                 End If
             End If
 
-            If My.Settings.autocp = True Then
-                My.Settings.MSCODEPAGE = GetCode(cp)
-            End If
         End If
 
         If cp(0) = &H0 AndAlso cp(1) = &H0 AndAlso cp(2) = &HFE AndAlso cp(3) = &HFF Then

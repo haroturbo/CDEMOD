@@ -220,7 +220,7 @@ Partial Class MERGE
         Me.treeopen.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.menu_file, Me.menu_sort, Me.codepage_select, Me.codetreeview, Me.browsecodesite, Me.EXE起動ToolStripMenuItem, Me.menu_options, Me.ヘルプHToolStripMenuItem})
         Me.treeopen.Location = New System.Drawing.Point(0, 0)
         Me.treeopen.Name = "treeopen"
-        Me.treeopen.Size = New System.Drawing.Size(775, 26)
+        Me.treeopen.Size = New System.Drawing.Size(779, 26)
         Me.treeopen.TabIndex = 0
         Me.treeopen.Text = "MenuStrip1"
         '
@@ -1167,9 +1167,9 @@ Partial Class MERGE
         Me.GID_tb.Font = New System.Drawing.Font("ＭＳ ゴシック", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.GID_tb.ImeMode = System.Windows.Forms.ImeMode.Alpha
         Me.GID_tb.Location = New System.Drawing.Point(321, 131)
-        Me.GID_tb.MaxLength = 10
+        Me.GID_tb.MaxLength = 13
         Me.GID_tb.Name = "GID_tb"
-        Me.GID_tb.Size = New System.Drawing.Size(73, 19)
+        Me.GID_tb.Size = New System.Drawing.Size(86, 19)
         Me.GID_tb.TabIndex = 3
         '
         'GT_tb
@@ -1183,7 +1183,7 @@ Partial Class MERGE
         Me.GT_tb.Location = New System.Drawing.Point(321, 95)
         Me.GT_tb.MaxLength = 72
         Me.GT_tb.Name = "GT_tb"
-        Me.GT_tb.Size = New System.Drawing.Size(451, 19)
+        Me.GT_tb.Size = New System.Drawing.Size(455, 19)
         Me.GT_tb.TabIndex = 2
         '
         'gtitle_lbl
@@ -1222,7 +1222,7 @@ Partial Class MERGE
         Me.CT_tb.Location = New System.Drawing.Point(321, 169)
         Me.CT_tb.MaxLength = 72
         Me.CT_tb.Name = "CT_tb"
-        Me.CT_tb.Size = New System.Drawing.Size(451, 19)
+        Me.CT_tb.Size = New System.Drawing.Size(455, 19)
         Me.CT_tb.TabIndex = 4
         '
         'codetitle_lbl
@@ -1299,7 +1299,7 @@ Partial Class MERGE
         Me.cmt_tb.Multiline = True
         Me.cmt_tb.Name = "cmt_tb"
         Me.cmt_tb.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.cmt_tb.Size = New System.Drawing.Size(458, 101)
+        Me.cmt_tb.Size = New System.Drawing.Size(462, 101)
         Me.cmt_tb.TabIndex = 5
         '
         'cm_lbl
@@ -1317,7 +1317,7 @@ Partial Class MERGE
         Me.tool_menu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.add_game, Me.rem_game, Me.ToolStripSeparator2, Me.Add_cd, Me.rem_cd, Me.ToolStripSeparator1, Me.save_gc, Me.save_cc, Me.move_up, Me.move_down, Me.merge_codes})
         Me.tool_menu.Location = New System.Drawing.Point(0, 26)
         Me.tool_menu.Name = "tool_menu"
-        Me.tool_menu.Size = New System.Drawing.Size(775, 54)
+        Me.tool_menu.Size = New System.Drawing.Size(779, 54)
         Me.tool_menu.TabIndex = 14
         Me.tool_menu.Text = "ToolStrip1"
         '
@@ -1462,7 +1462,7 @@ Partial Class MERGE
         Me.button_list.Items.AddRange(New Object() {"セレクト", "スタート", "↑", "→", "↓", "←", "Lトリガー", "Rトリガー", "△", "○", "Ｘ", "□", "HOME", "HOLD", "ミュート", "スクリーン", "音量+", "音量-", "WLAN UP", "REMOTE HOLD"})
         Me.button_list.Location = New System.Drawing.Point(519, 207)
         Me.button_list.Name = "button_list"
-        Me.button_list.Size = New System.Drawing.Size(256, 200)
+        Me.button_list.Size = New System.Drawing.Size(260, 200)
         Me.button_list.TabIndex = 9
         '
         'inverse_chk
@@ -1496,14 +1496,14 @@ Partial Class MERGE
         '
         'TextBox1
         '
-        Me.TextBox1.Location = New System.Drawing.Point(534, 120)
+        Me.TextBox1.Location = New System.Drawing.Point(701, 416)
         Me.TextBox1.Name = "TextBox1"
         Me.TextBox1.Size = New System.Drawing.Size(1, 19)
         Me.TextBox1.TabIndex = 0
         '
         'TextBox2
         '
-        Me.TextBox2.Location = New System.Drawing.Point(534, 129)
+        Me.TextBox2.Location = New System.Drawing.Point(708, 416)
         Me.TextBox2.Name = "TextBox2"
         Me.TextBox2.Size = New System.Drawing.Size(1, 19)
         Me.TextBox2.TabIndex = 19
@@ -1514,15 +1514,15 @@ Partial Class MERGE
         Me.Panel1.Controls.Add(Me.PSPAR)
         Me.Panel1.Controls.Add(Me.CWC)
         Me.Panel1.Enabled = False
-        Me.Panel1.Location = New System.Drawing.Point(411, 131)
+        Me.Panel1.Location = New System.Drawing.Point(413, 129)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(159, 20)
+        Me.Panel1.Size = New System.Drawing.Size(163, 20)
         Me.Panel1.TabIndex = 25
         '
         'TEMP
         '
         Me.TEMP.AutoSize = True
-        Me.TEMP.Location = New System.Drawing.Point(105, 2)
+        Me.TEMP.Location = New System.Drawing.Point(106, 2)
         Me.TEMP.Name = "TEMP"
         Me.TEMP.Size = New System.Drawing.Size(53, 16)
         Me.TEMP.TabIndex = 2
@@ -1624,7 +1624,7 @@ Partial Class MERGE
         '
         Me.PSF.AllowDrop = True
         Me.PSF.Enabled = False
-        Me.PSF.Location = New System.Drawing.Point(579, 129)
+        Me.PSF.Location = New System.Drawing.Point(582, 128)
         Me.PSF.Name = "PSF"
         Me.PSF.Size = New System.Drawing.Size(69, 23)
         Me.PSF.TabIndex = 32
@@ -1633,18 +1633,18 @@ Partial Class MERGE
         '
         'dgtext
         '
-        Me.dgtext.Location = New System.Drawing.Point(655, 134)
+        Me.dgtext.Location = New System.Drawing.Point(744, 416)
         Me.dgtext.Multiline = True
         Me.dgtext.Name = "dgtext"
-        Me.dgtext.Size = New System.Drawing.Size(9, 19)
+        Me.dgtext.Size = New System.Drawing.Size(1, 19)
         Me.dgtext.TabIndex = 33
         Me.dgtext.Visible = False
         '
         'dmtext
         '
-        Me.dmtext.Location = New System.Drawing.Point(669, 134)
+        Me.dmtext.Location = New System.Drawing.Point(759, 416)
         Me.dmtext.Name = "dmtext"
-        Me.dmtext.Size = New System.Drawing.Size(9, 19)
+        Me.dmtext.Size = New System.Drawing.Size(1, 19)
         Me.dmtext.TabIndex = 34
         Me.dmtext.Visible = False
         '
@@ -1671,10 +1671,10 @@ Partial Class MERGE
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoScroll = True
-        Me.ClientSize = New System.Drawing.Size(775, 561)
-        Me.Controls.Add(Me.PSF)
+        Me.ClientSize = New System.Drawing.Size(779, 561)
         Me.Controls.Add(Me.curr_line)
         Me.Controls.Add(Me.dmtext)
+        Me.Controls.Add(Me.PSF)
         Me.Controls.Add(Me.SELECTLIST)
         Me.Controls.Add(Me.dgtext)
         Me.Controls.Add(Me.SHIFLIST)
@@ -1684,9 +1684,9 @@ Partial Class MERGE
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.コード形式)
         Me.Controls.Add(Me.TextBox2)
-        Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.TextBox1)
         Me.Controls.Add(Me.Joker_lbl)
+        Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.inverse_chk)
         Me.Controls.Add(Me.progbar)
         Me.Controls.Add(Me.tool_menu)

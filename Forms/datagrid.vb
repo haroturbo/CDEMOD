@@ -5061,6 +5061,8 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         Dim valdecm As Match = valdec.Match(str)
         Dim valfloat As New Regex("(\x20|,)-?\d+\.?\d*f$")
         Dim valfloatm As Match = valfloat.Match(str)
+        Dim vhf As New Regex("(\x20|,)-?\d+\.?\d*hf$")
+        Dim vhfm As Match = vhf.Match(str)
         If valhexm.Success Then
             Dim s As String = valhexm.Value
             Dim minus As Integer = 0
@@ -5072,11 +5074,9 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                 minus = Convert.ToInt32(s.Replace("$", "").Remove(0, 1), 16)
             End If
             hex = hex Or (minus And &HFFFF)
-        End If
-        If valdecm.Success Then
+        ElseIf valdecm.Success Then
             hex = hex Or (Convert.ToInt32(valdecm.Value.Remove(0, 1)) And &HFFFF)
-        End If
-        If valfloatm.Success Then
+        ElseIf valfloatm.Success Then
             Dim f As Single = Convert.ToSingle(valfloatm.Value.Remove(0, 1).Replace("f", ""))
             Dim bit() As Byte = BitConverter.GetBytes(f)
             Dim sb As New System.Text.StringBuilder()
@@ -5086,6 +5086,16 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                 i -= 1
             End While
             hex = hex Or (Convert.ToInt32(sb.ToString.Substring(0, 4), 16))
+        ElseIf vhfm.Success Then
+            Dim f As Single = Convert.ToSingle(vhfm.Value.Remove(0, 1).Replace("hf", ""))
+            Dim bit() As Byte = BitConverter.GetBytes(f)
+            Dim sb As New System.Text.StringBuilder()
+            Dim i As Integer = 3
+            While i >= 0
+                sb.Append(Convert.ToString(bit(i), 16).PadLeft(2, "0"c))
+                i -= 1
+            End While
+            hex = hex Or (Convert.ToInt32(converthalffloat(sb.ToString), 16))
         End If
         Return hex
     End Function

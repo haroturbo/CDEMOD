@@ -126,7 +126,7 @@ Partial Class datagrid
         '
         Me.CNVbikou.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.addline, Me.cut, Me.copy, Me.paste, Me.ToolStripSeparator1, Me.moveup, Me.movedown, Me.ToolStripSeparator2, Me.notetag, Me.appy})
         Me.CNVbikou.Name = "CNVbikou"
-        Me.CNVbikou.Size = New System.Drawing.Size(156, 214)
+        Me.CNVbikou.Size = New System.Drawing.Size(156, 192)
         Me.CNVbikou.Text = "備考変換"
         '
         'addline
@@ -227,7 +227,7 @@ Partial Class datagrid
         'gridsave
         '
         Me.gridsave.AutoSize = True
-        Me.gridsave.Location = New System.Drawing.Point(217, 320)
+        Me.gridsave.Location = New System.Drawing.Point(216, 320)
         Me.gridsave.Name = "gridsave"
         Me.gridsave.Size = New System.Drawing.Size(113, 16)
         Me.gridsave.TabIndex = 4

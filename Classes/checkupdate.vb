@@ -73,8 +73,7 @@ Public Class checkupdate
                             Dim save As String = fileName.Insert(fileName.LastIndexOf("."), rr)
                             save = save.Replace(":", "")
                             save = save.Replace("/", "")
-                            Dim ok As String = check.getweb(save, exe, 1)
-                            If ok = "OK" Then
+                            If  check.getweb(save, exe, 1) = "OK" Then
                                 MessageBox.Show(save & vbCrLf & "BUID:" & m.Value & "のダウンロードが完了しました" _
                                  & vbCrLf & "設定を引き継ぎたい場合は起動しているEXE名と同じ名前にしてください", "ダウンロード完了")
                                 If mode = "start" Then
@@ -163,8 +162,7 @@ Public Class checkupdate
 
         ElseIf webmode = 1 Then
             'ファイルに書き込むためのFileStreamを作成
-            Dim fs As New System.IO.FileStream(filename3, _
-                System.IO.FileMode.Create, System.IO.FileAccess.Write)
+            Dim fs As New System.IO.FileStream(filename3, System.IO.FileMode.Create, System.IO.FileAccess.Write)
 
             '応答データをファイルに書き込む
             Dim readData(1023) As Byte
