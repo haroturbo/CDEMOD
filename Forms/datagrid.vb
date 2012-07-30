@@ -1889,12 +1889,24 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                                 If (bytes(1) And &H7F) < &H7C Then
                                     Dim bytes2 As Byte() = str2bin(converthalffloat2(bytes))
                                     If BitConverter.ToSingle(bytes2, 0) > 0.00009 Then
-                                        sss = BitConverter.ToSingle(bytes2, 0).ToString
+                                        sss = BitConverter.ToSingle(bytes2, 0).ToString & "hf"
                                     Else
-                                        sss = "0"
+                                        sss = "0hf"
                                     End If
+                                ElseIf (bytes(1) And &H7F) < &H7F Then
+                                    If (bytes(1) And &H80) = 0 Then
+                                        sss = "+"
+                                    Else
+                                        sss = "-"
+                                    End If
+                                    sss &= "Inf"
                                 Else
-                                    sss = "NaN"
+                                    If (bytes(1) And &H80) = 0 Then
+                                        sss = "+"
+                                    Else
+                                        sss = "-"
+                                    End If
+                                    sss &= "NaN"
                                 End If
                                 str = str.Replace("%v" & ss(i + 1), sss)
                                 'output = print_vfpu_halffloat(opcode, output); i++; 
@@ -1909,12 +1921,12 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                     Case "2"
                         ': // [hlide] added %2? (? is d, s)
                         Select Case ss(i + 1)
-                            Case "d"
-                                str = str.Replace("%2" & ss(i + 1), print_cop2(CInt((hex >> 8) And &HFF)))
-                                ' : output = print_cop2(VED(opcode), output); i++; break;
-                            Case "s"
-                                str = str.Replace("%2" & ss(i + 1), print_cop2(CInt(hex And &HFF)))
-                                ': output = print_cop2(VES(opcode), output); i++; break;
+                                Case "d"
+                                    str = str.Replace("%2" & ss(i + 1), print_cop2(CInt(hex And &HFF)))
+                                    ' : output = print_cop2(VED(opcode), output); i++; break;
+                                Case "s"
+                                    str = str.Replace("%2" & ss(i + 1), print_cop2(CInt((hex >> 8) And &HFF)))
+                                    ': output = print_cop2(VES(opcode), output); i++; break;
                         End Select
 
                     Case "X"
