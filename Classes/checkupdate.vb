@@ -10,13 +10,13 @@ Public Class checkupdate
 
         If My.Computer.Network.IsAvailable Then
             Dim tx As String = "http://mkijiro.googlecode.com/svn/trunk/CODEDITOR/CDEMOD/bin/Release/version"
-            Dim exe As String = "http://ijiro.daiwa-hotcom.com/data/IJIRO/CDEMOD/bin/Release/CDE_CP932_FM4.exe"
-            Dim up As String = "http://ijiro.daiwa-hotcom.com/data/IJIRO/CDEMOD/bin/Release/APP/updater.exe"
+            Dim exe As String = "https://github.com/haroturbo/CDEMOD/blob/master/bin/Release/CDE_CP932_FM4.exe?raw=true"
+            Dim up As String = "https://github.com/haroturbo/CDEMOD/blob/master/updater/bin/Release/updater.exe?raw=true"
             Dim tblbase = "http://mkijiro.googlecode.com/svn/trunk/CODEDITOR/CDEMOD/bin/Release/"
 
             If My.Settings.updatesever = False Then
                 exe = "http://mkijiro.googlecode.com/svn/trunk/CODEDITOR/CDEMOD/bin/Release/CDE_CP932_FM4.exe"
-                up = "http://mkijiro.googlecode.com/svn/trunk/CODEDITOR/CDEMOD/updater/bin/Release//updater.exe"
+                up = "http://mkijiro.googlecode.com/svn/trunk/CODEDITOR/CDEMOD/updater/bin/Release/updater.exe"
             End If
 
             If Directory.Exists("table") = False Then

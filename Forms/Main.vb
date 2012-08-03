@@ -204,13 +204,13 @@ Public Class MERGE
                     codetree.Nodes(0).Expand()
                 End If
                 resets_level1()
-                error_window.list_load_error.EndUpdate()
                 loaded = True
                 file_saveas.Enabled = True
                 overwrite_db.Enabled = True
                 overwrite_db.ToolTipText = "対象;" & database
             End If
 
+            error_window.list_load_error.EndUpdate()
             codetree.EndUpdate()
         Else
             codetree.Nodes.Add("NEW_DB").ImageIndex = 0
@@ -230,19 +230,13 @@ Public Class MERGE
         cl_tb.Font = My.Settings.cl_tb
         codetree.Font = My.Settings.codetree
 
+        GITHUB.Checked = My.Settings.updatesever
+        GOOGLESVN.Checked = Not GITHUB.Checked
 
-        If My.Settings.updatesever = False Then
-            GOOGLESVN.Checked = True
-            LANDMIRROR.Checked = False
-        Else
-            GOOGLESVN.Checked = False
-            LANDMIRROR.Checked = True
-        End If
-
-        If My.Settings.updatecomp = True Then
-            MessageBox.Show("アップデートが完了しました", "アップデート完了")
-            My.Settings.updatecomp = False
-        End If
+            If My.Settings.updatecomp = True Then
+                MessageBox.Show("アップデートが完了しました", "アップデート完了")
+                My.Settings.updatecomp = False
+            End If
 
 
     End Sub
@@ -3011,42 +3005,26 @@ Public Class MERGE
 
     Private Sub GOOGLE_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GOOGLESVN.Click
 
-        If GOOGLESVN.Checked = False Then
-            GOOGLESVN.Checked = True
-            LANDMIRROR.Checked = False
-            My.Settings.updatesever = False
-        Else
-            GOOGLESVN.Checked = False
-            LANDMIRROR.Checked = True
-            My.Settings.updatesever = True
-        End If
+        GOOGLESVN.Checked = Not GOOGLESVN.Checked
+        GITHUB.Checked = Not GOOGLESVN.Checked
+        My.Settings.updatesever = GOOGLESVN.Checked
 
     End Sub
 
 
     Private Sub GBKOP_Click(sender As System.Object, e As System.EventArgs) Handles GBKOP.Click
 
-        If GBKOP.Checked = False Then
-            GBKOP.Checked = True
-            My.Settings.GBKOP = False
-        Else
-            GBKOP.Checked = False
-            My.Settings.GBKOP = True
-        End If
+        GBKOP.Checked = Not GBKOP.Checked
+        My.Settings.GBKOP = GBKOP.Checked
 
     End Sub
 
-    Private Sub LAND_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles LANDMIRROR.Click
+    Private Sub GITHUB_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GITHUB.Click
 
-        If LANDMIRROR.Checked = True Then
-            GOOGLESVN.Checked = True
-            LANDMIRROR.Checked = False
-            My.Settings.updatesever = False
-        Else
-            GOOGLESVN.Checked = False
-            LANDMIRROR.Checked = True
-            My.Settings.updatesever = True
-        End If
+        GITHUB.Checked = Not GITHUB.Checked
+        GOOGLESVN.Checked = Not GITHUB.Checked
+        My.Settings.updatesever = GITHUB.Checked
+
     End Sub
 
 

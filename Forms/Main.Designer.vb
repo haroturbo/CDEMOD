@@ -127,7 +127,7 @@ Partial Class MERGE
         Me.releasedate = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator12 = New System.Windows.Forms.ToolStripSeparator()
         Me.GOOGLESVN = New System.Windows.Forms.ToolStripMenuItem()
-        Me.LANDMIRROR = New System.Windows.Forms.ToolStripMenuItem()
+        Me.GITHUB = New System.Windows.Forms.ToolStripMenuItem()
         Me.DBENCODE = New System.Windows.Forms.ToolStripMenuItem()
         Me.ENCTRING = New System.Windows.Forms.ToolStripMenuItem()
         Me.CPENC = New System.Windows.Forms.ToolStripMenuItem()
@@ -905,7 +905,7 @@ Partial Class MERGE
         '
         'autoupdater
         '
-        Me.autoupdater.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.samename, Me.releasedate, Me.ToolStripSeparator12, Me.GOOGLESVN, Me.LANDMIRROR})
+        Me.autoupdater.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.samename, Me.releasedate, Me.ToolStripSeparator12, Me.GOOGLESVN, Me.GITHUB})
         Me.autoupdater.Name = "autoupdater"
         Me.autoupdater.Size = New System.Drawing.Size(297, 22)
         Me.autoupdater.Text = "起動時最新版チェック"
@@ -914,31 +914,31 @@ Partial Class MERGE
         'samename
         '
         Me.samename.Name = "samename"
-        Me.samename.Size = New System.Drawing.Size(226, 22)
+        Me.samename.Size = New System.Drawing.Size(194, 22)
         Me.samename.Text = "同じ名前(再起動必要)"
         '
         'releasedate
         '
         Me.releasedate.Name = "releasedate"
-        Me.releasedate.Size = New System.Drawing.Size(226, 22)
+        Me.releasedate.Size = New System.Drawing.Size(194, 22)
         Me.releasedate.Text = "リリース日付で保存"
         '
         'ToolStripSeparator12
         '
         Me.ToolStripSeparator12.Name = "ToolStripSeparator12"
-        Me.ToolStripSeparator12.Size = New System.Drawing.Size(223, 6)
+        Me.ToolStripSeparator12.Size = New System.Drawing.Size(191, 6)
         '
         'GOOGLESVN
         '
         Me.GOOGLESVN.Name = "GOOGLESVN"
-        Me.GOOGLESVN.Size = New System.Drawing.Size(226, 22)
+        Me.GOOGLESVN.Size = New System.Drawing.Size(194, 22)
         Me.GOOGLESVN.Text = "GOOGLESVNからDL"
         '
-        'LANDMIRROR
+        'GITHUB
         '
-        Me.LANDMIRROR.Name = "LANDMIRROR"
-        Me.LANDMIRROR.Size = New System.Drawing.Size(226, 22)
-        Me.LANDMIRROR.Text = "IJIRO DAIWA HP　からDL"
+        Me.GITHUB.Name = "GITHUB"
+        Me.GITHUB.Size = New System.Drawing.Size(194, 22)
+        Me.GITHUB.Text = "GITHUBからDL"
         '
         'DBENCODE
         '
@@ -1883,7 +1883,6 @@ Partial Class MERGE
     Friend WithEvents samename As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator12 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents GOOGLESVN As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents LANDMIRROR As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MECAB半角カナToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MECABでローマ字ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents saveas_actionreplay As System.Windows.Forms.ToolStripMenuItem
@@ -1908,5 +1907,6 @@ Partial Class MERGE
     Friend WithEvents UHC As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents CCP As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents eucms As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents GITHUB As System.Windows.Forms.ToolStripMenuItem
 
 End Class

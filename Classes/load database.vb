@@ -43,7 +43,6 @@ Public Class load_db
             Dim NULLCODE As Boolean = False
             Dim cwcar As String = "_L"
             Dim z As Integer = 0
-            'Dim b4 As String = Nothing
 
             m.codetree.Nodes.Add(Path.GetFileNameWithoutExtension(filename)).ImageIndex = 0 ' Add the root node and set its icon
             m.progbar.Value = 0 ' Reset the progress bar
@@ -66,7 +65,7 @@ Public Class load_db
 
                     If sr.EndOfStream = True Then 'Check if we are at the end of the file
                         If buffer(0).Length >= 4 Then
-                            If buffer(0).Substring(0, 2) = "_G" Then
+                            If buffer(0).Substring(0, 3) = "_G " Then
                                 buffer(2) = buffer(0).Substring(3, buffer(0).Length - 3).Trim
                                 gnode = New TreeNode(buffer(0).Substring(3, buffer(0).Length - 3).Trim)
                                 With gnode
@@ -78,8 +77,6 @@ Public Class load_db
 
                                 code.Clear()
                                 cmt.Clear()
-                                'buffer(3) = Nothing
-                                'b4 = Nothing
                                 Exit Do
                             End If
 
@@ -93,7 +90,6 @@ Public Class load_db
                                 buffer(0) = buffer(0).Replace(" 0A", " 0x")
                                 buffer(0) = buffer(0).PadRight(24, "0"c)
                                 If buffer(0).Substring(3, 2) = "0x" And buffer(0).Substring(14, 2) = "0x" Then 'If it is a correctly formed code record it
-                                    'buffer(3) &= buffer(0).Substring(3, 21).Trim & vbCrLf
                                     code.AppendLine(buffer(0).Substring(3, 21).Trim)
                                 End If
                             End If
@@ -101,20 +97,14 @@ Public Class load_db
                                 If NULLCODE = True Then
                                     code.Append(cmt.ToString)
                                     cnode.Tag = code.ToString
-                                    'buffer(3) &= "" & vbCrLf
-                                    'cnode.Tag = buffer(3) & b4
                                 End If
                                 code.Clear()
                                 cmt.Clear()
-                                'buffer(3) = Nothing
-                                'b4 = Nothing
 
                                 If buffer(0).Substring(2, 1) = "1" Then
                                     code.AppendLine("1")
-                                    'buffer(3) = "1" & vbCrLf
                                 Else
                                     code.AppendLine("0")
-                                    'buffer(3) = "0" & vbCrLf
                                 End If
 
                                 cnode = New TreeNode(buffer(0).Substring(3, buffer(0).Length - 3).Trim)
@@ -126,15 +116,12 @@ Public Class load_db
                         End If
                         If NULLCODE = True Then
                             code.AppendLine()
-                            'buffer(3) &= "" & vbCrLf
                         End If
                         If buffer(0).Trim.Length > 1 AndAlso buffer(0).Substring(0, 1) = "#" Then
                             cmt.AppendLine(buffer(0))
-                            'b4 &= buffer(0) & vbCrLf
                         End If
                         code.Append(cmt.ToString)
                         cnode.Tag = code.ToString
-                        'cnode.Tag = buffer(3) & b4
                         Exit Do
                     End If
 
@@ -145,18 +132,13 @@ Public Class load_db
 
                             Case Is = "_S "
                                 skip = False
-
                                 If NULLCODE = True Then
                                     code.Append(cmt.ToString)
                                     cnode.Tag = code.ToString
-                                    'buffer(3) &= "" & vbCrLf
-                                    'cnode.Tag = buffer(3) & b4
                                     NULLCODE = False
                                 End If
                                 code.Clear()
                                 cmt.Clear()
-                                'buffer(3) = Nothing
-                                'b4 = Nothing
                                 buffer(1) = buffer(0).Substring(3, buffer(0).Length - 3).Trim
 
                             Case Is = "_G "
@@ -171,26 +153,19 @@ Public Class load_db
                                 m.codetree.Nodes(0).Nodes.Add(gnode)
 
                             Case Is = "_C0", "_C1", "_C2", "_CO"
-
                                 skip = False
 
                                 If NULLCODE = True Then
                                     code.Append(cmt.ToString)
                                     cnode.Tag = code.ToString
-                                    'buffer(3) &= "" & vbCrLf
-                                    'cnode.Tag = buffer(3) & b4
                                 End If
                                 code.Clear()
                                 cmt.Clear()
-                                'buffer(3) = Nothing
-                                'b4 = Nothing
 
                                 If buffer(0).Substring(2, 1) = "1" Then
                                     code.AppendLine("1")
-                                    'buffer(3) = "1" & vbCrLf
                                 Else
                                     code.AppendLine("0")
-                                    'buffer(3) = "0" & vbCrLf
                                 End If
 
                                 cnode = New TreeNode(buffer(0).Substring(3, buffer(0).Length - 3).Trim)
@@ -206,21 +181,17 @@ Public Class load_db
                                 If cwcar = "_M " Then
                                     z = Integer.Parse(code.ToString.Substring(0, 1))
                                     code.Remove(0, 1)
-                                    'buffer(3) = buffer(3).Remove(0, 1)
                                     z = z And 1
                                     z = 2 Or z
                                     code.Insert(0, z.ToString())
-                                    'buffer(3) = buffer(3).Insert(0, z.ToString())
+
                                 ElseIf cwcar = "_N " Then
                                     z = Integer.Parse(code.ToString.Substring(0, 1))
                                     code.Remove(0, 1)
 
-                                    'buffer(3) = buffer(3).Remove(0, 1)
                                     z = z And 1
                                     z = 4 Or z
                                     code.Insert(0, z.ToString())
-                                    'buffer(3) = buffer(3).Insert(0, z.ToString())
-                                Else  ' cwc
                                 End If
 
                                 '_L 0x12345678 0x12345678 24文字
@@ -231,26 +202,18 @@ Public Class load_db
                                     buffer(0) = buffer(0).ToUpper
                                     buffer(0) = buffer(0).Replace(" 0A", " 0x")
                                     code.AppendLine(buffer(0).Substring(3, 21).Trim)
-                                    'buffer(3) &= buffer(0).Substring(3, 21).Trim & vbCrLf
+
                                 ElseIf buffer(0).Substring(0, 1) = "#" AndAlso buffer(0).Trim <> "#" Then
                                     cmt.AppendLine(buffer(0))
-                                    'b4 &= buffer(0) & vbCrLf
+
                                 Else ' If it is incorrectly formed, ignore it.
 
                                     counts(2) += 1
 
                                     If buffer(0).Trim = Nothing Then 'If the line is blank
-                                        write_errors(counts(0), counts(2), "<!!空白しかない行です>", gnode.Text, cnode.Text)
+                                        write_errors(counts(0), counts(2), "<空白しかない行です,L-1>", gnode.Text, cnode.Text)
                                     Else
-                                        write_errors(counts(0), counts(2), buffer(0) & " <!!対応してないコード形式です>", gnode.Text, cnode.Text) ' Write the ignored line to the error list
-                                    End If
-
-                                    If ew.Visible = False Then
-                                        ew.Show()
-                                        ew.tab_error.SelectedIndex = 0 ' Give focus to the "Load Error" tab
-                                        m.Focus()
-                                        reset_toolbar()
-
+                                        write_errors(counts(0), counts(2), buffer(0) & " <対応してないコード形式です,L-1>", gnode.Text, cnode.Text) ' Write the ignored line to the error list
                                     End If
 
                                 End If
@@ -269,9 +232,6 @@ Public Class load_db
                                             cnode.Tag = code.ToString
                                             code.Clear()
                                             cmt.Clear()
-                                            'cnode.Tag = buffer(3) & b4
-                                            'buffer(3) = Nothing
-                                            'b4 = Nothing
                                             Exit Do
                                         End If
                                     End If
@@ -285,39 +245,27 @@ Public Class load_db
                                                 buffer(0) = buffer(0).ToUpper
                                                 buffer(0) = buffer(0).Replace(" 0A", " 0x")
                                                 code.AppendLine(buffer(0).Substring(3, 21).Trim)
-                                                'buffer(3) &= buffer(0).Substring(3, 21).Trim & vbCrLf
+
                                             Else ' If it is incorrectly formed, add it to the error list and ignore it
                                                 counts(2) += 1
 
                                                 If buffer(0).Trim = Nothing Then 'If the line is blank
-                                                    write_errors(counts(0), counts(2), "<!空白しかない行です>", gnode.Text, cnode.Text)
+                                                    write_errors(counts(0), counts(2), "<空白しかない行です,L-LOOP>", gnode.Text, cnode.Text)
                                                 Else
-                                                    write_errors(counts(0), counts(2), buffer(0) & " <!対応してないコード形式です。>", gnode.Text, cnode.Text) ' Write the ignored line to the error list
-                                                End If
-
-                                                If ew.Visible = False Then
-
-                                                    ew.Show()
-                                                    ew.tab_error.SelectedIndex = 0 ' Give focus to the "Load Error" tab
-                                                    m.Focus()
-                                                    reset_toolbar()
-
+                                                    write_errors(counts(0), counts(2), buffer(0) & " <対応してないコード形式です,L-LOOP>", gnode.Text, cnode.Text) ' Write the ignored line to the error list
                                                 End If
 
                                             End If
 
                                         ElseIf buffer(0).Substring(0, 1) = "#" AndAlso buffer(0).Trim <> "#" Then
                                             cmt.AppendLine(buffer(0))
-                                            'b4 &= buffer(0) & vbCrLf
 
                                         ElseIf buffer(0).Substring(0, 2) = "_C" Or buffer(0).Substring(0, 2) = "_S" Then
                                             code.Append(cmt.ToString)
                                             cnode.Tag = code.ToString
                                             code.Clear()
                                             cmt.Clear()
-                                            'cnode.Tag = buffer(3) & b4 ' Store all collected codes in the nodes 'tag'
-                                            'buffer(3) = Nothing
-                                            'b4 = Nothing
+                                            ' Store all collected codes in the nodes 'tag'
                                             skip = True ' If a new game or code is found, skip the initial read so it is processed
 
                                         End If
@@ -336,9 +284,9 @@ Public Class load_db
 
                             Case Else ' This will catch anything that is out of place
 
+                                buffer(0) = buffer(0).PadRight(2)
                                 If buffer(0).Substring(0, 1) = "#" AndAlso buffer(0).Trim <> "#" Then
                                     cmt.AppendLine(buffer(0))
-                                    'b4 &= buffer(0) & vbCrLf
 
                                 ElseIf counts(0) = 1 AndAlso buffer(0).Contains("[") AndAlso buffer(0).Contains("]") Then
 
@@ -347,18 +295,9 @@ Public Class load_db
                                     counts(2) += 1
 
                                     If buffer(0).Trim = Nothing Then 'If the line is blank
-                                        write_errors(counts(0), counts(2), "<空白しかない行です。>", gnode.Text, cnode.Text)
+                                        write_errors(counts(0), counts(2), "<空白しかない行です,H-EX>", gnode.Text, cnode.Text)
                                     Else
-                                        write_errors(counts(0), counts(2), buffer(0) & " <不正なコードなため追加されませんでした。>", gnode.Text, cnode.Text) ' Write the ignored line to the error list
-                                    End If
-
-                                    If ew.Visible = False Then
-
-                                        ew.Show()
-                                        ew.tab_error.SelectedIndex = 0 ' Give focus to the "Load Error" tab
-                                        m.Focus()
-                                        reset_toolbar()
-
+                                        write_errors(counts(0), counts(2), buffer(0) & " <追加されませんでした,H-EX>", gnode.Text, cnode.Text) ' Write the ignored line to the error list
                                     End If
 
                                     buffer(0) = sr.ReadLine ' Read the next line after the error
@@ -373,7 +312,6 @@ Public Class load_db
                         buffer(0) = buffer(0).PadRight(2)
                         If NULLCODE = False AndAlso buffer(0).Substring(0, 1) = "#" Then
                             cmt.AppendLine(buffer(0).Trim)
-                            'b4 &= buffer(0).Trim & vbCrLf
                         Else
                             ' This is set if there is a garbage line in the database and
                             ' will write the line to the error window and try to continue loading
@@ -381,8 +319,8 @@ Public Class load_db
                             'Determine if it's a blank line
                             If buffer(0).Trim = Nothing Then
                                 write_errors(counts(0), counts(2), "<空白しかない行です>", gnode.Text, cnode.Text)
-                                'Else
-                                '    write_errors(counts(0), counts(2), buffer(0) & " <追加されませんでした>", gnode.Text, cnode.Text)
+                            Else
+                                write_errors(counts(0), counts(2), buffer(0) & " <追加されませんでした>", gnode.Text, cnode.Text)
                             End If
                         End If
                         skip = False
@@ -406,12 +344,18 @@ Public Class load_db
 
             End Try
 
+            If (counts(2) > 0) Then
+                ew.Show()
+                ew.tab_error.SelectedIndex = 0
+                m.Focus()
+                reset_toolbar()
+            End If
+
             If ew.list_load_error.Items.Count = 0 And ew.list_save_error.Items.Count > 0 Then
                 ew.Show()
                 ew.tab_error.SelectedIndex = 1
                 m.Focus()
                 reset_toolbar()
-
             End If
 
             m.progbar.Visible = False
@@ -459,7 +403,6 @@ Public Class load_db
             Dim gnode As New TreeNode ' Game name node for the TreeView control
             Dim cnode As New TreeNode ' Code name node for the TreeView control
             Dim skip As Boolean = False
-            'Dim b4 As String = Nothing
             Dim nullcode As Boolean = False
             buffer(0) = Nothing
             gnode.Text = Nothing
@@ -493,13 +436,9 @@ Public Class load_db
                                     code.AppendLine()
                                     code.Append(cmt.ToString)
                                     cnode.Tag = code.ToString
-                                    'buffer(3) &= "" & vbCrLf
-                                    'cnode.Tag = buffer(3) & b4
                                 End If
                                 code.Clear()
                                 cmt.Clear()
-                                'buffer(3) = Nothing
-                                'b4 = Nothing
                                 buffer(1) = buffer(0).Substring(3, buffer(0).Length - 3).Trim
 
                             Case Is = "_G"
@@ -518,20 +457,16 @@ Public Class load_db
                                 If nullcode = True Then
                                     code.Append(cmt.ToString)
                                     cnode.Tag = code.ToString
-                                    'buffer(3) &= "" & vbCrLf
-                                    'cnode.Tag = buffer(3) & b4
+
                                 End If
                                 code.Clear()
                                 cmt.Clear()
-                                'buffer(3) = Nothing
-                                'b4 = Nothing
+
 
                                 If buffer(0).Substring(2, 1) = "1" Then
                                     code.AppendLine("1")
-                                    'buffer(3) = "1" & vbCrLf
                                 Else
                                     code.AppendLine("0")
-                                    'buffer(3) = "0" & vbCrLf
                                 End If
 
                                 cnode = New TreeNode(buffer(0).Substring(3, buffer(0).Length - 3).Trim)
@@ -551,7 +486,6 @@ Public Class load_db
                                     If buffer(0).Substring(11, 1) = " " Then 'If it is a correctly formed code record it
                                         buffer(0) = buffer(0).Replace("?", "A")
                                         code.AppendLine(buffer(0).Substring(3, 13))
-                                        'buffer(3) &= buffer(0).Substring(3, 13) & vbCrLf
                                     End If
                                 Else
 
@@ -559,24 +493,14 @@ Public Class load_db
 
                                     If buffer(4).Length = 16 Then 'Attempt to remove white spaces and re-check
                                         code.AppendLine(buffer(4).Substring(3, 13))
-                                        'buffer(3) &= buffer(4).Substring(3, 13) & vbCrLf
 
                                     Else ' If it is incorrectly formed, ignore it.
 
                                         counts(2) += 1
                                         If buffer(0).Trim = Nothing Then 'If the line is blank
-                                            write_errors(counts(0), counts(2), "<空白しかない行です>", gnode.Text, cnode.Text)
+                                            write_errors(counts(0), counts(2), "<空白しかない行です,L-1>", gnode.Text, cnode.Text)
                                         Else
-                                            write_errors(counts(0), counts(2), buffer(0) & " <追加されませんでした。>", gnode.Text, cnode.Text) ' Write the ignored line to the error list
-                                        End If
-
-                                        If ew.Visible = False Then
-                                            ew.Visible = True
-                                            ew.Show()
-                                            ew.tab_error.SelectedIndex = 0 ' Give focus to the "Load Error" tab
-                                            m.Focus()
-                                            reset_toolbar()
-
+                                            write_errors(counts(0), counts(2), buffer(0) & " <追加されませんでした,L-1>", gnode.Text, cnode.Text) ' Write the ignored line to the error list
                                         End If
 
                                     End If
@@ -595,11 +519,8 @@ Public Class load_db
                                         If sr.EndOfStream = True Then
                                             code.Append(cmt.ToString)
                                             cnode.Tag = code.ToString
-                                            'cnode.Tag = buffer(3) & b4
                                             code.Clear()
                                             cmt.Clear()
-                                            'buffer(3) = Nothing
-                                            'b4 = Nothing
                                         End If
 
                                         Exit Do
@@ -613,7 +534,6 @@ Public Class load_db
                                                 If buffer(0).Substring(11, 1) = " " Then
                                                     buffer(0) = buffer(0).Replace("?", "A")
                                                     code.AppendLine(buffer(0).Substring(3, 13))
-                                                    'buffer(3) &= buffer(0).Substring(3, 13) & vbCrLf
                                                 End If
                                             Else
 
@@ -622,24 +542,14 @@ Public Class load_db
                                                 If buffer(4).Length = 16 Then
                                                     If buffer(0).Substring(11, 1) = " " Then 'Attempt to remove white spaces and re-check
                                                         code.AppendLine(buffer(4).Substring(3, 13))
-                                                        'buffer(3) &= buffer(4).Substring(3, 13) & vbCrLf
                                                     End If
                                                 Else ' If it is incorrectly formed, ignore it.
 
                                                     counts(2) += 1
                                                     If buffer(0).Replace(" ", "") = Nothing Then 'If the line is blank
-                                                        write_errors(counts(0), counts(2), "<空白しかない行です>", gnode.Text, cnode.Text)
+                                                        write_errors(counts(0), counts(2), "<空白しかない行です,L-LOOP>", gnode.Text, cnode.Text)
                                                     Else
-                                                        write_errors(counts(0), counts(2), buffer(0) & " <追加されませんでした>", gnode.Text, cnode.Text) ' Write the ignored line to the error list
-                                                    End If
-
-                                                    If ew.Visible = False Then
-                                                        ew.Visible = True
-                                                        ew.Show()
-                                                        ew.tab_error.SelectedIndex = 0 ' Give focus to the "Load Error" tab
-                                                        m.Focus()
-                                                        reset_toolbar()
-
+                                                        write_errors(counts(0), counts(2), buffer(0) & " <追加されませんでした,L-LOOP>", gnode.Text, cnode.Text) ' Write the ignored line to the error list
                                                     End If
 
                                                 End If
@@ -651,9 +561,6 @@ Public Class load_db
                                             cnode.Tag = code.ToString
                                             code.Clear()
                                             cmt.Clear()
-                                            'cnode.Tag = buffer(3) & b4 ' Store all collected codes in the nodes 'tag'
-                                            'buffer(3) = Nothing
-                                            'b4 = Nothing
                                             skip = True ' If a new game or code is found, skip the initial read so it is processed
 
                                         End If
@@ -661,7 +568,6 @@ Public Class load_db
                                     If buffer(0).Length >= 2 Then
                                         If nullcode = False AndAlso buffer(0).Substring(0, 1) = "#" Then
                                             cmt.AppendLine(buffer(0))
-                                            'b4 &= buffer(0) & vbCrLf
                                         End If
                                     End If
 
@@ -682,7 +588,6 @@ Public Class load_db
                                     If buffer(0).Substring(0, 1) = "#" Then
 
                                         cmt.AppendLine(buffer(0).Trim)
-                                        'b4 &= buffer(0).Trim & vbCrLf
 
                                     ElseIf counts(0) = 1 AndAlso buffer(0).Contains("[") AndAlso buffer(0).Contains("]") Then
 
@@ -690,18 +595,9 @@ Public Class load_db
 
                                         counts(2) += 1
                                         If buffer(0).Trim = Nothing Then 'If the line is blank
-                                            write_errors(counts(0), counts(2), "<空白しかない行です>", gnode.Text, cnode.Text)
+                                            write_errors(counts(0), counts(2), "<空白しかない行です,H-EX>", gnode.Text, cnode.Text)
                                         Else
-                                            write_errors(counts(0), counts(2), buffer(0) & " <追加されませんでした>", gnode.Text, cnode.Text) ' Write the ignored line to the error list
-                                        End If
-
-                                        If ew.Visible = False Then
-
-                                            ew.Show()
-                                            ew.tab_error.SelectedIndex = 0 ' Give focus to the "Load Error" tab
-                                            m.Focus()
-                                            reset_toolbar()
-
+                                            write_errors(counts(0), counts(2), buffer(0) & " <追加されませんでした,H-EX>", gnode.Text, cnode.Text) ' Write the ignored line to the error list
                                         End If
 
                                         buffer(0) = sr.ReadLine
@@ -719,7 +615,6 @@ Public Class load_db
 
                             If buffer(0).Substring(0, 1) = "#" Then
                                 cmt.AppendLine(buffer(0).Trim)
-                                'b4 &= buffer(0).Trim & vbCrLf
                             Else
                                 ' This is set if there is a garbage line or blank line in the database and
                                 ' will write the line to the error window and try to continue loading
@@ -751,9 +646,16 @@ Public Class load_db
                 Loop
 
             Catch ex As Exception
-                MessageBox.Show(ex.Message & vbCrLf, "エラー")
-
+                MessageBox.Show(ex.Message, "エラー")
             End Try
+
+
+            If (counts(2) > 0) Then
+                ew.Show()
+                ew.tab_error.SelectedIndex = 0
+                m.Focus()
+                reset_toolbar()
+            End If
 
             If ew.list_load_error.Items.Count = 0 And ew.list_save_error.Items.Count > 0 Then
                 ew.Show()
@@ -1069,6 +971,7 @@ Public Class load_db
             MessageBox.Show(ex.Message)
 
         End Try
+
         If ew.list_load_error.Items.Count = 0 And ew.list_save_error.Items.Count > 0 Then
             ew.Show()
             ew.tab_error.SelectedIndex = 1
@@ -1082,19 +985,17 @@ Public Class load_db
 
     End Sub
 
-    Private Sub write_errors(ByVal line As Integer, ByVal error_n As Integer, ByVal error_t As String, _
-                             ByVal game_t As String, ByVal code_t As String)
+    Private Sub write_errors(ByVal line As Integer, ByVal error_n As Integer, ByVal error_t As String, ByVal game_t As String, ByVal code_t As String)
 
         Dim ew As error_window = error_window
+        Dim itemx As New ListViewItem
         If error_n > 0 AndAlso game_t <> "" AndAlso code_t <> "" AndAlso error_t <> "" Then
-            With ew.list_load_error
-                .Items.Add(error_n.ToString)
-                .Items(error_n - 1).SubItems.Add(line.ToString)
-                .Items(error_n - 1).SubItems.Add(game_t)
-                .Items(error_n - 1).SubItems.Add(code_t)
-                .Items(error_n - 1).SubItems.Add(error_t.Trim)
-            End With
-
+            itemx.Text = error_n.ToString
+            itemx.SubItems.Add(line.ToString)
+            itemx.SubItems.Add(game_t)
+            itemx.SubItems.Add(code_t)
+            itemx.SubItems.Add(error_t.Trim)
+            ew.list_load_error.Items.Add(itemx)
             Application.DoEvents()
         End If
 
