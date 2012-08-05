@@ -5,30 +5,36 @@ Imports Microsoft.VisualBasic
 
 Public Class txrp
 
-    Dim ss As String()
     Dim path As String = Application.StartupPath & "\APP\seekrp.txt"
+    Dim cmbss As String() = Nothing
 
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        If Me.Text = "検索" Then
-            TextBox2.ReadOnly = True
-        Else
-            RPTEST.Enabled = True
-        End If
-        TextBox1.Text = My.Settings.seekstr
-        TextBox2.Text = My.Settings.rpstr
-        If (My.Settings.seek_rp And 1) <> 0 Then
-            CheckBox1.Checked = True
-        End If
-        If (My.Settings.seek_rp And 2) <> 0 Then
-            CheckBox2.Checked = True
-        End If
-        If (My.Settings.seek_rp And 4) <> 0 Then
-            CheckBox3.Checked = True
-        End If
-        lsread()
-        ComboBox1.Items.Clear()
-        ComboBox1.Items.AddRange(ss)
+        Try
 
+            If Me.Text = "検索" Then
+                TextBox2.ReadOnly = True
+            Else
+                RPTEST.Enabled = True
+            End If
+            TextBox1.Text = My.Settings.seekstr
+            TextBox2.Text = My.Settings.rpstr
+            If (My.Settings.seek_rp And 1) <> 0 Then
+                CheckBox1.Checked = True
+            End If
+            If (My.Settings.seek_rp And 2) <> 0 Then
+                CheckBox2.Checked = True
+            End If
+            If (My.Settings.seek_rp And 4) <> 0 Then
+                CheckBox3.Checked = True
+            End If
+            cmbss = lsread(cmbss)
+            ComboBox1.Items.Clear()
+            If cmbss.Length > 0 Then
+                ComboBox1.Items.AddRange(cmbss)
+            End If
+        Catch ex As Exception
+
+        End Try
     End Sub
 
     Private Sub Button1_Click(sender As System.Object, e As System.EventArgs) Handles RUN.Click, RPTEST.Click
@@ -140,7 +146,7 @@ Public Class txrp
 
     Private Sub ComboBox1_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles ComboBox1.SelectedIndexChanged
         Dim sel As Integer = ComboBox1.SelectedIndex
-        Dim st As String() = Regex.Split(ss(sel).Trim, (""","""))
+        Dim st As String() = Regex.Split(cmbss(sel).Trim, (""","""))
         Array.Resize(st, 3)
         TextBox1.Text = st(1)
         TextBox2.Text = st(2).Remove(st(2).Length - 1, 1)
@@ -159,13 +165,13 @@ Public Class txrp
         End If
     End Sub
 
-    Private Function lsread() As Boolean
-        If (File.Exists(Path)) Then
+    Private Function lsread(ByVal cmbss As String()) As String()
+        If (File.Exists(path)) Then
             Dim sr As StreamReader = New StreamReader(path, Encoding.GetEncoding(65001))
             Dim s As String = sr.ReadToEnd
             sr.Close()
-            ss = s.Split(CChar(vbLf))
+            cmbss = s.Split(CChar(vbLf))
         End If
-        Return True
+        Return cmbss
     End Function
 End Class

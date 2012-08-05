@@ -6,52 +6,59 @@ Public Class parser
 
     Public Opener As Form
     Friend gid_gname As Boolean = False
-    Dim cmbss As String()
     Dim path As String = Application.StartupPath & "\APP\seekerror.txt"
     Dim last As Integer = -1
 
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        Dim f As MERGE
-        f = CType(Me.Owner, MERGE)
+        Try
 
-        If f.fixedform.Checked = True Then
-            Me.AutoSize = True
-        End If
+            Dim f As MERGE = MERGE
+            f = CType(Me.Owner, MERGE)
+            Dim cmbss As String() = Nothing
 
-        Dim mode As String = Nothing
-
-        If f.codetree.Nodes.Count >= 1 Then
-            If f.codetree.SelectedNode Is Nothing Then
-                f.codetree.SelectedNode = f.codetree.TopNode
+            If f.fixedform.Checked = True Then
+                Me.AutoSize = True
             End If
-            If f.codetree.SelectedNode.Level = 0 Then
-                mode = "(Lv0,新規追加)"
-            ElseIf f.codetree.SelectedNode.Level > 0 Then
-                mode = "(Lv" & f.codetree.SelectedNode.Level.ToString & ",継ぎ足し)"
+
+            Dim mode As String = Nothing
+
+            If f.codetree.Nodes.Count >= 1 Then
+                If f.codetree.SelectedNode Is Nothing Then
+                    f.codetree.SelectedNode = f.codetree.TopNode
+                End If
+                If f.codetree.SelectedNode.Level = 0 Then
+                    mode = "(Lv0,新規追加)"
+                ElseIf f.codetree.SelectedNode.Level > 0 Then
+                    mode = "(Lv" & f.codetree.SelectedNode.Level.ToString & ",継ぎ足し)"
+                End If
+            Else
+                mode = "(NONE,コードなし)"
             End If
-        Else
-            mode = "(NONE,コードなし)"
-        End If
 
-        Me.Text &= mode
+            Me.Text &= mode
 
 
-        lsread()
-        FIND_REGEX.Items.Clear()
-        FIND_REGEX.Items.AddRange(cmbss)
+            FIND_REGEX.Items.Clear()
+            cmbss = lsread(cmbss)
+            If cmbss.Length > 0 Then
+                FIND_REGEX.Items.AddRange(cmbss)
+            End If
+            FIND_REGEX.Text = My.Settings.perror
 
-        FIND_REGEX.Text = My.Settings.perror
+        Catch ex As Exception
+
+        End Try
 
     End Sub
 
-    Private Function lsread() As Boolean
-        If (File.Exists(Path)) Then
+    Private Function lsread(ByVal cmbss As String()) As String()
+        If (File.Exists(path)) Then
             Dim sr As StreamReader = New StreamReader(path, Encoding.GetEncoding(65001))
             Dim s As String = sr.ReadToEnd
             sr.Close()
             cmbss = s.Split(CChar(vbLf))
         End If
-        Return True
+        Return cmbss
     End Function
 
     Private Sub OK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK.Click
@@ -310,8 +317,8 @@ Public Class parser
 
     Private Sub check_errors(sender As System.Object, e As System.EventArgs) Handles PARSE_CHECK.Click
 
-        Dim m As MERGE = MERGE
         Dim ew As error_window = error_window
+        Dim m As MERGE = MERGE
         reset_errors()
         Dim gname As String = "(NULL)"
         Dim cname As String = "(NULL)"
@@ -418,6 +425,7 @@ Public Class parser
 
     Private Sub Button5_Click(sender As System.Object, e As System.EventArgs) Handles SEEK_ERROR.Click
         Dim ew As error_window = error_window
+
         Dim r As Regex = New Regex(FIND_REGEX.Text)
         Dim m As Match
         If last > ew.list_parse_error.Items.Count Then

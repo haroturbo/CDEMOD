@@ -32,13 +32,13 @@ Partial Class parser
         Me.編集ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.検索ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.置換ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.エラーリスト検索文字編集ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.PARSE_CHECK = New System.Windows.Forms.Button()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.SEEK_ERROR = New System.Windows.Forms.Button()
         Me.FIND_REGEX = New System.Windows.Forms.ComboBox()
         Me.TX = New System.Windows.Forms.TextBox()
-        Me.エラーリスト検索文字編集ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
@@ -126,6 +126,12 @@ Partial Class parser
         Me.置換ToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
         Me.置換ToolStripMenuItem.Text = "置換"
         '
+        'エラーリスト検索文字編集ToolStripMenuItem
+        '
+        Me.エラーリスト検索文字編集ToolStripMenuItem.Name = "エラーリスト検索文字編集ToolStripMenuItem"
+        Me.エラーリスト検索文字編集ToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
+        Me.エラーリスト検索文字編集ToolStripMenuItem.Text = "エラーリスト検索文字編集"
+        '
         'PARSE_CHECK
         '
         Me.PARSE_CHECK.Location = New System.Drawing.Point(162, 16)
@@ -173,6 +179,7 @@ Partial Class parser
         'FIND_REGEX
         '
         Me.FIND_REGEX.FormattingEnabled = True
+        Me.FIND_REGEX.Items.AddRange(New Object() {"NULL"})
         Me.FIND_REGEX.Location = New System.Drawing.Point(6, 18)
         Me.FIND_REGEX.Name = "FIND_REGEX"
         Me.FIND_REGEX.Size = New System.Drawing.Size(82, 20)
@@ -188,12 +195,6 @@ Partial Class parser
         Me.TX.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.TX.Size = New System.Drawing.Size(253, 222)
         Me.TX.TabIndex = 14
-        '
-        'エラーリスト検索文字編集ToolStripMenuItem
-        '
-        Me.エラーリスト検索文字編集ToolStripMenuItem.Name = "エラーリスト検索文字編集ToolStripMenuItem"
-        Me.エラーリスト検索文字編集ToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
-        Me.エラーリスト検索文字編集ToolStripMenuItem.Text = "エラーリスト検索文字編集"
         '
         'parser
         '

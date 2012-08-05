@@ -1194,7 +1194,7 @@ Public Class MERGE
     'コードパーサー
     Private Sub paserToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cntparser.Click, paserToolStripMenuItem.Click
         Dim backup As String = cmt_tb.Text
-        Dim f As New parser
+        Dim f As parser = parser
         cmt_tb.Text = Nothing
         f.ShowDialog(Me)
         Dim b1 As String = cmt_tb.Text

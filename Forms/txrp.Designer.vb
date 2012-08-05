@@ -133,6 +133,7 @@ Partial Class txrp
         'ComboBox1
         '
         Me.ComboBox1.FormattingEnabled = True
+        Me.ComboBox1.Items.AddRange(New Object() {"NULL"})
         Me.ComboBox1.Location = New System.Drawing.Point(6, 18)
         Me.ComboBox1.Name = "ComboBox1"
         Me.ComboBox1.Size = New System.Drawing.Size(72, 20)
