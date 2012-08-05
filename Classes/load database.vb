@@ -677,6 +677,7 @@ Public Class load_db
 
     Public Sub read_cf(ByVal filename As String, ByVal enc1 As Integer)
 
+        Dim t1 As Integer = System.Environment.TickCount
         Dim m As MERGE = MERGE
         Dim ew As error_window = error_window
         Dim memory As New MemoryManagement
@@ -702,16 +703,13 @@ Public Class load_db
         file.Read(bs, 0, bs.Length)
         Dim cfdatlen As Integer = bs.Length
         Dim cf_utf16(33) As Byte
+        Dim cfid(4) As Byte
+        cfid(4) = &H2D
         Dim str As String = Nothing
         Dim gname() As Byte = Nothing
         Dim cname() As Byte = Nothing
         Dim i As Integer = 0
         Dim n As Integer = 0
-        Dim s1 As String = Nothing
-        Dim s2 As String = Nothing
-        Dim s3 As String = Nothing
-        Dim s4 As String = Nothing
-        Dim s5 As String = Nothing
         Dim sb As New System.Text.StringBuilder()
         counts(0) = cfdatlen \ 36
 
@@ -750,17 +748,7 @@ Public Class load_db
                         Array.ConstrainedCopy(bs, i - 32, cf_utf16, 0, 32)
                         str = System.Text.Encoding.GetEncoding(1201).GetString(cf_utf16)
                         sb.Clear()
-                        s1 = Chr(Convert.ToInt32(str.Substring(0, 2), 16))
-                        s2 = Chr(Convert.ToInt32(str.Substring(2, 2), 16))
-                        s3 = Chr(Convert.ToInt32(str.Substring(4, 2), 16))
-                        s4 = Chr(Convert.ToInt32(str.Substring(6, 2), 16))
-                        s5 = str.Substring(8, 8) 'str.Substring(8, 5)
-                        sb.Append(s1)
-                        sb.Append(s2)
-                        sb.Append(s3)
-                        sb.Append(s4)
-                        sb.Append("-")
-                        sb.Append(s5)
+                        sb.Append(cf2sceid(cfid, str))
                         b3 = sb.ToString()
                         b3 = b3.Replace(CChar(Chr(0)), "0")
                         gnode.Tag = b3
@@ -842,7 +830,198 @@ Public Class load_db
         file.Close()
         memory.FlushMemory() ' Force a garbage collection after all the memory processing
 
+        m.tt.Text = t1.ToString
+
     End Sub
+
+    Public Sub read_cfcp1201(ByVal filename As String, ByVal enc1 As Integer)
+
+        Dim t1 As Integer = System.Environment.TickCount
+
+        Dim m As MERGE = MERGE
+        Dim ew As error_window = error_window
+        Dim memory As New MemoryManagement
+        Dim file As New FileStream(filename, FileMode.Open, FileAccess.Read)
+        Dim counts(2) As Integer ' 0 = Line #, 1 = Progress bar counter, 2 = Total formatting errors, 3 = Error number
+        Dim percent As Double = 0
+        Dim gnode As New TreeNode ' Game name node for the TreeView control
+        Dim cnode As New TreeNode ' Code name node for the TreeView control
+        Dim skip As Boolean = False
+        Dim b3 As String = "0" & vbCrLf
+        m.codetree.Nodes.Add(Path.GetFileNameWithoutExtension(filename)).ImageIndex = 0 ' Add the root node and set its icon
+        m.progbar.Visible = True ' Show the progress bar and reset it's value
+        m.progbar.Value = 0 ' Reset the progress bar
+
+        reset_errors() ' Clear the error list before loading
+
+        Dim bs(CInt(file.Length)) As Byte
+        file.Read(bs, 0, bs.Length)
+        Dim cfdatlen As Integer = bs.Length
+
+        Dim cfid(4) As Byte
+        cfid(4) = &H2D
+        Dim s As String = Nothing
+        Dim i As Integer = 0
+        Dim k As Integer = 0
+        Dim n As Integer = 0
+        Dim cmt As Boolean = False
+        Dim sb As New System.Text.StringBuilder()
+        counts(0) = cfdatlen \ 36
+
+        ''CP1201　UFT16ビッグエンディアンでコードフリークDATを読む
+        Dim sr = New StreamReader(filename, Encoding.GetEncoding(1201))
+        s = sr.ReadToEnd()
+        sr.Close()
+        s = rpstringin(s)
+        ''U+0A0Aで分割
+        Dim ss As String() = s.Split(CChar("ਊ"))
+        Dim head As String = ""
+        Dim sbb As String = ""
+
+        Try
+            For i = 0 To ss.Length - 1
+                If (ss(i).Length > 1) Then
+                    head = ss(i).Substring(0, 1)
+                    s = ss(i).Remove(0, 1)
+                    ''U+4720でコードタイトル
+                    If (head = "䜠") Then
+                        cnode.Tag = sb.ToString
+                        sb.Clear()
+                        gnode = New TreeNode(s)
+                        With gnode
+                            .Name = s
+                            .Tag = Nothing
+                            .ImageIndex = 1
+                        End With
+                        m.codetree.Nodes(0).Nodes.Add(gnode)
+                        ''U+4D20でゲームID
+                    ElseIf (head = "䴠") Then
+                        cnode = New TreeNode("(M)")
+                        cnode.Name = "(M)"
+                        cnode.ImageIndex = 2
+                        gnode.Tag = cf2sceid(cfid, s)
+                        s = s.Insert(8, " 0x")
+                        sb.AppendLine("0")
+                        sb.Append("0x")
+                        sb.AppendLine(s)
+                        gnode.Nodes.Add(cnode)
+                        ''U+4420でコード名
+                    ElseIf (head = "䐠") Then
+                        ''コード名が’’(アポストロフィx2)の場合コメント
+                        If (ss(i).Length > 2 AndAlso s.Substring(0, 2) = "''") Then
+                            cmt = True
+                            sbb = s
+                        Else
+                            cnode.Tag = sb.ToString
+                            sb.Clear()
+                            cmt = False
+                            cnode = New TreeNode(s)
+                            cnode.Name = s
+                            cnode.ImageIndex = 2
+                            sb.AppendLine("0")
+                            gnode.Nodes.Add(cnode)
+                        End If
+
+                        ''U+4320でコード内容
+                    ElseIf (head = "䌠") Then
+                        If (cmt = False) Then
+                            sb.Append("0x")
+                            sb.AppendLine(s.Insert(8, " 0x"))
+                            counts(1) += 1
+                            ''コメント
+                        Else
+                            sb.Append("#")
+                            sb.AppendLine(sbb)
+                        End If
+                    End If
+
+                    If counts(1) = counts(0) Then
+                        ' Update the progressbar every 20 repetitions otherwise the program 
+                        ' will slow to a crawl from the constant re-draw of the progress bar
+                        percent = (i * 100) / cfdatlen
+                        m.progbar.Value = Convert.ToInt32(percent)
+                        m.progbar.PerformStep()
+                        Application.DoEvents()
+                        counts(1) = 0
+                    End If
+                End If
+            Next
+
+            cnode.Tag = sb.ToString
+
+
+
+        Catch ex As Exception
+
+            MessageBox.Show(ex.Message)
+
+        End Try
+
+        If ew.list_load_error.Items.Count = 0 And ew.list_save_error.Items.Count > 0 Then
+            ew.Show()
+            ew.tab_error.SelectedIndex = 1
+            m.Focus()
+            reset_toolbar()
+        End If
+
+        m.progbar.Visible = False
+        file.Close()
+        memory.FlushMemory() ' Force a garbage collection after all the memory processing
+
+        m.tt.Text = t1.ToString
+    End Sub
+
+    Dim pattern As String() = {"<(C)>", "<(R)>", "<(TM)>", "<肉>", "<どくろ>", "<顔白>", "<かえる>"}
+    Dim rp As String() = {"\xA9", "\xAE", "\x2122", "\x1C", "\x1D", "\x1E", "\x1F"}
+
+    Public Function cf2sceid(ByVal cfid As Byte(), ByVal str As String) As String
+        For k = 0 To 3
+            cfid(k) = CByte(Convert.ToInt32(str.Substring(2 * k, 2), 16))
+        Next
+        str = Encoding.ASCII.GetString(cfid) & str.Substring(8, 8)     'str.Substring(8, 5)
+        Return str
+    End Function
+
+    Private Function rpstringout(ByVal s As String) As String
+        Dim r = New Regex("<.*?>")
+        Dim m As Match = r.Match(s)
+        While (m.Success = True)
+            For i = 0 To 2
+                If (m.Value = pattern(i)) Then
+                    s = s.Replace(m.Value, rp(i))
+                    Exit While
+                End If
+            Next
+            m = m.NextMatch()
+        End While
+        Return s
+    End Function
+
+    Private Function rpstringin(ByVal s As String) As String
+        Dim r = New Regex("[\x1C-\x1F]")
+        Dim m As Match = r.Match(s)
+        While (m.Success = True)
+            For i = 3 To 6
+                If (m.Value = rp(i)) Then
+                    s = s.Replace(m.Value, pattern(i))
+                    Exit While
+                End If
+                m = m.NextMatch()
+            Next
+        End While
+        Dim u = New Regex("<.*?>")
+        Dim n As Match = u.Match(s)
+        While (n.Success = True)
+            For i = 0 To 2
+                If (n.Value = pattern(i)) Then
+                    s = s.Replace(n.Value, rp(i))
+                    Exit While
+                End If
+                n = n.NextMatch()
+            Next
+        End While
+        Return s
+    End Function
 
     Public Sub read_ar(ByVal filename As String, ByVal enc1 As Integer)
 

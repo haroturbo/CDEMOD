@@ -9,14 +9,16 @@ Public Class checkupdate
     Public Sub CDEupater(ByVal mode As String)
 
         If My.Computer.Network.IsAvailable Then
-            Dim tx As String = "http://mkijiro.googlecode.com/svn/trunk/CODEDITOR/CDEMOD/bin/Release/version"
-            Dim exe As String = "https://github.com/haroturbo/CDEMOD/blob/master/bin/Release/CDE_CP932_FM4.exe?raw=true"
-            Dim up As String = "https://github.com/haroturbo/CDEMOD/blob/master/updater/bin/Release/updater.exe?raw=true"
-            Dim tblbase = "http://mkijiro.googlecode.com/svn/trunk/CODEDITOR/CDEMOD/bin/Release/"
+            Dim tx As String = "https://raw.github.com/haroturbo/CDEMOD/master/bin/Release/version"
+            Dim exe As String = "https://github.com/haroturbo/CDEMOD/raw/master/bin/Release/CDE_CP932_FM4.exe"
+            Dim up As String = "https://github.com/haroturbo/CDEMOD/raw/master/updater/bin/Release/updater.exe"
+            Dim tblbase = "https://raw.github.com/haroturbo/CDEMOD/master/bin/Release/"
 
             If My.Settings.updatesever = False Then
+                tx = "http://mkijiro.googlecode.com/svn/trunk/CODEDITOR/CDEMOD/bin/Release/version"
                 exe = "http://mkijiro.googlecode.com/svn/trunk/CODEDITOR/CDEMOD/bin/Release/CDE_CP932_FM4.exe"
                 up = "http://mkijiro.googlecode.com/svn/trunk/CODEDITOR/CDEMOD/updater/bin/Release/updater.exe"
+                tblbase = "http://mkijiro.googlecode.com/svn/trunk/CODEDITOR/CDEMOD/bin/Release/"
             End If
 
             If Directory.Exists("table") = False Then
@@ -74,7 +76,7 @@ Public Class checkupdate
                             save = save.Replace(":", "")
                             save = save.Replace("/", "")
                             If  check.getweb(save, exe, 1) = "OK" Then
-                                MessageBox.Show(save & vbCrLf & "BUID:" & m.Value & "のダウンロードが完了しました" _
+                                MessageBox.Show(save & vbCrLf & "BUILD:" & m.Value & "のダウンロードが完了しました" _
                                  & vbCrLf & "設定を引き継ぎたい場合は起動しているEXE名と同じ名前にしてください", "ダウンロード完了")
                                 If mode = "start" Then
                                     MERGE.Close()

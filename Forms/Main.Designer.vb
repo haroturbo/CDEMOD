@@ -126,11 +126,12 @@ Partial Class MERGE
         Me.samename = New System.Windows.Forms.ToolStripMenuItem()
         Me.releasedate = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator12 = New System.Windows.Forms.ToolStripSeparator()
-        Me.GOOGLESVN = New System.Windows.Forms.ToolStripMenuItem()
         Me.GITHUB = New System.Windows.Forms.ToolStripMenuItem()
+        Me.GOOGLESVN = New System.Windows.Forms.ToolStripMenuItem()
         Me.DBENCODE = New System.Windows.Forms.ToolStripMenuItem()
         Me.ENCTRING = New System.Windows.Forms.ToolStripMenuItem()
         Me.CPENC = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CFEDIT = New System.Windows.Forms.ToolStripMenuItem()
         Me.ヘルプHToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.オンラインヘルプToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.バージョン情報ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -209,6 +210,7 @@ Partial Class MERGE
         Me.dmtext = New System.Windows.Forms.TextBox()
         Me.curr_line = New System.Windows.Forms.Label()
         Me.コード形式 = New System.Windows.Forms.Label()
+        Me.tt = New System.Windows.Forms.Label()
         Me.treeopen.SuspendLayout()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.tool_menu.SuspendLayout()
@@ -731,7 +733,7 @@ Partial Class MERGE
         '
         'menu_options
         '
-        Me.menu_options.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.options_ontop, Me.options_error, Me.ブラウザ変更ToolStripMenuItem, Me.menu_font, Me.ToolStripMenuItem1, Me.grided_use, Me.fixedform, Me.FTPDsetting, Me.PBPHBHASH, Me.update_save_filepass, Me.autoupdater, Me.DBENCODE})
+        Me.menu_options.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.options_ontop, Me.options_error, Me.ブラウザ変更ToolStripMenuItem, Me.menu_font, Me.ToolStripMenuItem1, Me.grided_use, Me.fixedform, Me.FTPDsetting, Me.PBPHBHASH, Me.update_save_filepass, Me.autoupdater, Me.DBENCODE, Me.CFEDIT})
         Me.menu_options.Name = "menu_options"
         Me.menu_options.Size = New System.Drawing.Size(99, 22)
         Me.menu_options.Text = "オプション(&O)"
@@ -905,7 +907,7 @@ Partial Class MERGE
         '
         'autoupdater
         '
-        Me.autoupdater.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.samename, Me.releasedate, Me.ToolStripSeparator12, Me.GOOGLESVN, Me.GITHUB})
+        Me.autoupdater.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.samename, Me.releasedate, Me.ToolStripSeparator12, Me.GITHUB, Me.GOOGLESVN})
         Me.autoupdater.Name = "autoupdater"
         Me.autoupdater.Size = New System.Drawing.Size(297, 22)
         Me.autoupdater.Text = "起動時最新版チェック"
@@ -928,17 +930,17 @@ Partial Class MERGE
         Me.ToolStripSeparator12.Name = "ToolStripSeparator12"
         Me.ToolStripSeparator12.Size = New System.Drawing.Size(191, 6)
         '
-        'GOOGLESVN
-        '
-        Me.GOOGLESVN.Name = "GOOGLESVN"
-        Me.GOOGLESVN.Size = New System.Drawing.Size(194, 22)
-        Me.GOOGLESVN.Text = "GOOGLESVNからDL"
-        '
         'GITHUB
         '
         Me.GITHUB.Name = "GITHUB"
         Me.GITHUB.Size = New System.Drawing.Size(194, 22)
         Me.GITHUB.Text = "GITHUBからDL"
+        '
+        'GOOGLESVN
+        '
+        Me.GOOGLESVN.Name = "GOOGLESVN"
+        Me.GOOGLESVN.Size = New System.Drawing.Size(194, 22)
+        Me.GOOGLESVN.Text = "GOOGLESVNからDL"
         '
         'DBENCODE
         '
@@ -964,6 +966,14 @@ Partial Class MERGE
         Me.CPENC.Text = "[CP(番号)]で保存]"
         Me.CPENC.ToolTipText = "M$コードページ番号で保存します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "M$にないコードページは仮の番号が吐き出されます" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "//FAKECODEPAGE" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Shift_JIS-2004=CP2132" & _
     "004" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "EUC-JIS-2004=CP512132004" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "eucJP-ms=CP21220932" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "BIG5-HKSCS=CP951"
+        '
+        'CFEDIT
+        '
+        Me.CFEDIT.Name = "CFEDIT"
+        Me.CFEDIT.Size = New System.Drawing.Size(297, 22)
+        Me.CFEDIT.Text = "CFDATを(M)付きで変換する"
+        Me.CFEDIT.ToolTipText = "読み込み時マスターコード(M)がゲームの一番初めのコードに表示されるようになります。" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "(M)がある場合、保存時にマスターコードとして優先して出力します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "(M)" & _
+    "なしの場合,ゲームIDフォームのULJM-00000XXXを変換して出力します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "XXXがない場合は820,CWCモードとして出力します。"
         '
         'ヘルプHToolStripMenuItem
         '
@@ -1500,6 +1510,7 @@ Partial Class MERGE
         Me.TextBox1.Name = "TextBox1"
         Me.TextBox1.Size = New System.Drawing.Size(1, 19)
         Me.TextBox1.TabIndex = 0
+        Me.TextBox1.Visible = False
         '
         'TextBox2
         '
@@ -1507,6 +1518,7 @@ Partial Class MERGE
         Me.TextBox2.Name = "TextBox2"
         Me.TextBox2.Size = New System.Drawing.Size(1, 19)
         Me.TextBox2.TabIndex = 19
+        Me.TextBox2.Visible = False
         '
         'Panel1
         '
@@ -1666,12 +1678,23 @@ Partial Class MERGE
         Me.コード形式.TabIndex = 21
         Me.コード形式.Text = "コード形式"
         '
+        'tt
+        '
+        Me.tt.AutoSize = True
+        Me.tt.Location = New System.Drawing.Point(522, 416)
+        Me.tt.Name = "tt"
+        Me.tt.Size = New System.Drawing.Size(38, 12)
+        Me.tt.TabIndex = 36
+        Me.tt.Text = "Label2"
+        Me.tt.Visible = False
+        '
         'MERGE
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoScroll = True
         Me.ClientSize = New System.Drawing.Size(779, 561)
+        Me.Controls.Add(Me.tt)
         Me.Controls.Add(Me.curr_line)
         Me.Controls.Add(Me.dmtext)
         Me.Controls.Add(Me.PSF)
@@ -1908,5 +1931,7 @@ Partial Class MERGE
     Friend WithEvents CCP As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents eucms As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents GITHUB As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents tt As System.Windows.Forms.Label
+    Friend WithEvents CFEDIT As System.Windows.Forms.ToolStripMenuItem
 
 End Class

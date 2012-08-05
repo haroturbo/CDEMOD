@@ -143,6 +143,12 @@
     <Compile Include="Forms\codepage.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\txrp.Designer.vb">
+      <DependentUpon>txrp.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\txrp.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\gnote.Designer.vb">
       <DependentUpon>gnote.vb</DependentUpon>
     </Compile>
@@ -223,6 +229,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Forms\codepage.resx">
       <DependentUpon>codepage.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\txrp.resx">
+      <DependentUpon>txrp.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\gnote.resx">
       <DependentUpon>gnote.vb</DependentUpon>

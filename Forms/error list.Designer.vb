@@ -37,9 +37,18 @@ Partial Class error_window
         Me.scol_game = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.scol_codetitle = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.scol_reason = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.tab_parse = New System.Windows.Forms.TabPage()
+        Me.list_parse_error = New System.Windows.Forms.ListView()
+        Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader6 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader3 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader4 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader5 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.tab_error.SuspendLayout()
         Me.tab_load.SuspendLayout()
         Me.tab_save.SuspendLayout()
+        Me.tab_parse.SuspendLayout()
         Me.SuspendLayout()
         '
         'list_load_error
@@ -52,7 +61,7 @@ Partial Class error_window
         Me.list_load_error.Location = New System.Drawing.Point(3, 3)
         Me.list_load_error.MultiSelect = False
         Me.list_load_error.Name = "list_load_error"
-        Me.list_load_error.Size = New System.Drawing.Size(643, 103)
+        Me.list_load_error.Size = New System.Drawing.Size(630, 183)
         Me.list_load_error.TabIndex = 0
         Me.list_load_error.UseCompatibleStateImageBehavior = False
         Me.list_load_error.View = System.Windows.Forms.View.Details
@@ -80,17 +89,18 @@ Partial Class error_window
         'col_linetext
         '
         Me.col_linetext.Text = "テキスト内容"
-        Me.col_linetext.Width = 252
+        Me.col_linetext.Width = 300
         '
         'tab_error
         '
         Me.tab_error.Controls.Add(Me.tab_load)
         Me.tab_error.Controls.Add(Me.tab_save)
+        Me.tab_error.Controls.Add(Me.tab_parse)
         Me.tab_error.Dock = System.Windows.Forms.DockStyle.Fill
         Me.tab_error.Location = New System.Drawing.Point(0, 0)
         Me.tab_error.Name = "tab_error"
         Me.tab_error.SelectedIndex = 0
-        Me.tab_error.Size = New System.Drawing.Size(657, 135)
+        Me.tab_error.Size = New System.Drawing.Size(618, 172)
         Me.tab_error.TabIndex = 1
         '
         'tab_load
@@ -99,7 +109,7 @@ Partial Class error_window
         Me.tab_load.Location = New System.Drawing.Point(4, 22)
         Me.tab_load.Name = "tab_load"
         Me.tab_load.Padding = New System.Windows.Forms.Padding(3)
-        Me.tab_load.Size = New System.Drawing.Size(649, 109)
+        Me.tab_load.Size = New System.Drawing.Size(636, 189)
         Me.tab_load.TabIndex = 0
         Me.tab_load.Text = "読み込み時エラー"
         Me.tab_load.UseVisualStyleBackColor = True
@@ -110,7 +120,7 @@ Partial Class error_window
         Me.tab_save.Location = New System.Drawing.Point(4, 22)
         Me.tab_save.Name = "tab_save"
         Me.tab_save.Padding = New System.Windows.Forms.Padding(3)
-        Me.tab_save.Size = New System.Drawing.Size(649, 109)
+        Me.tab_save.Size = New System.Drawing.Size(636, 189)
         Me.tab_save.TabIndex = 1
         Me.tab_save.Text = "保存時エラー"
         Me.tab_save.UseVisualStyleBackColor = True
@@ -125,7 +135,7 @@ Partial Class error_window
         Me.list_save_error.Location = New System.Drawing.Point(3, 3)
         Me.list_save_error.MultiSelect = False
         Me.list_save_error.Name = "list_save_error"
-        Me.list_save_error.Size = New System.Drawing.Size(643, 103)
+        Me.list_save_error.Size = New System.Drawing.Size(630, 183)
         Me.list_save_error.TabIndex = 0
         Me.list_save_error.UseCompatibleStateImageBehavior = False
         Me.list_save_error.View = System.Windows.Forms.View.Details
@@ -148,13 +158,68 @@ Partial Class error_window
         'scol_reason
         '
         Me.scol_reason.Text = "保存エラー"
-        Me.scol_reason.Width = 260
+        Me.scol_reason.Width = 300
+        '
+        'tab_parse
+        '
+        Me.tab_parse.Controls.Add(Me.list_parse_error)
+        Me.tab_parse.Location = New System.Drawing.Point(4, 22)
+        Me.tab_parse.Name = "tab_parse"
+        Me.tab_parse.Padding = New System.Windows.Forms.Padding(3)
+        Me.tab_parse.Size = New System.Drawing.Size(610, 146)
+        Me.tab_parse.TabIndex = 2
+        Me.tab_parse.Text = "パーサー"
+        Me.tab_parse.UseVisualStyleBackColor = True
+        '
+        'list_parse_error
+        '
+        Me.list_parse_error.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2, Me.ColumnHeader6, Me.ColumnHeader3, Me.ColumnHeader4, Me.ColumnHeader5})
+        Me.list_parse_error.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.list_parse_error.FullRowSelect = True
+        Me.list_parse_error.GridLines = True
+        Me.list_parse_error.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable
+        Me.list_parse_error.Location = New System.Drawing.Point(3, 3)
+        Me.list_parse_error.MultiSelect = False
+        Me.list_parse_error.Name = "list_parse_error"
+        Me.list_parse_error.Size = New System.Drawing.Size(604, 140)
+        Me.list_parse_error.TabIndex = 1
+        Me.list_parse_error.UseCompatibleStateImageBehavior = False
+        Me.list_parse_error.View = System.Windows.Forms.View.Details
+        '
+        'ColumnHeader1
+        '
+        Me.ColumnHeader1.Text = "エラー #"
+        Me.ColumnHeader1.Width = 63
+        '
+        'ColumnHeader2
+        '
+        Me.ColumnHeader2.Text = "行数 #"
+        Me.ColumnHeader2.Width = 57
+        '
+        'ColumnHeader6
+        '
+        Me.ColumnHeader6.Text = "#位置"
+        '
+        'ColumnHeader3
+        '
+        Me.ColumnHeader3.Text = "ゲーム名"
+        Me.ColumnHeader3.Width = 83
+        '
+        'ColumnHeader4
+        '
+        Me.ColumnHeader4.Text = "コード名"
+        Me.ColumnHeader4.Width = 178
+        '
+        'ColumnHeader5
+        '
+        Me.ColumnHeader5.Text = "テキスト内容"
+        Me.ColumnHeader5.Width = 300
         '
         'error_window
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(657, 135)
+        Me.ClientSize = New System.Drawing.Size(618, 172)
         Me.Controls.Add(Me.tab_error)
         Me.Font = New System.Drawing.Font("ＭＳ ゴシック", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
@@ -168,6 +233,7 @@ Partial Class error_window
         Me.tab_error.ResumeLayout(False)
         Me.tab_load.ResumeLayout(False)
         Me.tab_save.ResumeLayout(False)
+        Me.tab_parse.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -185,5 +251,13 @@ Partial Class error_window
     Friend WithEvents scol_game As System.Windows.Forms.ColumnHeader
     Friend WithEvents scol_codetitle As System.Windows.Forms.ColumnHeader
     Friend WithEvents scol_reason As System.Windows.Forms.ColumnHeader
+    Friend WithEvents tab_parse As System.Windows.Forms.TabPage
+    Friend WithEvents list_parse_error As System.Windows.Forms.ListView
+    Friend WithEvents ColumnHeader1 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ColumnHeader2 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ColumnHeader3 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ColumnHeader4 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ColumnHeader5 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ColumnHeader6 As System.Windows.Forms.ColumnHeader
 
 End Class

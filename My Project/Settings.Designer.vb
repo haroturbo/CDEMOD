@@ -489,7 +489,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
         Public Property updatesever() As Boolean
             Get
                 Return CType(Me("updatesever"),Boolean)
@@ -652,6 +652,66 @@ Namespace My
             End Get
             Set
                 Me("cpstr") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property cfid() As Boolean
+            Get
+                Return CType(Me("cfid"),Boolean)
+            End Get
+            Set
+                Me("cfid") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property seekstr() As String
+            Get
+                Return CType(Me("seekstr"),String)
+            End Get
+            Set
+                Me("seekstr") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property rpstr() As String
+            Get
+                Return CType(Me("rpstr"),String)
+            End Get
+            Set
+                Me("rpstr") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+        Public Property seek_rp() As Integer
+            Get
+                Return CType(Me("seek_rp"),Integer)
+            End Get
+            Set
+                Me("seek_rp") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property perror() As String
+            Get
+                Return CType(Me("perror"),String)
+            End Get
+            Set
+                Me("perror") = value
             End Set
         End Property
     End Class

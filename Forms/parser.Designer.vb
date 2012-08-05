@@ -22,35 +22,31 @@ Partial Class parser
     'コード エディターを使って変更しないでください。
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.TX = New System.Windows.Forms.TextBox()
         Me.OK = New System.Windows.Forms.Button()
         Me.cancel = New System.Windows.Forms.Button()
         Me.clear = New System.Windows.Forms.Button()
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.Button2 = New System.Windows.Forms.Button()
-        Me.Button3 = New System.Windows.Forms.Button()
+        Me.CMT_FIX = New System.Windows.Forms.Button()
+        Me.CODE_FIX = New System.Windows.Forms.Button()
+        Me.NAME_FIX = New System.Windows.Forms.Button()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
-        Me.MenuStrip2 = New System.Windows.Forms.MenuStrip()
-        Me.MenuStrip3 = New System.Windows.Forms.MenuStrip()
-        Me.MenuStrip4 = New System.Windows.Forms.MenuStrip()
+        Me.編集ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.検索ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.置換ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.MenuStrip4.SuspendLayout()
+        Me.PARSE_CHECK = New System.Windows.Forms.Button()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.SEEK_ERROR = New System.Windows.Forms.Button()
+        Me.FIND_REGEX = New System.Windows.Forms.ComboBox()
+        Me.TX = New System.Windows.Forms.TextBox()
+        Me.エラーリスト検索文字編集ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuStrip1.SuspendLayout()
+        Me.Panel1.SuspendLayout()
+        Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
-        '
-        'TX
-        '
-        Me.TX.Location = New System.Drawing.Point(12, 12)
-        Me.TX.MaxLength = 0
-        Me.TX.Multiline = True
-        Me.TX.Name = "TX"
-        Me.TX.ScrollBars = System.Windows.Forms.ScrollBars.Both
-        Me.TX.Size = New System.Drawing.Size(259, 202)
-        Me.TX.TabIndex = 0
         '
         'OK
         '
-        Me.OK.Location = New System.Drawing.Point(12, 272)
+        Me.OK.Location = New System.Drawing.Point(6, 51)
         Me.OK.Name = "OK"
         Me.OK.Size = New System.Drawing.Size(75, 23)
         Me.OK.TabIndex = 1
@@ -59,7 +55,7 @@ Partial Class parser
         '
         'cancel
         '
-        Me.cancel.Location = New System.Drawing.Point(106, 272)
+        Me.cancel.Location = New System.Drawing.Point(87, 51)
         Me.cancel.Name = "cancel"
         Me.cancel.Size = New System.Drawing.Size(75, 23)
         Me.cancel.TabIndex = 2
@@ -68,124 +64,171 @@ Partial Class parser
         '
         'clear
         '
-        Me.clear.Location = New System.Drawing.Point(196, 272)
+        Me.clear.Location = New System.Drawing.Point(168, 51)
         Me.clear.Name = "clear"
         Me.clear.Size = New System.Drawing.Size(75, 23)
         Me.clear.TabIndex = 3
         Me.clear.Text = "クリア"
         Me.clear.UseVisualStyleBackColor = True
         '
-        'Button1
+        'CMT_FIX
         '
-        Me.Button1.Location = New System.Drawing.Point(12, 232)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(75, 23)
-        Me.Button1.TabIndex = 4
-        Me.Button1.Text = "#補正"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.CMT_FIX.Location = New System.Drawing.Point(6, 8)
+        Me.CMT_FIX.Name = "CMT_FIX"
+        Me.CMT_FIX.Size = New System.Drawing.Size(75, 23)
+        Me.CMT_FIX.TabIndex = 4
+        Me.CMT_FIX.Text = "#補正"
+        Me.CMT_FIX.UseVisualStyleBackColor = True
         '
-        'Button2
+        'CODE_FIX
         '
-        Me.Button2.Location = New System.Drawing.Point(106, 232)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(75, 23)
-        Me.Button2.TabIndex = 5
-        Me.Button2.Text = "_L補正"
-        Me.Button2.UseVisualStyleBackColor = True
+        Me.CODE_FIX.Location = New System.Drawing.Point(87, 8)
+        Me.CODE_FIX.Name = "CODE_FIX"
+        Me.CODE_FIX.Size = New System.Drawing.Size(75, 23)
+        Me.CODE_FIX.TabIndex = 5
+        Me.CODE_FIX.Text = "_L補正"
+        Me.CODE_FIX.UseVisualStyleBackColor = True
         '
-        'Button3
+        'NAME_FIX
         '
-        Me.Button3.Location = New System.Drawing.Point(196, 232)
-        Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(75, 23)
-        Me.Button3.TabIndex = 6
-        Me.Button3.Text = "_C補正"
-        Me.Button3.UseVisualStyleBackColor = True
+        Me.NAME_FIX.Location = New System.Drawing.Point(168, 8)
+        Me.NAME_FIX.Name = "NAME_FIX"
+        Me.NAME_FIX.Size = New System.Drawing.Size(75, 23)
+        Me.NAME_FIX.TabIndex = 6
+        Me.NAME_FIX.Text = "_C補正"
+        Me.NAME_FIX.UseVisualStyleBackColor = True
         '
         'MenuStrip1
         '
-        Me.MenuStrip1.Location = New System.Drawing.Point(0, 72)
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.編集ToolStripMenuItem})
+        Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(284, 24)
-        Me.MenuStrip1.TabIndex = 7
-        Me.MenuStrip1.Text = "MenuStrip1"
+        Me.MenuStrip1.Size = New System.Drawing.Size(283, 26)
+        Me.MenuStrip1.TabIndex = 10
+        Me.MenuStrip1.Text = "MenuStrip4"
         '
-        'MenuStrip2
+        '編集ToolStripMenuItem
         '
-        Me.MenuStrip2.Location = New System.Drawing.Point(0, 48)
-        Me.MenuStrip2.Name = "MenuStrip2"
-        Me.MenuStrip2.Size = New System.Drawing.Size(284, 24)
-        Me.MenuStrip2.TabIndex = 8
-        Me.MenuStrip2.Text = "MenuStrip2"
-        '
-        'MenuStrip3
-        '
-        Me.MenuStrip3.Location = New System.Drawing.Point(0, 24)
-        Me.MenuStrip3.Name = "MenuStrip3"
-        Me.MenuStrip3.Size = New System.Drawing.Size(284, 24)
-        Me.MenuStrip3.TabIndex = 9
-        Me.MenuStrip3.Text = "MenuStrip3"
-        '
-        'MenuStrip4
-        '
-        Me.MenuStrip4.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.検索ToolStripMenuItem, Me.置換ToolStripMenuItem})
-        Me.MenuStrip4.Location = New System.Drawing.Point(0, 0)
-        Me.MenuStrip4.Name = "MenuStrip4"
-        Me.MenuStrip4.Size = New System.Drawing.Size(284, 24)
-        Me.MenuStrip4.TabIndex = 10
-        Me.MenuStrip4.Text = "MenuStrip4"
+        Me.編集ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.検索ToolStripMenuItem, Me.置換ToolStripMenuItem, Me.エラーリスト検索文字編集ToolStripMenuItem})
+        Me.編集ToolStripMenuItem.Name = "編集ToolStripMenuItem"
+        Me.編集ToolStripMenuItem.Size = New System.Drawing.Size(44, 22)
+        Me.編集ToolStripMenuItem.Text = "検索"
         '
         '検索ToolStripMenuItem
         '
         Me.検索ToolStripMenuItem.Name = "検索ToolStripMenuItem"
-        Me.検索ToolStripMenuItem.Size = New System.Drawing.Size(41, 20)
+        Me.検索ToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
         Me.検索ToolStripMenuItem.Text = "検索"
-        Me.検索ToolStripMenuItem.Visible = False
         '
         '置換ToolStripMenuItem
         '
         Me.置換ToolStripMenuItem.Name = "置換ToolStripMenuItem"
-        Me.置換ToolStripMenuItem.Size = New System.Drawing.Size(41, 20)
+        Me.置換ToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
         Me.置換ToolStripMenuItem.Text = "置換"
-        Me.置換ToolStripMenuItem.Visible = False
+        '
+        'PARSE_CHECK
+        '
+        Me.PARSE_CHECK.Location = New System.Drawing.Point(162, 16)
+        Me.PARSE_CHECK.Name = "PARSE_CHECK"
+        Me.PARSE_CHECK.Size = New System.Drawing.Size(69, 23)
+        Me.PARSE_CHECK.TabIndex = 11
+        Me.PARSE_CHECK.Text = "チェック"
+        Me.PARSE_CHECK.UseVisualStyleBackColor = True
+        '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.GroupBox1)
+        Me.Panel1.Controls.Add(Me.CMT_FIX)
+        Me.Panel1.Controls.Add(Me.CODE_FIX)
+        Me.Panel1.Controls.Add(Me.clear)
+        Me.Panel1.Controls.Add(Me.NAME_FIX)
+        Me.Panel1.Controls.Add(Me.OK)
+        Me.Panel1.Controls.Add(Me.cancel)
+        Me.Panel1.Location = New System.Drawing.Point(12, 257)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(259, 139)
+        Me.Panel1.TabIndex = 13
+        '
+        'GroupBox1
+        '
+        Me.GroupBox1.Controls.Add(Me.SEEK_ERROR)
+        Me.GroupBox1.Controls.Add(Me.PARSE_CHECK)
+        Me.GroupBox1.Controls.Add(Me.FIND_REGEX)
+        Me.GroupBox1.Location = New System.Drawing.Point(6, 80)
+        Me.GroupBox1.Name = "GroupBox1"
+        Me.GroupBox1.Size = New System.Drawing.Size(237, 51)
+        Me.GroupBox1.TabIndex = 14
+        Me.GroupBox1.TabStop = False
+        Me.GroupBox1.Text = "エラーリスト検索/チェック"
+        '
+        'SEEK_ERROR
+        '
+        Me.SEEK_ERROR.Location = New System.Drawing.Point(94, 16)
+        Me.SEEK_ERROR.Name = "SEEK_ERROR"
+        Me.SEEK_ERROR.Size = New System.Drawing.Size(62, 23)
+        Me.SEEK_ERROR.TabIndex = 14
+        Me.SEEK_ERROR.Text = "検索"
+        Me.SEEK_ERROR.UseVisualStyleBackColor = True
+        '
+        'FIND_REGEX
+        '
+        Me.FIND_REGEX.FormattingEnabled = True
+        Me.FIND_REGEX.Location = New System.Drawing.Point(6, 18)
+        Me.FIND_REGEX.Name = "FIND_REGEX"
+        Me.FIND_REGEX.Size = New System.Drawing.Size(82, 20)
+        Me.FIND_REGEX.TabIndex = 13
+        Me.FIND_REGEX.Text = "^[0-9A-Fa-f]{8}"
+        '
+        'TX
+        '
+        Me.TX.Location = New System.Drawing.Point(18, 29)
+        Me.TX.MaxLength = 0
+        Me.TX.Multiline = True
+        Me.TX.Name = "TX"
+        Me.TX.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.TX.Size = New System.Drawing.Size(253, 222)
+        Me.TX.TabIndex = 14
+        '
+        'エラーリスト検索文字編集ToolStripMenuItem
+        '
+        Me.エラーリスト検索文字編集ToolStripMenuItem.Name = "エラーリスト検索文字編集ToolStripMenuItem"
+        Me.エラーリスト検索文字編集ToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
+        Me.エラーリスト検索文字編集ToolStripMenuItem.Text = "エラーリスト検索文字編集"
         '
         'parser
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(284, 303)
-        Me.Controls.Add(Me.Button3)
-        Me.Controls.Add(Me.Button2)
-        Me.Controls.Add(Me.Button1)
-        Me.Controls.Add(Me.clear)
-        Me.Controls.Add(Me.cancel)
-        Me.Controls.Add(Me.OK)
+        Me.ClientSize = New System.Drawing.Size(283, 400)
         Me.Controls.Add(Me.TX)
+        Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.MenuStrip1)
-        Me.Controls.Add(Me.MenuStrip2)
-        Me.Controls.Add(Me.MenuStrip3)
-        Me.Controls.Add(Me.MenuStrip4)
-        Me.MainMenuStrip = Me.MenuStrip1
         Me.Name = "parser"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "一括パーサー"
-        Me.MenuStrip4.ResumeLayout(False)
-        Me.MenuStrip4.PerformLayout()
+        Me.MenuStrip1.ResumeLayout(False)
+        Me.MenuStrip1.PerformLayout()
+        Me.Panel1.ResumeLayout(False)
+        Me.GroupBox1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents TX As System.Windows.Forms.TextBox
     Friend WithEvents OK As System.Windows.Forms.Button
     Friend WithEvents cancel As System.Windows.Forms.Button
     Friend WithEvents clear As System.Windows.Forms.Button
-    Friend WithEvents Button1 As System.Windows.Forms.Button
-    Friend WithEvents Button2 As System.Windows.Forms.Button
-    Friend WithEvents Button3 As System.Windows.Forms.Button
+    Friend WithEvents CMT_FIX As System.Windows.Forms.Button
+    Friend WithEvents CODE_FIX As System.Windows.Forms.Button
+    Friend WithEvents NAME_FIX As System.Windows.Forms.Button
     Friend WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip
-    Friend WithEvents MenuStrip2 As System.Windows.Forms.MenuStrip
-    Friend WithEvents MenuStrip3 As System.Windows.Forms.MenuStrip
-    Friend WithEvents MenuStrip4 As System.Windows.Forms.MenuStrip
+    Friend WithEvents PARSE_CHECK As System.Windows.Forms.Button
+    Friend WithEvents Panel1 As System.Windows.Forms.Panel
+    Friend WithEvents 編集ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents 検索ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents 置換ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents FIND_REGEX As System.Windows.Forms.ComboBox
+    Friend WithEvents SEEK_ERROR As System.Windows.Forms.Button
+    Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
+    Friend WithEvents TX As System.Windows.Forms.TextBox
+    Friend WithEvents エラーリスト検索文字編集ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 End Class

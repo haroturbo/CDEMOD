@@ -1,6 +1,7 @@
 ﻿Imports System
 Imports System.IO
 Imports System.Text
+Imports System.Text.RegularExpressions
 
 Public Class save_db
 
@@ -574,8 +575,11 @@ Public Class save_db
         Dim sce As Integer() = {0, 0, 0, 0}
         Dim cfmax As Integer = 0
         Dim namebak As Integer = 0
+        Dim cfidbk As Integer = 0
         Dim gidst As String = ""
-
+        Dim cfids As Regex = New Regex("0x[0-9A-Fa-f]{8} 0x[0-9A-Fa-f]{8}")
+        Dim cfim As Match
+        Dim s1 As String = ""
 
         Try
             If m.codetree.Nodes(0).Nodes.Count = 0 Then
@@ -609,16 +613,9 @@ Public Class save_db
                     gidst = gidst.PadRight(10, CChar("0"))
                 End If
                 gid = gidst.Remove(4, 1)
-                    'Shift JISとして文字列に変換
-                    bytesData = Encoding.GetEncoding(0).GetBytes(gid)
-                    sce(0) = CType(bytesData(0), Integer)
-                    sce(1) = CType(bytesData(1), Integer)
-                    sce(2) = CType(bytesData(2), Integer)
-                    sce(3) = CType(bytesData(3), Integer)
-                    gid = (sce(0) >> 4).ToString("X") & (sce(0) And &HF).ToString("X")
-                    gid &= (sce(1) >> 4).ToString("X") & (sce(1) And &HF).ToString("X")
-                    gid &= (sce(2) >> 4).ToString("X") & (sce(2) And &HF).ToString("X")
-                gid &= (sce(3) >> 4).ToString("X") & (sce(3) And &HF).ToString("X")
+                'ASCIIとして文字列に変換
+                bytesData = Encoding.GetEncoding(1252).GetBytes(gid)
+                gid = cvtsceid2cf(bytesData)
                 If gidst.Length = 13 Then
                     gid &= gidst.Remove(0, 5) 'CFID
                 Else
@@ -649,8 +646,9 @@ Public Class save_db
                     bs(i + 1) = 10
                     i += 2
                     bs(i) = &H4D    'M ゲームID
-                    bs(i + 1) = &H20
-                    i += 2
+                bs(i + 1) = &H20
+                i += 2
+                cfidbk = i
                     cp1201len = gid.Length * 2
                     cfutf16be = Encoding.GetEncoding(1201).GetBytes(gid)
                     Array.ConstrainedCopy(cfutf16be, 0, bs, i, cp1201len)
@@ -670,8 +668,18 @@ Public Class save_db
                             bs(i) = 10
                             bs(i + 1) = 10
                             i += 2
-                        End If
+                    End If
 
+                    If n1.Index = 0 AndAlso n1.Text = "(M)" Then
+                        cfim = cfids.Match(n1.Tag.ToString)
+                        If cfim.Success Then
+                            s1 = cfim.Value
+                            s1 = s1.Replace("0x", "")
+                            s1 = s1.Replace(" ", "")
+                            cfutf16be = Encoding.GetEncoding(1201).GetBytes(s1)
+                            Array.ConstrainedCopy(cfutf16be, 0, bs, cfidbk, 32)
+                        End If
+                    Else
                         bs(i) = &H44 'D コード名
                         bs(i + 1) = &H20
                         i += 2
@@ -725,10 +733,8 @@ Public Class save_db
                                 End If
                             Next
                         End If
-
-                    Next
-
-
+                    End If
+                Next
             Next
 
 
@@ -753,6 +759,17 @@ Public Class save_db
 
 
     End Sub
+
+    Public Function cvtsceid2cf(ByVal b As Byte()) As String
+        Dim sb As StringBuilder = New StringBuilder
+        For i = 0 To 3
+            sb.Append((CType(b(i), Integer) >> 4).ToString("X"))
+            sb.Append((CType(b(i), Integer) And 15).ToString("X"))
+        Next
+
+        Return sb.ToString
+
+    End Function
 
     Public Sub save_ar(ByVal filename As String, ByVal enc1 As Integer)
 
@@ -1035,19 +1052,20 @@ Public Class save_db
 
     End Sub
 
-    Private Sub write_errors(ByVal error_n As Integer, ByVal game_t As String, ByVal code_t As String, _
-                             ByVal error_r As String)
+    Private Sub write_errors(ByVal error_n As Integer, ByVal game_t As String, ByVal code_t As String, ByVal error_r As String)
 
         Dim ew As error_window = error_window
 
-        With ew.list_save_error
-            .Items.Add(error_n.ToString)
-            .Items(error_n - 1).SubItems.Add(game_t)
-            .Items(error_n - 1).SubItems.Add(code_t)
-            .Items(error_n - 1).SubItems.Add(error_r)
-        End With
+        Dim itemx As New ListViewItem
+        If error_n > 0 AndAlso game_t <> "" AndAlso code_t <> "" AndAlso error_r <> "" Then
+            itemx.Text = error_n.ToString
+            itemx.SubItems.Add(game_t)
+            itemx.SubItems.Add(code_t)
+            itemx.SubItems.Add(error_r.Trim)
+            ew.list_save_error.Items.Add(itemx)
+            Application.DoEvents()
+        End If
 
-        Application.DoEvents()
 
     End Sub
 

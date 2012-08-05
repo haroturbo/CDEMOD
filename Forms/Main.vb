@@ -47,6 +47,9 @@ Public Class MERGE
             GBKOP.Checked = True
         End If
 
+        If My.Settings.cfid = True Then
+            CFEDIT.Checked = True
+        End If
 
         If My.Settings.saveencode = True Then
             DBENCODE.Checked = True
@@ -58,11 +61,8 @@ Public Class MERGE
             ENCTRING.Checked = True
         End If
 
-
         If My.Settings.codepathwhensave = True Then
             update_save_filepass.Checked = True
-        Else
-            update_save_filepass.Checked = False
         End If
 
         If My.Settings.updater = True Then
@@ -73,12 +73,9 @@ Public Class MERGE
             autoupdater.Checked = False
         End If
 
-        If My.Settings.hbhash = False Then
-            PBPHBHASH.Checked = False
-        Else
+        If My.Settings.hbhash = True Then
             PBPHBHASH.Checked = True
         End If
-
 
         If My.Settings.updatemode = False Then
             releasedate.Checked = True
@@ -94,7 +91,6 @@ Public Class MERGE
             If maintop = True Then
                 error_window.TopMost = True
             End If
-
         Else
             error_window.Hide()
             options_error.Checked = False
@@ -164,7 +160,11 @@ Public Class MERGE
                 reset_PSP()
                 Application.DoEvents()
                 enc1 = 1201
-                open.read_cf(database, 1201)
+                If CFEDIT.Checked = False Then
+                    open.read_cf(database, 1201)
+                Else
+                    open.read_cfcp1201(database, 1201)
+                End If
             ElseIf DATEL = True Then
                 reset_PSP()
                 Application.DoEvents()
@@ -233,10 +233,10 @@ Public Class MERGE
         GITHUB.Checked = My.Settings.updatesever
         GOOGLESVN.Checked = Not GITHUB.Checked
 
-            If My.Settings.updatecomp = True Then
-                MessageBox.Show("アップデートが完了しました", "アップデート完了")
-                My.Settings.updatecomp = False
-            End If
+        If My.Settings.updatecomp = True Then
+            MessageBox.Show("アップデートが完了しました", "アップデート完了")
+            My.Settings.updatecomp = False
+        End If
 
 
     End Sub
@@ -370,7 +370,11 @@ Public Class MERGE
                 reset_PSP()
                 Application.DoEvents()
                 enc1 = 1201
-                open.read_cf(database, 1201)
+                If CFEDIT.Checked = False Then
+                    open.read_cf(database, 1201)
+                Else
+                    open.read_cfcp1201(database, 1201)
+                End If
             ElseIf DATEL = True Then
                 reset_PSP()
                 Application.DoEvents()
@@ -900,8 +904,7 @@ Public Class MERGE
     Private Sub nichsite(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles nichannel_browser.Click
         Dim ofd As New OpenFileDialog()
         ofd.InitialDirectory = "C:\Program Files"
-        ofd.Filter = _
-    "EXEファイル(*.exe)|*.exe"
+        ofd.Filter = "EXEファイル(*.exe)|*.exe"
         ofd.Title = "2CHブラウザのEXEを選んでください"
         If ofd.ShowDialog() = DialogResult.OK Then
             'OKボタンがクリックされたとき
@@ -941,8 +944,7 @@ Public Class MERGE
     End Sub
 
     Function urltrim(ByVal url As String) As String
-        Dim r As New Regex(
-    "^s?https?://[-_.!~*'()a-zA-Z0-9;/?:@&=+$,%#]+$")
+        Dim r As New Regex("^s?https?://[-_.!~*'()a-zA-Z0-9;/?:@&=+$,%#]+$")
         Dim m As Match = r.Match(url)
         If m.Success Then
             Dim i As Integer = m.Value.IndexOf(":") + 3
@@ -1198,8 +1200,8 @@ Public Class MERGE
         Dim b1 As String = cmt_tb.Text
         Dim b2 As String() = b1.Split(CChar(vbLf))
         Dim gid As String = Nothing
-        Dim gname As String = Nothing
-        Dim cname As String = Nothing
+        Dim gname As String = "(NULL)"
+        Dim cname As String = "(NULL)"
         Dim code As String = Nothing
         Dim cname2 As String = Nothing
         Dim code2 As String = Nothing
@@ -1209,11 +1211,14 @@ Public Class MERGE
         Dim nullcode As Boolean = False
         Dim i As Integer = 0
         Dim k As Integer = 0
+        Dim z As Integer = 0
         Dim level2insert As Integer = 1
         Dim pos As Integer
         Dim parent As Integer
-        If codetree.Nodes.Count >= 1 And b1 <> Nothing Then
+        Dim line As Integer = 0
+        Dim erct As Integer = 0
 
+        If codetree.Nodes.Count >= 1 And b1 <> Nothing Then
             codetree.BeginUpdate()
 
             Dim selnode1stlv As Integer = codetree.SelectedNode.Level
@@ -1224,34 +1229,32 @@ Public Class MERGE
 
             For Each s As String In b2
 
+                line += 1
+
                 If s.Length >= 2 Then
-                    If selnode1stlv = 0 Then
-                        If s.Substring(0, 2) = "_S" Then
-                            If havegame = True AndAlso nullcode = False Then
-                                add = True
-                                i = 0
-                            End If
-                            s = s.PadRight(4)
-                            gid = s.Substring(3, s.Length - 3).Trim
-                        ElseIf s.Substring(0, 2) = "_G" Then
-                            s = s.PadRight(4)
-                            gname = s.Substring(3, s.Length - 3).Trim
-                            Dim gnode = New TreeNode(gname)
-                            With gnode
-                                .Name = gname
-                                .Tag = gid
-                                .ImageIndex = 1
-                            End With
-                            codetree.Nodes(0).Nodes.Insert(k, gnode)
-                            k += 1
-                            codetree.SelectedNode = gnode
-                            havegame = True
-                            nullcode = True
+                    If selnode1stlv = 0 AndAlso s.Substring(0, 2) = "_S" Then
+                        If havegame = True AndAlso nullcode = False Then
+                            add = True
+                            i = 0
                         End If
+                        s = s.PadRight(4)
+                        gid = s.Substring(3, s.Length - 3).Trim
+                    ElseIf selnode1stlv = 0 AndAlso s.Substring(0, 2) = "_G" Then
+                        s = s.PadRight(4)
+                        gname = s.Substring(3, s.Length - 3).Trim
+                        Dim gnode = New TreeNode(gname)
+                        With gnode
+                            .Name = gname
+                            .Tag = gid
+                            .ImageIndex = 1
+                        End With
+                        codetree.Nodes(0).Nodes.Insert(k, gnode)
+                        k += 1
+                        codetree.SelectedNode = gnode
+                        havegame = True
+                        nullcode = True
 
-                    End If
-
-                    If s.Substring(0, 2) = "_C" Then
+                    ElseIf s.Substring(0, 2) = "_C" Then
                         nullcode = True
                         s = s.PadRight(3, "0"c)
                         If i = 0 Then
@@ -1275,9 +1278,8 @@ Public Class MERGE
                             cname2 = s.Substring(3, s.Length - 3).Trim
                         End If
                         i += 1
-                    End If
 
-                    If s.Substring(0, 2) = "_L" Or s.Substring(0, 2) = "_M" Or s.Substring(0, 2) = "_N" Then
+                    ElseIf s.Substring(0, 2) = "_L" Or s.Substring(0, 2) = "_M" Or s.Substring(0, 2) = "_N" Then
                         nullcode = False
                         s = s.Replace(vbCr, "")
                         If PSX = True Then
@@ -1291,12 +1293,12 @@ Public Class MERGE
                             '_L 0x12345678 0x12345678
                             If s.Substring(3, 2) = "0x" And s.Substring(14, 2) = "0x" Then
                                 If s.Substring(0, 2) = "_M" Then
-                                    Dim z As Integer = Integer.Parse(code.Substring(0, 1))
+                                    z = Integer.Parse(code.Substring(0, 1))
                                     code = code.Remove(0, 1)
                                     z = 2 Or z
                                     code = code.Insert(0, z.ToString())
                                 ElseIf s.Substring(0, 2) = "_N" Then
-                                    Dim z As Integer = Integer.Parse(code.Substring(0, 1))
+                                    z = Integer.Parse(code.Substring(0, 1))
                                     code = code.Remove(0, 1)
                                     z = 4 Or z
                                     code = code.Insert(0, z.ToString())
@@ -1305,13 +1307,15 @@ Public Class MERGE
                             End If
 
                         End If
-                    End If
 
-                    If s.Substring(0, 1) = "#" Then
+                    ElseIf s.Substring(0, 1) = "#" Then
+
                         s = s.Replace("#", "")
                         coment &= "#" & s.Trim & vbCrLf
+
                     End If
                 End If
+
 
                 If add = True Then
                     Try
@@ -1350,10 +1354,13 @@ Public Class MERGE
             overwrite_db.Enabled = True
 
         End If
+
         f.Dispose()
         cmt_tb.Text = backup
 
+
     End Sub
+
 
     Private Sub すべて閉じるToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tree_collapse.Click, cntclose.Click
         codetree.CollapseAll()
@@ -2348,7 +2355,12 @@ Public Class MERGE
                 reset_PSP()
                 Application.DoEvents()
                 enc1 = 1201
-                open.read_cf(database, 1201)
+                If CFEDIT.Checked = False Then
+                    open.read_cf(database, 1201)
+                Else
+                    open.read_cfcp1201(database, 1201)
+                End If
+
             ElseIf DATEL = True Then
                 reset_PSP()
                 Application.DoEvents()
@@ -3100,4 +3112,8 @@ Public Class MERGE
         End If
     End Sub
 
+    Private Sub CFEDIT_Click(sender As System.Object, e As System.EventArgs) Handles CFEDIT.Click
+        CFEDIT.Checked = Not CFEDIT.Checked
+        My.Settings.cfid = CFEDIT.Checked
+    End Sub
 End Class
