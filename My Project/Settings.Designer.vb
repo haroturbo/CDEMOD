@@ -609,7 +609,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
         Public Property checkcpstr() As Boolean
             Get
                 Return CType(Me("checkcpstr"),Boolean)
@@ -712,6 +712,42 @@ Namespace My
             End Get
             Set
                 Me("perror") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property RPNCALC() As Boolean
+            Get
+                Return CType(Me("RPNCALC"),Boolean)
+            End Get
+            Set
+                Me("RPNCALC") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property STACKORDER() As Boolean
+            Get
+                Return CType(Me("STACKORDER"),Boolean)
+            End Get
+            Set
+                Me("STACKORDER") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property CVTRPNs() As Boolean
+            Get
+                Return CType(Me("CVTRPNs"),Boolean)
+            End Get
+            Set
+                Me("CVTRPNs") = value
             End Set
         End Property
     End Class

@@ -19,11 +19,26 @@ Public Class datagrid
                 Me.AutoSize = True
             End If
 
+
+            If My.Settings.RPNCALC = True Then
+                USERPN.Checked = True
+            End If
+            If My.Settings.STACKORDER = True Then
+                STACKORDER.Checked = True
+            End If
+
+            If My.Settings.CVTRPNs = True Then
+                CVTRPN.Checked = True
+            End If
+
             If My.Settings.gridsave = True Then
                 gridsave.Checked = True
-            Else
-                gridsave.Checked = False
             End If
+
+            If My.Settings.gridsave = True Then
+                gridsave.Checked = True
+            End If
+
             If m.PSX = True Then
                 ComboBox1.Items.RemoveAt(0)
                 ComboBox1.Items.RemoveAt(1)
@@ -180,9 +195,7 @@ Public Class datagrid
                         DirectCast(DataGridView1.Columns(3), DataGridViewTextBoxColumn).MaxInputLength = 6
                     End If
                     Dim str As String = e.FormattedValue.ToString()
-                    Dim r As New System.Text.RegularExpressions.Regex( _
-            "-?\d+", _
-            System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+                    Dim r As New System.Text.RegularExpressions.Regex("-?\d+", System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                     Dim m As System.Text.RegularExpressions.Match = r.Match(str)
                     If m.Success And m.Value.Length = str.Length Then
                         Label1.Text = ""
@@ -243,8 +256,7 @@ Public Class datagrid
                 ElseIf check.Contains("BIN") Then
                     DirectCast(DataGridView1.Columns(3), DataGridViewTextBoxColumn).MaxInputLength = 11
                     Dim str As String = e.FormattedValue.ToString()
-                    Dim r As New System.Text.RegularExpressions.Regex( _
-                     "^[-|+]?\d+\.?\d*", _
+                    Dim r As New System.Text.RegularExpressions.Regex("^[-|+]?\d+\.?\d*", _
                                 System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                     Dim m As System.Text.RegularExpressions.Match = r.Match(str)
                     If m.Success Then
@@ -414,9 +426,7 @@ Public Class datagrid
             Dim str As String = DataGridView1.Rows(d).Cells(3).Value.ToString
             If check = "DEC" Then
                 mask = "^-?\d{1,11}"
-                Dim r As New System.Text.RegularExpressions.Regex( _
-                 mask, _
-                            System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+                Dim r As New System.Text.RegularExpressions.Regex(mask, System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                 Dim v As System.Text.RegularExpressions.Match = r.Match(str)
                 If v.Success AndAlso v.Value.Length = str.Length Then
                     Dim dec As Int64 = (Convert.ToInt64(v.Value) And &HFFFFFFFFF)
@@ -502,75 +512,77 @@ Public Class datagrid
                     Dim asm As String = assembler(str, DataGridView1.Rows(d).Cells(0).Value.ToString)
                     If asm <> "" Then
                         DataGridView1.Rows(d).Cells(add_val).Value = asm
-                        'DataGridView1.Rows(d).Cells(4).Value = decoders(DataGridView1.Rows(d).Cells(add_val).Value.ToString)
                     End If
                 End If
             Else 'BINARY32/16
-                Dim r As New System.Text.RegularExpressions.Regex( _
-                 "^[-+]?\d+\.?\d*", _
-                            System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+                Dim r As New System.Text.RegularExpressions.Regex("^[-+]?\d+\.?\d*", System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                 Dim v As System.Text.RegularExpressions.Match = r.Match(str)
-                If v.Success AndAlso v.Value.Length = str.Length Then
-                    Dim f As Single = Convert.ToSingle(v.Value)
-                    Dim bit() As Byte = BitConverter.GetBytes(f)
-                    Dim sb As New System.Text.StringBuilder()
-                    Dim i As Integer = 3
-                    While i >= 0
-                        sb.Append(Convert.ToString(bit(i), 16).PadLeft(2, "0"c))
-                        i -= 1
-                    End While
-                    Dim half As String = ""
-                    If check = "BINARY32" Then
-                        DataGridView1.Rows(d).Cells(add_val).Value = "0x" + sb.ToString.ToUpper
-                    ElseIf check = "BIN32>>16" Then
-                        If m.PSX = True AndAlso g_value.Checked = True Then
-                            DataGridView1.Rows(d).Cells(add_val).Value = sb.ToString.Substring(0, 4).ToUpper
-                        Else
-                            half = DataGridView1.Rows(d).Cells(add_val).Value.ToString.Substring(0, 6)
-                            DataGridView1.Rows(d).Cells(add_val).Value = half & sb.ToString.Substring(0, 4).ToUpper
+                    If v.Success AndAlso v.Value.Length = str.Length Then
+                        Dim f As Single = Convert.ToSingle(v.Value)
+                        Dim bit() As Byte = BitConverter.GetBytes(f)
+                        Dim sb As New System.Text.StringBuilder()
+                        Dim i As Integer = 3
+                        While i >= 0
+                            sb.Append(Convert.ToString(bit(i), 16).PadLeft(2, "0"c))
+                            i -= 1
+                        End While
+                        Dim half As String = ""
+                        If check = "BINARY32" Then
+                            DataGridView1.Rows(d).Cells(add_val).Value = "0x" + sb.ToString.ToUpper
+                        ElseIf check = "BIN32>>16" Then
+                            If m.PSX = True AndAlso g_value.Checked = True Then
+                                DataGridView1.Rows(d).Cells(add_val).Value = sb.ToString.Substring(0, 4).ToUpper
+                            Else
+                                half = DataGridView1.Rows(d).Cells(add_val).Value.ToString.Substring(0, 6)
+                                DataGridView1.Rows(d).Cells(add_val).Value = half & sb.ToString.Substring(0, 4).ToUpper
+                            End If
+                        ElseIf check = "BINARY16" Then
+                            Dim hf As String = sb.ToString
+                            hf = converthalffloat(hf)
+                            If m.PSX = True AndAlso g_value.Checked = True Then
+                                DataGridView1.Rows(d).Cells(add_val).Value = hf
+                            Else
+                                half = DataGridView1.Rows(d).Cells(add_val).Value.ToString.Substring(0, 6)
+                                DataGridView1.Rows(d).Cells(add_val).Value = half & hf
+                            End If
                         End If
-                    ElseIf check = "BINARY16" Then
-                        Dim hf As String = sb.ToString
-                        hf = converthalffloat(hf)
-                        If m.PSX = True AndAlso g_value.Checked = True Then
-                            DataGridView1.Rows(d).Cells(add_val).Value = hf
-                        Else
-                            half = DataGridView1.Rows(d).Cells(add_val).Value.ToString.Substring(0, 6)
-                            DataGridView1.Rows(d).Cells(add_val).Value = half & hf
-                        End If
+                    Else
+                        Label1.Text = "不正な値です"
                     End If
-
-                Else
-                    Label1.Text = "不正な値です"
+            End If
+        ElseIf Not DataGridView1.Rows(d).Cells(2).Value Is Nothing AndAlso Not DataGridView1.Rows(d).Cells(4).Value Is Nothing Then
+            Dim check As String = DataGridView1.Rows(d).Cells(2).Value.ToString
+            If check = "BINARY32" Then
+                Dim str2 As String = DataGridView1.Rows(d).Cells(4).Value.ToString
+                DataGridView1.Rows(d).Cells(add_val).Value = "0x" + cvt_float(valfloat(str2.Trim)).ToString("X8")
+            End If
+            End If
+            Dim gridtx As String = Nothing
+            'Dim comment As String = ""
+            Dim sl As New StringBuilder
+            Dim sm As New StringBuilder
+            Dim k As Integer = 0
+            While k < DataGridView1.RowCount - 1 AndAlso DataGridView1.Rows(k).Cells(0).Value IsNot Nothing AndAlso DataGridView1.Rows(k).Cells(1).Value IsNot Nothing
+                gridtx &= DataGridView1.Rows(k).Cells(0).Value.ToString & " "
+                gridtx &= DataGridView1.Rows(k).Cells(1).Value.ToString & vbCrLf
+                If Not DataGridView1.Rows(k).Cells(4).Value Is Nothing Then
+                    If DataGridView1.Rows(k).Cells(4).Value.ToString <> "" Then
+                        sl.Append("<DGLINE" & Convert.ToString(k + 1) & "='" & DataGridView1.Rows(k).Cells(4).Value.ToString & "'>")
+                    End If
                 End If
-            End If
-        End If
-        Dim gridtx As String = Nothing
-        'Dim comment As String = ""
-        Dim sl As New StringBuilder
-        Dim sm As New StringBuilder
-        Dim k As Integer = 0
-        While k < DataGridView1.RowCount - 1 AndAlso DataGridView1.Rows(k).Cells(0).Value IsNot Nothing AndAlso DataGridView1.Rows(k).Cells(1).Value IsNot Nothing
-            gridtx &= DataGridView1.Rows(k).Cells(0).Value.ToString & " "
-            gridtx &= DataGridView1.Rows(k).Cells(1).Value.ToString & vbCrLf
-            If Not DataGridView1.Rows(k).Cells(4).Value Is Nothing Then
-                If DataGridView1.Rows(k).Cells(4).Value.ToString <> "" Then
-                    sl.Append("<DGLINE" & Convert.ToString(k + 1) & "='" & DataGridView1.Rows(k).Cells(4).Value.ToString & "'>")
+                If DataGridView1.Rows(k).Cells(2).Value.ToString.Contains("DEC") = False Then
+                    sm.Append("<DGMODE" & Convert.ToString(k + 1) & "='" & DataGridView1.Rows(k).Cells(2).Value.ToString & "'>")
                 End If
+                k += 1
+            End While
+            m.cl_tb.Text = gridtx
+            m.dgtext.Text = sl.ToString
+            m.dmtext.Text = sm.ToString()
+            If My.Settings.gridsave = True Then
+                m.save_cc_Click(sender, e)
+            Else
+                m.changed.Text = "データグリッドでコードが変更されてます"
             End If
-            If DataGridView1.Rows(k).Cells(2).Value.ToString.Contains("DEC") = False Then
-                sm.Append("<DGMODE" & Convert.ToString(k + 1) & "='" & DataGridView1.Rows(k).Cells(2).Value.ToString & "'>")
-            End If
-            k += 1
-        End While
-        m.cl_tb.Text = gridtx
-        m.dgtext.Text = sl.ToString
-        m.dmtext.Text = sm.ToString()
-        If My.Settings.gridsave = True Then
-            m.save_cc_Click(sender, e)
-        Else
-            m.changed.Text = "データグリッドでコードが変更されてます"
-        End If
     End Sub
 
     Private Sub DataGridView1_CellEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles DataGridView1.CellEnter
@@ -1012,7 +1024,7 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
             Array.Copy(dgcp, 0, list, d, cp)
             DataGridView1.Rows.Clear()
             DataGridView1.Rows.AddRange(list)
-            
+
             DataGridView1.CurrentCell = DataGridView1(0, a)
             DataGridView1.FirstDisplayedCell = DataGridView1(0, b)
 
@@ -1064,7 +1076,6 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
             DataGridView1.Focus()
         End If
     End Sub
-
 
     Private Sub ComboBox1_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles ComboBox1.SelectedIndexChanged
         Try
@@ -1921,12 +1932,12 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                     Case "2"
                         ': // [hlide] added %2? (? is d, s)
                         Select Case ss(i + 1)
-                                Case "d"
-                                    str = str.Replace("%2" & ss(i + 1), print_cop2(CInt(hex And &HFF)))
-                                    ' : output = print_cop2(VED(opcode), output); i++; break;
-                                Case "s"
-                                    str = str.Replace("%2" & ss(i + 1), print_cop2(CInt((hex >> 8) And &HFF)))
-                                    ': output = print_cop2(VES(opcode), output); i++; break;
+                            Case "d"
+                                str = str.Replace("%2" & ss(i + 1), print_cop2(CInt(hex And &HFF)))
+                                ' : output = print_cop2(VED(opcode), output); i++; break;
+                            Case "s"
+                                str = str.Replace("%2" & ss(i + 1), print_cop2(CInt((hex >> 8) And &HFF)))
+                                ': output = print_cop2(VES(opcode), output); i++; break;
                         End Select
 
                     Case "X"
@@ -4405,10 +4416,14 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                     hex = vp0123(ss(1), hex, 1)
                     hex = vp0123(ss(2), hex, 2)
                     hex = vp0123(ss(3).Replace("]", ""), hex, 3)
+                ElseIf mips = ".word" Then
+                    hex = valword(str.Trim)
+                ElseIf mips = ".float" Then
+                    hex = cvt_float(valfloat(str.Trim))
                 End If
+            End If
 
                 asm = "0x" & Convert.ToString(hex, 16).ToUpper.PadLeft(8, "0"c)
-            End If
 
             Return asm
         Catch ex As Exception
@@ -5214,6 +5229,576 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         End While
         Return hex
     End Function
+
+    Function valword(ByVal str As String) As Integer
+        Dim valhex As New Regex("(\x20|,)-?(\$|0x)[0-9A-Fa-f]{1,8}$")
+        Dim valhexm As Match = valhex.Match(str)
+        Dim valdec As New Regex("(\x20|,)-?\d{1,10}$")
+        Dim valdecm As Match = valdec.Match(str)
+        Dim minus As Int64 = 0
+        If valhexm.Success Then
+            Dim s As String = valhexm.Value
+            If s.Contains("-") Then
+                s = s.Replace("-", "")
+                minus = &H10000
+                minus -= Convert.ToInt64(s.Replace("$", "").Remove(0, 1), 16)
+            Else
+                minus = Convert.ToInt64(s.Replace("$", "").Remove(0, 1), 16)
+            End If
+        ElseIf valdecm.Success Then
+            minus = Convert.ToInt64(valdecm.Value.Remove(0, 1))
+        End If
+
+        minus = minus And 4294967295
+        If minus >= 2147483648 Then
+            minus -= 4294967296
+        End If
+        Return CInt(minus)
+    End Function
+
+    Private Function cvt_float(ByVal k As Double) As Integer
+        If k = 1.0E+307 Then
+            Return &H7F000000
+        ElseIf k = 1.0E+308 Then
+            k = 1.0E+308
+            Return &H7F800000
+        ElseIf k = -1.0E+307 Then
+            Return &HFF800000
+        ElseIf k = -1.0E+308 Then
+            Return &HFF800000
+        End If
+        Dim f As Single = Convert.ToSingle(k)
+        Dim b As Byte() = BitConverter.GetBytes(f)
+        Return BitConverter.ToInt32(b, 0)
+    End Function
+
+    Private Function calcradian(ByVal st As String) As Double
+        Dim ss(255) As String
+        Dim s As String = st.Replace(" ", "")
+        Dim sbk As String = ""
+        Dim i As Integer = 0
+        Dim sb As New StringBuilder
+        Dim f As Double = 0
+        While i < s.Length
+            If s(i) = "*" Or s(i) = "/" Then
+                f = floatcal(sb.ToString, f, sbk)
+                sbk = s(i)
+                sb.Clear()
+            ElseIf s(i) = "," Or s(i) = "^" Then
+                Exit While
+            Else
+                sb.Append(s(i))
+            End If
+            i += 1
+        End While
+        Return floatcal(sb.ToString, f, sbk)
+
+    End Function
+
+    Private Function floatcal(ByVal str As String, ByVal f As Double, ByVal sbk As String) As Double
+        Dim g As Double
+        Dim ff As New Regex("-?\d\.?\d*")
+        Dim ffm As Match = ff.Match(str)
+        Dim valmu As New Regex("[+-]?(e|pi|goldenratio)")
+        Dim valmum As Match = valmu.Match(str)
+
+        If ffm.Success Then
+            g = Convert.ToDouble(ffm.Value)
+            str = str.Replace(ffm.Value, "")
+        ElseIf valmum.Success Then
+            If valmum.Value.Contains("pi") Then
+                g = Convert.ToSingle(Math.PI)
+            ElseIf valmum.Value.Contains("goldenratio") Then
+                g = Convert.ToSingle((1 + Math.Sqrt(5)) / 2)
+            ElseIf valmum.Value.Contains("e") Then
+                g = Convert.ToSingle(Math.E)
+            End If
+            If valmum.Value.Contains("-") Then
+                g = -g
+            End If
+        End If
+
+        Dim cc As New Regex("[\*/]")
+        Dim ccm As Match = cc.Match(sbk)
+        If ccm.Success Then
+            Select Case ccm.Value
+                Case "*"
+                    f = f * g
+                Case "/"
+                    f = f / g
+            End Select
+        Else
+            f = g
+        End If
+
+        Return f
+    End Function
+
+    Private Function calcdbl(ByVal str As String) As Double
+        Dim i As Integer = 0
+
+        Dim k As Double = 0
+        Dim valfl As New Regex("(\x20|,)[+-]?\d+\.?\d+$")
+        Dim valflm As Match = valfl.Match(str)
+        Dim valmugen As New Regex("(\x20|,)[+-]?(nan|inf|e|pi|goldenratio)$")
+        Dim valmugenm As Match = valmugen.Match(str)
+        Dim valmath As New Regex("(tanh|tan|sinh|sin|cosh|cos|sqrt|cbrt|[xy]rt|ln|log|exp|pow|atan2_[drg]?|atan[drg]?|asin[drg]?|acos[drg]?)")
+        Dim valmathm As Match = valmath.Match(str)
+        If valflm.Success Then
+            k = Convert.ToSingle(valflm.Value.Remove(0, 1))
+        ElseIf valmugenm.Success Then
+            If valmugenm.Value.Contains("pi") Then
+                k = Convert.ToSingle(Math.PI)
+            ElseIf valmugenm.Value.Contains("goldenratio") Then
+                k = Convert.ToDouble((1 + Math.Sqrt(5)) / 2)
+            ElseIf valmugenm.Value.Contains("e") Then
+                k = Convert.ToDouble(Math.E)
+            ElseIf valmugenm.Value.Contains("nan") Then
+                k = 1.0E+308
+            Else
+                k = 1.0E+307
+            End If
+            If valmugenm.Value.Contains("-") Then
+                k = -k
+            End If
+        ElseIf valmathm.Success Then
+            Dim hh As String = valmathm.Value
+            str = str.Remove(0, valmathm.Index + valmathm.Length).Replace("deg", "dgr").Replace("grade", "grad")
+            Dim valmu As New Regex("[+-]?(e|pi|goldenratio)")
+            Dim valmum As Match = valmu.Match(str)
+            While valmum.Success
+                Dim y As Double = 0
+                If valmum.Value.Contains("pi") Then
+                    y = Convert.ToSingle(Math.PI)
+                ElseIf valmum.Value.Contains("goldenratio") Then
+                    y = Convert.ToSingle((1 + Math.Sqrt(5)) / 2)
+                ElseIf valmum.Value.Contains("e") Then
+                    y = Convert.ToSingle(Math.E)
+                End If
+                If valmum.Value.Contains("-") Then
+                    y = -y
+                End If
+                str = str.Replace(valmum.Value, y.ToString)
+                valmum = valmum.NextMatch
+            End While
+            Dim vald As New Regex("-?\d+\.?\d*")
+            Dim valdm As Match = vald.Match(str)
+            k = Convert.ToDouble(valdm.Value)
+            Dim ss As String() = str.Split(CChar(","))
+            Dim angle As Double = calcradian(str)
+            angle = angle_cvt(str.Trim, angle)
+
+            For i = 0 To maths.Length - 1
+                If hh = maths(i) Then
+                    Select Case i
+                        Case 0
+                            k = Math.Tan(angle)
+                            If angle = Math.PI / 2 Or angle = -Math.PI * 3 / 2 Then
+                                k = 1.0E+307
+                            ElseIf angle = -Math.PI / 2 Or angle = Math.PI * 3 / 2 Then
+                                k = -1.0E+307
+                            ElseIf angle = Math.PI Or angle = -Math.PI Then
+                                k = 0
+                            End If
+                        Case 1
+                            k = Math.Tanh(angle)
+                        Case 2
+                            k = Math.Sin(angle)
+                            If angle = Math.PI Or angle = -Math.PI Then
+                                k = 0
+                            End If
+                        Case 3
+                            k = Math.Sinh(angle)
+                        Case 4
+                            k = Math.Cos(angle)
+                            If angle = Math.PI / 2 Or angle = -Math.PI / 2 Or angle = -Math.PI * 3 / 2 Or angle = Math.PI * 3 / 2 Then
+                                k = 0
+                            End If
+                        Case 5
+                            k = Math.Cosh(angle)
+                        Case 6
+                            k = Math.Sqrt(k)
+                        Case 27
+                            k = Math.Pow(k, 1 / 3)
+                        Case 7
+                            k = Math.Log(k)
+                        Case 8
+                            k = valfloat(ss(0))
+                            If ss.Length < 2 Then
+                                MessageBox.Show("引数が２つ必要です。(x,y)で指定してください")
+                                k = 0
+                            Else
+                                angle = valfloat(ss(1))
+                                k = Math.Log(angle, k)
+                            End If
+                        Case 9
+                            k = Math.Exp(k)
+                        Case 10, 28, 29
+                            If ss.Length < 2 Then
+                                ss = str.Split(CChar("^"))
+                            End If
+                            If ss.Length < 2 Then
+                                MessageBox.Show("引数が2つ必要です。(x,y)かx^yで指定してください")
+                                k = 0
+                            Else
+                                k = valfloat(ss(0))
+                                angle = valfloat(ss(1))
+                                If i = 28 Then
+                                    Dim sw As Double = 1 / k
+                                    k = angle
+                                    angle = sw
+                                ElseIf i = 29 Then
+                                    angle = 1 / angle
+                                End If
+                                k = Math.Pow(k, angle)
+                            End If
+                        Case 11, 15, 19, 23
+                            k = Math.Atan(k)
+                        Case 12, 16, 20, 24
+                            k = Math.Asin(k)
+                        Case 13, 17, 21, 25
+                            k = Math.Acos(k)
+                        Case 14, 18, 22, 26
+                            If ss.Length < 2 Then
+                                MessageBox.Show("引数が2つ必要です。(x,y)で指定してください")
+                                k = 0
+                            Else
+                                k = valfloat(ss(0))
+                                angle = valfloat(ss(1))
+                                k = Math.Atan2(k, angle)
+                            End If
+                    End Select
+                    Exit For
+                End If
+            Next
+            '度数
+            If i >= 15 AndAlso i <= 18 Then
+                k = k * 180 / Math.PI
+                '直角
+            ElseIf i >= 19 AndAlso i <= 22 Then
+                k = k * 2 / Math.PI
+                'グラード
+            ElseIf i >= 22 AndAlso i <= 26 Then
+                k = k * 200 / Math.PI
+            End If
+
+        Else
+            k = calcradian(str)
+        End If
+
+        Return k
+    End Function
+
+    Function valfloat(ByVal str As String) As Double
+        Dim i As Integer = 0
+        For i = 0 To mathsconst.Length - 1
+            If str.Contains(mathsconst(i)) Then
+                str = str.Replace(mathsconst(i), mathrp(i))
+            End If
+        Next
+        Dim k As Double = 0
+        If USERPN.Checked Then
+            If CVTRPN.Checked Then
+                Dim p As New Polish
+                str = p.Main(str, LOOKSORDER.Checked)
+            End If
+            k = rpndbl(str.Replace(".float", ""))
+        Else
+            k = calcdbl(str)
+        End If
+        Return k
+
+    End Function
+
+    Private Function angle_cvt(ByVal s As String, ByVal angle As Double) As Double
+
+        Dim valmu As New Regex("(度|グラード|直角|dgr|grad|gon|°|rad|r|∟)")
+        Dim valmum As Match = valmu.Match(s)
+        Dim valhms As New Regex("-?\d+\.?\d*[dhms度°時分秒′″]")
+        Dim valhmsm As Match = valhms.Match(s)
+        Dim hms As Boolean = False
+        If valhmsm.Success Then
+            angle = 0
+            Dim vals As String = ""
+            Dim hh As String = ""
+            Dim len As Integer = 0
+            While valhmsm.Success
+                len = valhmsm.Value.Length - 1
+                vals = valhmsm.Value.Substring(0, len)
+                hh = valhmsm.Value.Remove(0, len)
+                Select Case hh
+                    Case "d", "°", "度"
+                        hms = False
+                        angle += Convert.ToDouble(vals)
+                    Case "h", "時"
+                        hms = True
+                        angle += 15 * Convert.ToDouble(vals)
+                    Case "m", "分", "′"
+                        If hms = True Then
+                            angle += Convert.ToDouble(vals) / 4
+                        Else
+                            angle += Convert.ToDouble(vals) / 60
+                        End If
+                    Case "s", "秒", "″"
+                        If hms = True Then
+                            angle += Convert.ToDouble(vals) / 240
+                        Else
+                            angle += Convert.ToDouble(vals) / 3600
+                        End If
+                End Select
+                valhmsm = valhmsm.NextMatch
+            End While
+            angle = angle * Math.PI / 180
+        ElseIf valmum.Success Then
+            Select Case valmum.Value
+                Case "grad", "gon", "グラード"
+                    angle = angle * 90 / 100
+                Case "r", "直角", "∟"
+                    angle = angle * 90
+            End Select
+            If valmum.Value <> "rad" Then
+                angle = angle * Math.PI / 180
+            End If
+        End If
+        Return angle
+    End Function
+
+    Dim maths As String() = {"tan", "tanh", "sin", "sinh", "cos", "cosh", "sqrt", "ln", "log", "exp", "pow", _
+                             "atan", "asin", "acos", "atan2_", "atand", "asind", "acosd", "atan2_d", _
+                             "atanr", "asinr", "acosr", "atan2_r", "atang", "asing", "acosg", "atan2_g", _
+                             "cbrt", "xrt", "yrt"
+                            }
+    Dim mathsconst As String() = {"π", "円周率", "黄金比", "自然対数の底"}
+    Dim mathrp As String() = {"pi", "pi", "goldenratio", "e"}
+
+    Private Function cvt_dbl(ByVal s As String) As Double
+        Dim dem As Double = 0
+        Dim cnst As New Regex("-?(e|pi|goldenratio)")
+        Dim cnstm As Match = cnst.Match(s)
+        Dim frac As New Regex("-?\d+\.?\d*")
+        Dim fracm As Match = frac.Match(s)
+        If cnstm.Success Then
+            If cnstm.Value.Contains("e") Then
+                dem = (Math.E)
+            ElseIf cnstm.Value.Contains("pi") Then
+                dem = (Math.PI)
+            ElseIf cnstm.Value.Contains("goldendratio") Then
+                dem = ((1 + Math.Sqrt(5)) / 2)
+            End If
+            If cnstm.Value.Contains("-") Then
+                dem = -dem
+            End If
+        ElseIf fracm.Success Then
+            dem = Convert.ToDouble(fracm.Value)
+        End If
+
+        Return dem
+    End Function
+
+    Private Function swapper(ByVal dem As Double()) As Double()
+        Dim demt As Double
+        demt = dem(1)
+        dem(1) = dem(0)
+        dem(0) = demt
+        Return dem
+    End Function
+
+    Private Function swapper2(ByVal dem As Double()) As Double()
+        If LOOKSORDER.Checked Then
+            dem = swapper(dem)
+        End If
+        Return dem
+    End Function
+
+    Private Function rpndbl(ByVal str As String) As Double
+        Dim ss As String() = str.ToLower.Split(CChar(","))
+        Dim len As Integer = ss.Length - 1
+        Dim dem(len) As Double
+        For i = 0 To len
+            Select Case ss(i).Trim
+                '4*(4*atan(1/5)-atan(1/239))
+                '4,4,5,1/x,atan,*,239,1/x,atan,-,*
+                Case "chs", "+/-"
+                    dem(0) = -dem(0)
+                Case "abs", "|x|"
+                    dem(0) = Math.Abs(dem(0))
+                Case "drop"
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "swap"
+                    dem = swapper(dem)
+                Case "deg2rad"
+                    dem(0) = dem(0) * Math.PI / 180
+                Case "deg2grad"
+                    dem(0) = dem(0) * 100 / 90
+                Case "deg2r"
+                    dem(0) = dem(0) / 90
+                Case "rad2deg"
+                    dem(0) = dem(0) * 180 / Math.PI
+                Case "rad2grad"
+                    dem(0) = dem(0) * 200 / Math.PI
+                Case "rad2r"
+                    dem(0) = dem(0) * 2 / Math.PI
+                Case "grad2deg"
+                    dem(0) = dem(0) * 90 / 100
+                Case "grad2rad"
+                    dem(0) = dem(0) * Math.PI / 200
+                Case "grad2r"
+                    dem(0) = dem(0) / 100
+                Case "r2deg"
+                    dem(0) = dem(0) * 90
+                Case "r2rad"
+                    dem(0) = dem(0) * Math.PI / 2
+                Case "r2grad"
+                    dem(0) = dem(0) * 100
+                Case "="
+                Case "+"
+                    dem(1) = dem(0) + dem(1)
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "-"
+                    dem(1) = dem(1) - dem(0)
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "*"
+                    dem(1) = dem(1) * dem(0)
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "/"
+                    dem(1) = dem(1) / dem(0)
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "rpow", "y^x"
+                    dem = swapper2(dem)
+                    dem(1) = Math.Pow(dem(1), dem(0))
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "pow", "x^y", "^"
+                    dem = swapper2(dem)
+                    dem(1) = Math.Pow(dem(0), dem(1))
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "xrt"
+                    dem = swapper2(dem)
+                    dem(1) = Math.Pow(dem(1), 1 / dem(0))
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "yrt"
+                    dem = swapper2(dem)
+                    dem(1) = Math.Pow(dem(0), 1 / dem(1))
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "logy"
+                    dem = swapper2(dem)
+                    dem(1) = Math.Log(dem(0), dem(1))
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "logx"
+                    dem = swapper2(dem)
+                    dem(1) = Math.Log(dem(1), dem(0))
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "1/x", "reci"
+                    dem(0) = 1 / dem(0)
+                Case "sqrt", "√"
+                    dem(0) = Math.Sqrt(dem(0))
+                Case "cbrt"
+                    dem(0) = Math.Pow(dem(0), 1 / 3)
+                Case "log"
+                    dem(0) = Math.Log(dem(0), 10)
+                Case "ln"
+                    dem(0) = Math.Log(dem(0), Math.E)
+                Case "atand"
+                    dem(0) = Math.Atan(dem(0)) * 180 / Math.PI
+                Case "atan"
+                    dem(0) = Math.Atan(dem(0))
+                Case "atanr"
+                    dem(0) = Math.Atan(dem(0)) * 2 / Math.PI
+                Case "atang"
+                    dem(0) = Math.Atan(dem(0)) * 200 / Math.PI
+                Case "atan2_d"
+                    dem = swapper2(dem)
+                    dem(1) = Math.Atan2(dem(1), dem(0)) * 180 / Math.PI
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "atan2_"
+                    dem = swapper2(dem)
+                    dem(1) = Math.Atan2(dem(1), dem(0))
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "atan2_r"
+                    dem = swapper2(dem)
+                    dem(1) = Math.Atan2(dem(1), dem(0)) * 2 / Math.PI
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "atan2_g"
+                    dem = swapper2(dem)
+                    dem(1) = Math.Atan2(dem(1), dem(0)) * 200 / Math.PI
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "acosd"
+                    dem(0) = Math.Acos(dem(0)) * 180 / Math.PI
+                Case "acos"
+                    dem(0) = Math.Acos(dem(0))
+                Case "acosr"
+                    dem(0) = Math.Acos(dem(0)) * 2 / Math.PI
+                Case "acosg"
+                    dem(0) = Math.Acos(dem(0))
+                Case "asind"
+                    dem(0) = Math.Asin(dem(0)) * 180 / Math.PI
+                Case "asin"
+                    dem(0) = Math.Asin(dem(0))
+                Case "asinr"
+                    dem(0) = Math.Asin(dem(0)) * 2 / Math.PI
+                Case "asing"
+                    dem(0) = Math.Asin(dem(0))
+                Case "tanhd"
+                    dem(0) = Math.Tanh(dem(0) * 200 / Math.PI)
+                Case "tahn"
+                    dem(0) = Math.Tanh(dem(0))
+                Case "tanhr"
+                    dem(0) = Math.Tanh(dem(0) * Math.PI / 2)
+                Case "tanhg"
+                    dem(0) = Math.Tanh(dem(0) * 90 / 100 * Math.PI / 180)
+                Case "coshd"
+                    dem(0) = Math.Cosh(dem(0) * Math.PI / 180)
+                Case "cohs"
+                    dem(0) = Math.Cosh(dem(0))
+                Case "coshr"
+                    dem(0) = Math.Cosh(dem(0) * Math.PI / 2)
+                Case "coshg"
+                    dem(0) = Math.Cosh(dem(0) * 90 / 100 * Math.PI / 180)
+                Case "sinhd"
+                    dem(0) = Math.Sinh(dem(0) * Math.PI / 180)
+                Case "sinh"
+                    dem(0) = Math.Sinh(dem(0))
+                Case "sinhr"
+                    dem(0) = Math.Sinh(dem(0) * Math.PI / 2)
+                Case "sinhg"
+                    dem(0) = Math.Sinh(dem(0) * Math.PI / 200)
+                Case "tand"
+                    dem(0) = Math.Tan(dem(0) * Math.PI / 180)
+                Case "tan"
+                    dem(0) = Math.Tan(dem(0))
+                Case "tanr"
+                    dem(0) = Math.Tan(dem(0) * Math.PI / 2)
+                Case "tang"
+                    dem(0) = Math.Tan(dem(0) * Math.PI / 200)
+                Case "cosd"
+                    dem(0) = Math.Cos(dem(0) * Math.PI / 180)
+                Case "cos"
+                    dem(0) = Math.Cos(dem(0))
+                Case "cosr"
+                    dem(0) = Math.Cos(dem(0) * Math.PI / 2)
+                Case "cosg"
+                    dem(0) = Math.Cos(dem(0) * 90 / 100 * Math.PI / 180)
+                Case "sind"
+                    dem(0) = Math.Sin(dem(0) * Math.PI / 180)
+                Case "sin"
+                    dem(0) = Math.Sin(dem(0))
+                Case "sinr"
+                    dem(0) = Math.Sin(dem(0) * Math.PI / 2)
+                Case "sing"
+                    dem(0) = Math.Sin(dem(0) * 90 / 100 * Math.PI / 180)
+                Case Else
+                    If (ss(i)).Trim <> "" Then
+                        Array.Copy(dem, 0, dem, 1, len)
+                        dem(0) = cvt_dbl(ss(i))
+                    End If
+            End Select
+        Next
+        dem(0) = Math.Round(dem(0), 14)
+
+        Return dem(0)
+
+    End Function
+
+
 #End Region
 
     'Function float_noma(ByVal str As String) As String
@@ -5236,6 +5821,22 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
     '    float &= z.ToString
     '    Return float
     'End Function
+
+    Private Sub RPNモードToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles USERPN.Click
+        USERPN.Checked = Not USERPN.Checked
+        My.Settings.RPNCALC = USERPN.Checked
+    End Sub
+
+    Private Sub STACKORDER_Click(sender As System.Object, e As System.EventArgs) Handles STACKORDER.Click, LOOKSORDER.Click
+        STACKORDER.Checked = Not STACKORDER.Checked
+        LOOKSORDER.Checked = Not STACKORDER.Checked
+        My.Settings.STACKORDER = STACKORDER.Checked
+    End Sub
+
+    Private Sub CVTRPN_Click(sender As System.Object, e As System.EventArgs) Handles CVTRPN.Click
+        CVTRPN.Checked = Not CVTRPN.Checked
+        My.Settings.CVTRPNs = CVTRPN.Checked
+    End Sub
 
 End Class
 

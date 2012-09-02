@@ -141,7 +141,7 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="checkcpstr" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
+      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="usercp" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
@@ -166,6 +166,15 @@
     </Setting>
     <Setting Name="perror" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="RPNCALC" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="STACKORDER" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="CVTRPNs" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -51,9 +51,17 @@ Partial Class datagrid
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.timer = New System.Windows.Forms.Label()
+        Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
+        Me.FLOAT計算ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.USERPN = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CVTRPN = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
+        Me.STACKORDER = New System.Windows.Forms.ToolStripMenuItem()
+        Me.LOOKSORDER = New System.Windows.Forms.ToolStripMenuItem()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.CNVbikou.SuspendLayout()
         Me.Panel1.SuspendLayout()
+        Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'DataGridView1
@@ -63,11 +71,11 @@ Partial Class datagrid
         Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.アドレス, Me.値, Me.編集タイプ, Me.入力値, Me.備考})
         Me.DataGridView1.ContextMenuStrip = Me.CNVbikou
         Me.DataGridView1.ImeMode = System.Windows.Forms.ImeMode.NoControl
-        Me.DataGridView1.Location = New System.Drawing.Point(6, 74)
+        Me.DataGridView1.Location = New System.Drawing.Point(6, 91)
         Me.DataGridView1.Name = "DataGridView1"
         Me.DataGridView1.RowTemplate.Height = 21
         Me.DataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.DataGridView1.Size = New System.Drawing.Size(443, 240)
+        Me.DataGridView1.Size = New System.Drawing.Size(441, 240)
         Me.DataGridView1.TabIndex = 0
         '
         'アドレス
@@ -227,7 +235,7 @@ Partial Class datagrid
         'gridsave
         '
         Me.gridsave.AutoSize = True
-        Me.gridsave.Location = New System.Drawing.Point(216, 320)
+        Me.gridsave.Location = New System.Drawing.Point(217, 337)
         Me.gridsave.Name = "gridsave"
         Me.gridsave.Size = New System.Drawing.Size(113, 16)
         Me.gridsave.TabIndex = 4
@@ -274,7 +282,7 @@ Partial Class datagrid
         Me.Panel1.Controls.Add(Me.Label1)
         Me.Panel1.Controls.Add(Me.g_value)
         Me.Panel1.Controls.Add(Me.g_address)
-        Me.Panel1.Location = New System.Drawing.Point(19, 10)
+        Me.Panel1.Location = New System.Drawing.Point(12, 28)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(430, 57)
         Me.Panel1.TabIndex = 8
@@ -291,21 +299,69 @@ Partial Class datagrid
         'timer
         '
         Me.timer.AutoSize = True
-        Me.timer.Location = New System.Drawing.Point(387, 320)
+        Me.timer.Location = New System.Drawing.Point(389, 338)
         Me.timer.Name = "timer"
         Me.timer.Size = New System.Drawing.Size(38, 12)
         Me.timer.TabIndex = 9
         Me.timer.Text = "Label3"
         '
+        'MenuStrip1
+        '
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FLOAT計算ToolStripMenuItem})
+        Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
+        Me.MenuStrip1.Name = "MenuStrip1"
+        Me.MenuStrip1.Size = New System.Drawing.Size(459, 26)
+        Me.MenuStrip1.TabIndex = 10
+        Me.MenuStrip1.Text = "MenuStrip1"
+        '
+        'FLOAT計算ToolStripMenuItem
+        '
+        Me.FLOAT計算ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.USERPN})
+        Me.FLOAT計算ToolStripMenuItem.Name = "FLOAT計算ToolStripMenuItem"
+        Me.FLOAT計算ToolStripMenuItem.Size = New System.Drawing.Size(82, 22)
+        Me.FLOAT計算ToolStripMenuItem.Text = "FLOAT計算"
+        '
+        'USERPN
+        '
+        Me.USERPN.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CVTRPN, Me.ToolStripSeparator3, Me.STACKORDER, Me.LOOKSORDER})
+        Me.USERPN.Name = "USERPN"
+        Me.USERPN.Size = New System.Drawing.Size(152, 22)
+        Me.USERPN.Text = "RPNモード"
+        '
+        'CVTRPN
+        '
+        Me.CVTRPN.Name = "CVTRPN"
+        Me.CVTRPN.Size = New System.Drawing.Size(172, 22)
+        Me.CVTRPN.Text = "数式をRPNに変換"
+        '
+        'ToolStripSeparator3
+        '
+        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(169, 6)
+        '
+        'STACKORDER
+        '
+        Me.STACKORDER.Name = "STACKORDER"
+        Me.STACKORDER.Size = New System.Drawing.Size(172, 22)
+        Me.STACKORDER.Text = "スタック順"
+        '
+        'LOOKSORDER
+        '
+        Me.LOOKSORDER.Name = "LOOKSORDER"
+        Me.LOOKSORDER.Size = New System.Drawing.Size(172, 22)
+        Me.LOOKSORDER.Text = "見た目順"
+        '
         'datagrid
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(460, 337)
-        Me.Controls.Add(Me.timer)
-        Me.Controls.Add(Me.Panel1)
+        Me.ClientSize = New System.Drawing.Size(459, 361)
+        Me.Controls.Add(Me.MenuStrip1)
         Me.Controls.Add(Me.DataGridView1)
+        Me.Controls.Add(Me.Panel1)
+        Me.Controls.Add(Me.timer)
         Me.Controls.Add(Me.gridsave)
+        Me.MainMenuStrip = Me.MenuStrip1
         Me.Name = "datagrid"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "データグリッドエディター"
@@ -313,6 +369,8 @@ Partial Class datagrid
         Me.CNVbikou.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
+        Me.MenuStrip1.ResumeLayout(False)
+        Me.MenuStrip1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -345,4 +403,11 @@ Partial Class datagrid
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents timer As System.Windows.Forms.Label
     Friend WithEvents CPADV As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip
+    Friend WithEvents FLOAT計算ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents USERPN As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents CVTRPN As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator3 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents STACKORDER As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents LOOKSORDER As System.Windows.Forms.ToolStripMenuItem
 End Class
