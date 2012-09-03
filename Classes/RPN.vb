@@ -73,7 +73,8 @@ Class Node
         Dim nest As Integer = 0
         Dim priority As Integer = 0
         Dim lowestPriority As Integer = 5
-        Dim byte1 As Byte
+        Dim bytes As Byte()
+        Dim cp As Integer = 0
 
         '^-2 x^(-2)対策
         If (expression(0)) = "-" Then
@@ -94,8 +95,9 @@ Class Node
                 Case CChar("(") : nest += 1 : Continue For
                 Case CChar(")") : nest -= 1 : Continue For
                 Case Else
-                    byte1 = Convert.ToByte(expression(i))
-                    If byte1 >= &H81 Or (byte1 >= &H41 AndAlso byte1 <= &H5A) Then
+                    bytes = Encoding.GetEncoding(1200).GetBytes(expression(i))
+                    cp = BitConverter.ToUInt16(bytes, 0)
+                    If cp >= &HA1 Or (cp >= &H41 AndAlso cp <= &H5A) Then
                         priority = 4
                     Else
                         Continue For
@@ -111,6 +113,7 @@ Class Node
         Return pos
     End Function
 
+
     Public Function TraversePostorder(ByVal sb As StringBuilder, ByVal stack As Boolean) As StringBuilder
         If Left IsNot Nothing Then
             Left.TraversePostorder(sb, stack)
@@ -119,8 +122,12 @@ Class Node
             Right.TraversePostorder(sb, stack)
         End If
 
-        If stack = False AndAlso ((Expression) = "^" Or ((Expression) >= "A" AndAlso Expression <= "I")) Then
+
+        If stack = False AndAlso ((Expression) = "^" Or ((Expression) >= "A" AndAlso Expression <= "V")) Then
             sb.Append("swap")
+            sb.Append(",")
+        ElseIf stack = False AndAlso (((Expression) >= "W" AndAlso Expression <= "Z")) Then
+            sb.Append("swap3")
             sb.Append(",")
         End If
         sb.Append(Expression)
@@ -134,12 +141,22 @@ End Class
 
 
 Class Polish
-    Dim rp2 As String() = {"logx", "pow", "xrt", "yrt", "logy",
+
+    Dim rp2 As String() = {"logx", "pow", "xrt", "yrt", "logy", "logms",
                            "atan2_r", "atan2_g", "atan2_d", "atan2_",
+                           "atan2ms_g", "atan2ms_r", "atan2ms_d", "atan2ms_",
+                           "atanh2_d", "atanh2_g", "atanh2_r", "atanh2_",
+                           "atanh2ms_d", "atanh2ms_g", "atanh2ms_r", "atanh2ms_",
+                           "dms>deg", "hms>deg", "hms>h", "hms>d",
+                           "dms2deg", "dms2d", "hms2deg", "hms2d", "hms2h",
                             "deg2rad", "deg2grad", "deg2r",
                            "rad2deg", "rad2grad", "rad2r",
                            "grad2deg", "grad2rad", "grad2r",
                            "r2deg", "r2rad", "r2grad",
+                           "atanhg", "atanhd", "atanhr", "atanh",
+                           "acoshg", "acoshd", "acoshr", "acosh",
+                           "acoshng", "acoshnd", "acoshnr", "acoshn",
+                           "asinhg", "asinhd", "asinhr", "asinh",
                            "tanhr", "coshr", "sinhr", _
                            "tanhg", "coshg", "sinhg", _
                            "tanhd", "coshd", "sinhd", _
@@ -148,23 +165,25 @@ Class Polish
                            "atang", "acosg", "asing", "tang", "cosg", "sing", _
                            "atand", "acosd", "asind", "tand", "cosd", "sind", _
                            "atan", "acos", "asin", "tan", "cos", "sin", _
-                           "sqrt", "cbrt", "log", "ln", "reci", "√", "abs", "chs"}
+                           "sqrt", "cbrt", "logten", "logtwo", "logthree", "ln", "reci", "√", "exp", "loge", "log", "abs", "chs",
+                            "d2rad", "d2g", "d2r", "rad2d", "rad2g", "g2d", "g2rad", "g2r", "r2d", "r2g"
+                           }
 
     Public Function Main(ByVal s As String, ByVal stack As Boolean) As String
         s = s.Replace(" ", String.Empty).ToLower
         Dim rp As String() = Nothing
         Array.Resize(rp, rp2.Length)
-        Dim c1(1) As Byte
-        c1(0) = &H41
+        Dim c1 As Integer = &H41
 
         '1文字ダミー処理を作成
         For i = 0 To rp2.Length - 1
-            c1(0) = CByte(&H41 + i)
-            If c1(0) >= &H5B Then
-                c1(0) = CByte(c1(0) + &H26)
+            c1 = &H41 + i
+            If c1 >= &H5B Then
+                c1 = (c1 + &H46)
             End If
-            rp(i) = Encoding.GetEncoding(1200).GetString(c1)
+            rp(i) = Encoding.GetEncoding(12000).GetString(BitConverter.GetBytes(c1))
         Next
+
 
         For i = 0 To rp2.Length - 1
             s = s.Replace(rp2(i), rp(i))
