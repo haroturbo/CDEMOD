@@ -142,6 +142,7 @@ End Class
 
 Class Polish
 
+
     Dim rp2 As String() = {"logx", "pow", "xrt", "yrt", "logy", "logms",
                            "atan2_r", "atan2_g", "atan2_d", "atan2_",
                            "atan2ms_g", "atan2ms_r", "atan2ms_d", "atan2ms_",
@@ -149,24 +150,40 @@ Class Polish
                            "atanh2ms_d", "atanh2ms_g", "atanh2ms_r", "atanh2ms_",
                            "dms>deg", "hms>deg", "hms>h", "hms>d",
                            "dms2deg", "dms2d", "hms2deg", "hms2d", "hms2h",
-                            "deg2rad", "deg2grad", "deg2r",
-                           "rad2deg", "rad2grad", "rad2r",
+                           "deg2rad", "deg2grad", "deg2r",
                            "grad2deg", "grad2rad", "grad2r",
+                           "rad2deg", "rad2grad", "rad2r",
                            "r2deg", "r2rad", "r2grad",
+                            "actanhd", "actanhr", "actanhg", "actanh",
+                            "actang", "actand", "actanr", "actan",
+                           "asechd", "asechr", "asechg", "asech",
+                            "acschd", "acschr", "acschg", "acsch",
+                            "acothd", "acothr", "acothg", "acoth",
+                            "acotg", "acotd", "acotr", "acot",
+                            "asecg", "asecd", "asecr", "asec",
+                            "acscg", "acscd", "acscr", "acsc",
+                            "sechg", "sechd", "sechr", "sech",
+                            "cschg", "cschd", "cschr", "csch",
+                            "ctanhg", "ctanhd", "ctanhr", "ctanh",
+                            "cothg", "cothd", "cothr", "coth",
+                            "ctang", "ctand", "ctanr", "ctan",
+                            "cotg", "cotd", "cotr", "cot",
+                            "cscg", "cscd", "cscr", "csc",
+                            "secg", "secd", "secr", "sec",
                            "atanhg", "atanhd", "atanhr", "atanh",
-                           "acoshg", "acoshd", "acoshr", "acosh",
                            "acoshng", "acoshnd", "acoshnr", "acoshn",
+                           "acoshg", "acoshd", "acoshr", "acosh",
                            "asinhg", "asinhd", "asinhr", "asinh",
                            "tanhr", "coshr", "sinhr", _
                            "tanhg", "coshg", "sinhg", _
                            "tanhd", "coshd", "sinhd", _
                            "tanh", "cosh", "sinh", _
-                           "atanr", "acosr", "asinr", "tanr", "cosr", "sinr", _
+                           "hypot", "atanr", "acosr", "asinr", "tanr", "cosr", "sinr", _
                            "atang", "acosg", "asing", "tang", "cosg", "sing", _
                            "atand", "acosd", "asind", "tand", "cosd", "sind", _
                            "atan", "acos", "asin", "tan", "cos", "sin", _
                            "sqrt", "cbrt", "logten", "logtwo", "logthree", "ln", "reci", "√", "exp", "loge", "log", "abs", "chs",
-                            "d2rad", "d2g", "d2r", "rad2d", "rad2g", "g2d", "g2rad", "g2r", "r2d", "r2g"
+                            "d2rad", "rad2d", "rad2g", "g2rad", "d2g", "g2d", "d2r", "g2r", "r2d", "r2g"
                            }
 
     Public Function Main(ByVal s As String, ByVal stack As Boolean) As String
