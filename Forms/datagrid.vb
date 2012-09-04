@@ -25,7 +25,12 @@ Public Class datagrid
             End If
             If My.Settings.STACKORDER = True Then
                 STACKORDER.Checked = True
+                LOOKSORDER.Checked = False
+            Else
+                STACKORDER.Checked = False
+                LOOKSORDER.Checked = True
             End If
+
 
             If My.Settings.CVTRPNs = True Then
                 CVTRPN.Checked = True
@@ -5498,7 +5503,7 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         Next
         Dim k As Double = 0
         If USERPN.Checked Then
-            If CVTRPN.Checked Then
+            If CVTRPN.Checked = True Then
                 Dim p As New Polish
                 str = p.Main(str, LOOKSORDER.Checked)
             End If
@@ -5918,7 +5923,6 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         Return dem(0)
 
     End Function
-
 
 #End Region
 

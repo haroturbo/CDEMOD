@@ -56,8 +56,8 @@ Partial Class datagrid
         Me.USERPN = New System.Windows.Forms.ToolStripMenuItem()
         Me.CVTRPN = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
-        Me.LOOKSORDER = New System.Windows.Forms.ToolStripMenuItem()
         Me.STACKORDER = New System.Windows.Forms.ToolStripMenuItem()
+        Me.LOOKSORDER = New System.Windows.Forms.ToolStripMenuItem()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.CNVbikou.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -323,7 +323,9 @@ Partial Class datagrid
         '
         'USERPN
         '
-        Me.USERPN.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CVTRPN, Me.ToolStripSeparator3, Me.STACKORDER, Me.LOOKSORDER})
+        Me.USERPN.Checked = True
+        Me.USERPN.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.USERPN.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CVTRPN, Me.ToolStripSeparator3, Me.LOOKSORDER, Me.STACKORDER})
         Me.USERPN.Name = "USERPN"
         Me.USERPN.Size = New System.Drawing.Size(152, 22)
         Me.USERPN.Text = "RPNモード"
@@ -344,16 +346,6 @@ Partial Class datagrid
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
         Me.ToolStripSeparator3.Size = New System.Drawing.Size(177, 6)
         '
-        'LOOKSORDER
-        '
-        Me.LOOKSORDER.Checked = True
-        Me.LOOKSORDER.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.LOOKSORDER.Name = "LOOKSORDER"
-        Me.LOOKSORDER.Size = New System.Drawing.Size(180, 22)
-        Me.LOOKSORDER.Text = "①,② スタック昇順"
-        Me.LOOKSORDER.ToolTipText = "関数引数順番がスタック降順になります" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "pow(①,②)→①,②,pow" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "logx(①,②)→①,②,logx" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "logy(①,②)→①,②,logy" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ata" & _
-    "n2_(①,②)→①,②,atan2_" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "atan2ms_(①,②)→①,②,atan2ms_"
-        '
         'STACKORDER
         '
         Me.STACKORDER.Name = "STACKORDER"
@@ -361,6 +353,16 @@ Partial Class datagrid
         Me.STACKORDER.Text = "②,① スタック昇順"
         Me.STACKORDER.ToolTipText = "関数引数順番がスタック昇順になります;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "pow(①,②)→②,①,pow" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "logx(①,②)→②,①,logx" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "logy(①,②)→②,①,logy" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "at" & _
     "an2_(①,②)→②,①,atan2_" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "atan2ms_(①,②)→②,①,atan2ms_" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
+        '
+        'LOOKSORDER
+        '
+        Me.LOOKSORDER.Checked = True
+        Me.LOOKSORDER.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.LOOKSORDER.Name = "LOOKSORDER"
+        Me.LOOKSORDER.Size = New System.Drawing.Size(180, 22)
+        Me.LOOKSORDER.Text = "①,② スタック降順"
+        Me.LOOKSORDER.ToolTipText = "関数引数順番がスタック降順になります" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "pow(①,②)→①,②,pow" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "logx(①,②)→①,②,logx" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "logy(①,②)→①,②,logy" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ata" & _
+    "n2_(①,②)→①,②,atan2_" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "atan2ms_(①,②)→①,②,atan2ms_"
         '
         'datagrid
         '
