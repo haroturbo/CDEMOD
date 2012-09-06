@@ -1704,7 +1704,30 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
 "vzero.s", "0xD0060000", "0xFFFFFF80", "%zs", _
 "vzero.t", "0xD0068000", "0xFFFFFF80", "%zt", _
 "mfvme", "0x68000000", "0xFC000000", "%t,%i", _
-"mtvme", "0xb0000000", "0xFC000000", "%t,%i"}
+"mtvme", "0xb0000000", "0xFC000000", "%t,%i",
+"vncos.s", "0x68000000", "0xFC000000", "%zs,%i", _
+"vncos.p", "0xD01b0080", "0xFFFF8080", "%zp,%yp", _
+"vncos.q", "0xD01b8080", "0xFFFF8080", "%zq,%yq", _
+"vncos.s", "0xD01b0000", "0xFFFF8080", "%zs,%ys", _
+"vncos.t", "0xD01b8000", "0xFFFF8080", "%zt,%yt", _
+"vnasin.p", "0xD01f0080", "0xFFFF8080", "%zp,%yp", _
+"vnasin.q", "0xD01f8080", "0xFFFF8080", "%zq,%yq", _
+"vnasin.s", "0xD01f0000", "0xFFFF8080", "%zs,%ys", _
+"vnasin.t", "0xD01f8000", "0xFFFF8080", "%zt,%yt",
+"vncos.s", "0x68000000", "0xFC000000", "%zs,%i", _
+"vnlog2.p", "0xD01d0080", "0xFFFF8080", "%zp,%yp", _
+"vnlog2.q", "0xD01d8080", "0xFFFF8080", "%zq,%yq", _
+"vnlog2.s", "0xD01d0000", "0xFFFF8080", "%zs,%ys", _
+"vnlog2.t", "0xD01d8000", "0xFFFF8080", "%zt,%yt", _
+"vnsqrt.p", "0xD01e0080", "0xFFFF8080", "%zp,%yp", _
+"vnsqrt.q", "0xD01e8080", "0xFFFF8080", "%zq,%yq", _
+"vnsqrt.s", "0xD01e0000", "0xFFFF8080", "%zs,%ys", _
+"vnsqrt.t", "0xD01e8000", "0xFFFF8080", "%zt,%yt",
+"vnrsq.p", "0xD0190080", "0xFFFF8080", "%zp,%yp", _
+"vnrsq.q", "0xD0198080", "0xFFFF8080", "%zq,%yq", _
+"vnrsq.s", "0xD0190000", "0xFFFF8080", "%zs,%ys", _
+"vnrsq.t", "0xD0198000", "0xFFFF8080", "%zt,%yt"
+                               }
 
 #End Region
 
@@ -2232,6 +2255,7 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
 
     'ASM INSERT
 #Region "INSERT ASM"
+
 
     Function assembler(ByVal str As String, ByVal str2 As String) As String
         Try
@@ -3077,6 +3101,27 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                     hex = xyzt(ss(0), hex, 0)
                     hex = xyzt(ss(1), hex, 1)
 
+                ElseIf mips = "vnasin.p" Then
+                    '"vnasin.p", "0xD01f0080", "0xFFFF8080", "%zp,%yp", _
+                    hex = &HD01F0080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                ElseIf mips = "vnasin.q" Then
+                    '"vnasin.q", "0xD01f8080", "0xFFFF8080", "%zq,%yq", _
+                    hex = &HD01F8080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                ElseIf mips = "vnasin.s" Then
+                    '"vnasin.s", "0xD01f0000", "0xFFFF8080", "%zs,%ys", _
+                    hex = &HD01F0000
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                ElseIf mips = "vnasin.t" Then
+                    '"vnasin.t", "0xD01f8000", "0xFFFF8080", "%zt,%yt", _
+                    hex = &HD01F8000
+                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
+
                 ElseIf mips = "vavg.p" Then
                     '"vavg.p", "0xD0470080", "0xFFFF8080", "%zp,%yp", _
                     hex = &HD0470080
@@ -3160,7 +3205,7 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                     hex = &HD0138080
                     hex = xyzq(ss(0), hex, 0)
                     hex = xyzq(ss(1), hex, 1)
-                ElseIf mips = "vvcos.s" Then
+                ElseIf mips = "vcos.s" Then
                     '"vcos.s", "0xD0130000", "0xFFFF8080", "%zs,%ys", _
                     hex = &HD0130000
                     hex = xyzs(ss(0), hex, 0)
@@ -3396,6 +3441,27 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                     hex = &HD0158000
                     hex = xyzt(ss(0), hex, 0)
                     hex = xyzt(ss(1), hex, 1)
+
+                ElseIf mips = "vnlog2.p" Then
+                    '"vnlog2.p","0xD01D0080","0xFFFF8080","%zp,%yp",
+                    hex = &HD01D0080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                ElseIf mips = "vnlog2.q" Then
+                    '"vnlog2.q","0xD01D8080","0xFFFF8080","%zq,%yq",
+                    hex = &HD01D8080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                ElseIf mips = "vnlog2.s" Then
+                    '"vnlog2.s","0xD01D0000","0xFFFF8080","%zs,%ys",
+                    hex = &HD01D0000
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                ElseIf mips = "vnlog2.t" Then
+                    '"vnlog2.t","0xD01D8000","0xFFFF8080","%zt,%yt",
+                    hex = &HD01D8000
+                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
                 ElseIf mips = "vmax.p" Then
                     '"vmax.p","0x6D800080","0xFF808080","%zp,%yp,%xp",
                     hex = &H6D800080
@@ -3563,6 +3629,23 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                     hex = &HD01A8000
                     hex = xyzt(ss(0), hex, 0)
                     hex = xyzt(ss(1), hex, 1)
+                ElseIf mips = "vncos.p" Then
+                    '"vncos.p","0xD01b0080","0xFFFF8080","%zp,%yp",
+                    hex = &HD01B0080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                ElseIf mips = "vncos.q" Then
+                    hex = &HD01B8080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                ElseIf mips = "vncos.s" Then
+                    hex = &HD01B0000
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                ElseIf mips = "vncos.t" Then
+                    hex = &HD01B8000
+                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
                 ElseIf mips = "vocp.p" Then
                     '"vocp.p","0xD0440080","0xFFFF8080","%zp,%yp",
                     hex = &HD0440080
@@ -3717,6 +3800,28 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                     hex = &HD0118000
                     hex = xyzt(ss(0), hex, 0)
                     hex = xyzt(ss(1), hex, 1)
+
+                ElseIf mips = "vnrsq.p" Then
+                    '"vnrsq.p","0xD0190080","0xFFFF8080","%zp,%yp",
+                    hex = &HD0190080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                ElseIf mips = "vnrsq.q" Then
+                    '"vnrsq.q","0xD0198080","0xFFFF8080","%zq,%yq",
+                    hex = &HD0198080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                ElseIf mips = "vnrsq.s" Then
+                    '"vnrsq.s","0xD0190000","0xFFFF8080","%zs,%ys",
+                    hex = &HD0190000
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                ElseIf mips = "vnrsq.t" Then
+                    '"vnrsq.t","0xD0198000","0xFFFF8080","%zt,%yt",
+                    hex = &HD0198000
+                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
+
                 ElseIf mips = "vs2i.p" Then
                     '"vs2i.p","0xD03B0080","0xFFFF8080","%zq,%yp",
                     hex = &HD03B0080
@@ -3936,6 +4041,26 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                 ElseIf mips = "vsqrt.t" Then
                     '"vsqrt.t","0xD0168000","0xFFFF8080","%zt,%yt",
                     hex = &HD0168000
+                    hex = xyzt(ss(0), hex, 0)
+                    hex = xyzt(ss(1), hex, 1)
+                ElseIf mips = "vnsqrt.p" Then
+                    '"vnsqrt.p","0xD01e0080","0xFFFF8080","%zp,%yp",
+                    hex = &HD01E0080
+                    hex = xyzp(ss(0), hex, 0)
+                    hex = xyzp(ss(1), hex, 1)
+                ElseIf mips = "vnsqrt.q" Then
+                    '"vnsqrt.q","0xD01e8080","0xFFFF8080","%zq,%yq",
+                    hex = &HD01E8080
+                    hex = xyzq(ss(0), hex, 0)
+                    hex = xyzq(ss(1), hex, 1)
+                ElseIf mips = "vnsqrt.s" Then
+                    '"vnsqrt.s","0xD01e0000","0xFFFF8080","%zs,%ys",
+                    hex = &HD01E0000
+                    hex = xyzs(ss(0), hex, 0)
+                    hex = xyzs(ss(1), hex, 1)
+                ElseIf mips = "vnsqrt.t" Then
+                    '"vsqrt.t","0xD01e8000","0xFFFF8080","%zt,%yt",
+                    hex = &HD01E8000
                     hex = xyzt(ss(0), hex, 0)
                     hex = xyzt(ss(1), hex, 1)
                 ElseIf mips = "vsrt1.q" Then
@@ -4424,11 +4549,11 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                 ElseIf mips = ".word" Then
                     hex = valword(str.Trim)
                 ElseIf mips = ".float" Then
-                    hex = cvt_float(valfloat(str.Trim))
+                    hex = cvt_float(valfloat(str.Trim.Replace(".float", "")))
                 End If
-            End If
 
                 asm = "0x" & Convert.ToString(hex, 16).ToUpper.PadLeft(8, "0"c)
+            End If
 
             Return asm
         Catch ex As Exception
