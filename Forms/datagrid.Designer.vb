@@ -53,11 +53,11 @@ Partial Class datagrid
         Me.timer = New System.Windows.Forms.Label()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.FLOAT計算ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.USERPN = New System.Windows.Forms.ToolStripMenuItem()
+        Me.RPN = New System.Windows.Forms.ToolStripMenuItem()
         Me.CVTRPN = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
-        Me.STACKORDER = New System.Windows.Forms.ToolStripMenuItem()
         Me.LOOKSORDER = New System.Windows.Forms.ToolStripMenuItem()
+        Me.STACKORDER = New System.Windows.Forms.ToolStripMenuItem()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.CNVbikou.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -316,20 +316,20 @@ Partial Class datagrid
         '
         'FLOAT計算ToolStripMenuItem
         '
-        Me.FLOAT計算ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.USERPN})
+        Me.FLOAT計算ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RPN})
         Me.FLOAT計算ToolStripMenuItem.Name = "FLOAT計算ToolStripMenuItem"
         Me.FLOAT計算ToolStripMenuItem.Size = New System.Drawing.Size(82, 22)
         Me.FLOAT計算ToolStripMenuItem.Text = "FLOAT計算"
         '
-        'USERPN
+        'RPN
         '
-        Me.USERPN.Checked = True
-        Me.USERPN.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.USERPN.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CVTRPN, Me.ToolStripSeparator3, Me.LOOKSORDER, Me.STACKORDER})
-        Me.USERPN.Name = "USERPN"
-        Me.USERPN.Size = New System.Drawing.Size(152, 22)
-        Me.USERPN.Text = "RPNモード"
-        Me.USERPN.ToolTipText = "逆ポーランド記法で複数の式を処理して単精度浮動小数点数を出力します。" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "通常モード時は単体式のみ対応" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "通常モード;tan(45度) " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "RPN式;9,2,3,*" & _
+        Me.RPN.Checked = True
+        Me.RPN.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.RPN.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CVTRPN, Me.ToolStripSeparator3, Me.LOOKSORDER, Me.STACKORDER})
+        Me.RPN.Name = "RPN"
+        Me.RPN.Size = New System.Drawing.Size(152, 22)
+        Me.RPN.Text = "RPNモード"
+        Me.RPN.ToolTipText = "逆ポーランド記法で複数の式を処理して単精度浮動小数点数を出力します。" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "通常モード時は単体式のみ対応" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "通常モード;tan(45度) " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "RPN式;9,2,3,*" & _
     ",6,*,9,+,tan"
         '
         'CVTRPN
@@ -346,14 +346,6 @@ Partial Class datagrid
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
         Me.ToolStripSeparator3.Size = New System.Drawing.Size(177, 6)
         '
-        'STACKORDER
-        '
-        Me.STACKORDER.Name = "STACKORDER"
-        Me.STACKORDER.Size = New System.Drawing.Size(180, 22)
-        Me.STACKORDER.Text = "②,① スタック昇順"
-        Me.STACKORDER.ToolTipText = "関数引数順番がスタック昇順になります;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "pow(①,②)→②,①,pow" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "logx(①,②)→②,①,logx" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "logy(①,②)→②,①,logy" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "at" & _
-    "an2_(①,②)→②,①,atan2_" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "atan2ms_(①,②)→②,①,atan2ms_" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
-        '
         'LOOKSORDER
         '
         Me.LOOKSORDER.Checked = True
@@ -363,6 +355,14 @@ Partial Class datagrid
         Me.LOOKSORDER.Text = "①,② スタック降順"
         Me.LOOKSORDER.ToolTipText = "関数引数順番がスタック降順になります" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "pow(①,②)→①,②,pow" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "logx(①,②)→①,②,logx" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "logy(①,②)→①,②,logy" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ata" & _
     "n2_(①,②)→①,②,atan2_" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "atan2ms_(①,②)→①,②,atan2ms_"
+        '
+        'STACKORDER
+        '
+        Me.STACKORDER.Name = "STACKORDER"
+        Me.STACKORDER.Size = New System.Drawing.Size(180, 22)
+        Me.STACKORDER.Text = "②,① スタック昇順"
+        Me.STACKORDER.ToolTipText = "関数引数順番がスタック昇順になります;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "pow(①,②)→②,①,pow" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "logx(①,②)→②,①,logx" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "logy(①,②)→②,①,logy" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "at" & _
+    "an2_(①,②)→②,①,atan2_" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "atan2ms_(①,②)→②,①,atan2ms_" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
         'datagrid
         '
@@ -418,7 +418,7 @@ Partial Class datagrid
     Friend WithEvents CPADV As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip
     Friend WithEvents FLOAT計算ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents USERPN As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents RPN As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents CVTRPN As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator3 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents STACKORDER As System.Windows.Forms.ToolStripMenuItem

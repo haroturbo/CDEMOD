@@ -21,7 +21,7 @@ Public Class datagrid
 
 
             If My.Settings.RPNCALC = True Then
-                USERPN.Checked = True
+                RPN.Checked = True
             End If
             If My.Settings.STACKORDER = True Then
                 STACKORDER.Checked = True
@@ -522,38 +522,38 @@ Public Class datagrid
             Else 'BINARY32/16
                 Dim r As New System.Text.RegularExpressions.Regex("^[-+]?\d+\.?\d*", System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                 Dim v As System.Text.RegularExpressions.Match = r.Match(str)
-                    If v.Success AndAlso v.Value.Length = str.Length Then
-                        Dim f As Single = Convert.ToSingle(v.Value)
-                        Dim bit() As Byte = BitConverter.GetBytes(f)
-                        Dim sb As New System.Text.StringBuilder()
-                        Dim i As Integer = 3
-                        While i >= 0
-                            sb.Append(Convert.ToString(bit(i), 16).PadLeft(2, "0"c))
-                            i -= 1
-                        End While
-                        Dim half As String = ""
-                        If check = "BINARY32" Then
-                            DataGridView1.Rows(d).Cells(add_val).Value = "0x" + sb.ToString.ToUpper
-                        ElseIf check = "BIN32>>16" Then
-                            If m.PSX = True AndAlso g_value.Checked = True Then
-                                DataGridView1.Rows(d).Cells(add_val).Value = sb.ToString.Substring(0, 4).ToUpper
-                            Else
-                                half = DataGridView1.Rows(d).Cells(add_val).Value.ToString.Substring(0, 6)
-                                DataGridView1.Rows(d).Cells(add_val).Value = half & sb.ToString.Substring(0, 4).ToUpper
-                            End If
-                        ElseIf check = "BINARY16" Then
-                            Dim hf As String = sb.ToString
-                            hf = converthalffloat(hf)
-                            If m.PSX = True AndAlso g_value.Checked = True Then
-                                DataGridView1.Rows(d).Cells(add_val).Value = hf
-                            Else
-                                half = DataGridView1.Rows(d).Cells(add_val).Value.ToString.Substring(0, 6)
-                                DataGridView1.Rows(d).Cells(add_val).Value = half & hf
-                            End If
+                If v.Success AndAlso v.Value.Length = str.Length Then
+                    Dim f As Single = Convert.ToSingle(v.Value)
+                    Dim bit() As Byte = BitConverter.GetBytes(f)
+                    Dim sb As New System.Text.StringBuilder()
+                    Dim i As Integer = 3
+                    While i >= 0
+                        sb.Append(Convert.ToString(bit(i), 16).PadLeft(2, "0"c))
+                        i -= 1
+                    End While
+                    Dim half As String = ""
+                    If check = "BINARY32" Then
+                        DataGridView1.Rows(d).Cells(add_val).Value = "0x" + sb.ToString.ToUpper
+                    ElseIf check = "BIN32>>16" Then
+                        If m.PSX = True AndAlso g_value.Checked = True Then
+                            DataGridView1.Rows(d).Cells(add_val).Value = sb.ToString.Substring(0, 4).ToUpper
+                        Else
+                            half = DataGridView1.Rows(d).Cells(add_val).Value.ToString.Substring(0, 6)
+                            DataGridView1.Rows(d).Cells(add_val).Value = half & sb.ToString.Substring(0, 4).ToUpper
                         End If
-                    Else
-                        Label1.Text = "不正な値です"
+                    ElseIf check = "BINARY16" Then
+                        Dim hf As String = sb.ToString
+                        hf = converthalffloat(hf)
+                        If m.PSX = True AndAlso g_value.Checked = True Then
+                            DataGridView1.Rows(d).Cells(add_val).Value = hf
+                        Else
+                            half = DataGridView1.Rows(d).Cells(add_val).Value.ToString.Substring(0, 6)
+                            DataGridView1.Rows(d).Cells(add_val).Value = half & hf
+                        End If
                     End If
+                Else
+                    Label1.Text = "不正な値です"
+                End If
             End If
         ElseIf Not DataGridView1.Rows(d).Cells(2).Value Is Nothing AndAlso Not DataGridView1.Rows(d).Cells(4).Value Is Nothing Then
             Dim check As String = DataGridView1.Rows(d).Cells(2).Value.ToString
@@ -561,33 +561,33 @@ Public Class datagrid
                 Dim str2 As String = DataGridView1.Rows(d).Cells(4).Value.ToString
                 DataGridView1.Rows(d).Cells(add_val).Value = "0x" + cvt_float(valfloat(str2.Trim)).ToString("X8")
             End If
-            End If
-            Dim gridtx As String = Nothing
-            'Dim comment As String = ""
-            Dim sl As New StringBuilder
-            Dim sm As New StringBuilder
-            Dim k As Integer = 0
-            While k < DataGridView1.RowCount - 1 AndAlso DataGridView1.Rows(k).Cells(0).Value IsNot Nothing AndAlso DataGridView1.Rows(k).Cells(1).Value IsNot Nothing
-                gridtx &= DataGridView1.Rows(k).Cells(0).Value.ToString & " "
-                gridtx &= DataGridView1.Rows(k).Cells(1).Value.ToString & vbCrLf
-                If Not DataGridView1.Rows(k).Cells(4).Value Is Nothing Then
-                    If DataGridView1.Rows(k).Cells(4).Value.ToString <> "" Then
-                        sl.Append("<DGLINE" & Convert.ToString(k + 1) & "='" & DataGridView1.Rows(k).Cells(4).Value.ToString & "'>")
-                    End If
+        End If
+        Dim gridtx As String = Nothing
+        'Dim comment As String = ""
+        Dim sl As New StringBuilder
+        Dim sm As New StringBuilder
+        Dim k As Integer = 0
+        While k < DataGridView1.RowCount - 1 AndAlso DataGridView1.Rows(k).Cells(0).Value IsNot Nothing AndAlso DataGridView1.Rows(k).Cells(1).Value IsNot Nothing
+            gridtx &= DataGridView1.Rows(k).Cells(0).Value.ToString & " "
+            gridtx &= DataGridView1.Rows(k).Cells(1).Value.ToString & vbCrLf
+            If Not DataGridView1.Rows(k).Cells(4).Value Is Nothing Then
+                If DataGridView1.Rows(k).Cells(4).Value.ToString <> "" Then
+                    sl.Append("<DGLINE" & Convert.ToString(k + 1) & "='" & DataGridView1.Rows(k).Cells(4).Value.ToString & "'>")
                 End If
-                If DataGridView1.Rows(k).Cells(2).Value.ToString.Contains("DEC") = False Then
-                    sm.Append("<DGMODE" & Convert.ToString(k + 1) & "='" & DataGridView1.Rows(k).Cells(2).Value.ToString & "'>")
-                End If
-                k += 1
-            End While
-            m.cl_tb.Text = gridtx
-            m.dgtext.Text = sl.ToString
-            m.dmtext.Text = sm.ToString()
-            If My.Settings.gridsave = True Then
-                m.save_cc_Click(sender, e)
-            Else
-                m.changed.Text = "データグリッドでコードが変更されてます"
             End If
+            If DataGridView1.Rows(k).Cells(2).Value.ToString.Contains("DEC") = False Then
+                sm.Append("<DGMODE" & Convert.ToString(k + 1) & "='" & DataGridView1.Rows(k).Cells(2).Value.ToString & "'>")
+            End If
+            k += 1
+        End While
+        m.cl_tb.Text = gridtx
+        m.dgtext.Text = sl.ToString
+        m.dmtext.Text = sm.ToString()
+        If My.Settings.gridsave = True Then
+            m.save_cc_Click(sender, e)
+        Else
+            m.changed.Text = "データグリッドでコードが変更されてます"
+        End If
     End Sub
 
     Private Sub DataGridView1_CellEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles DataGridView1.CellEnter
@@ -1267,468 +1267,481 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
     End Function
 
     'decoder 配列
-#Region "decoder"
-    Dim decoder As String() = {"nop", "0x00000000", "0xFFFFFFFF", "", _
-"li", "0x24000000", "0xFFE00000", "%t,%i", _
-"li", "0x34000000", "0xFFE00000", "%t,%I", _
-"move", "0x00000021", "0xFC1F07FF", "%d,%s", _
-"move", "0x00000025", "0xFC1F07FF", "%d,%s", _
-"b", "0x10000000", "0xFFFF0000", "%O", _
-"b", "0x04010000", "0xFFFF0000", "%O", _
-"bal", "0x04110000", "0xFFFF0000", "%O", _
-"bnez", "0x14000000", "0xFC1F0000", "%s,%O", _
-"bnezl", "0x54000000", "0xFC1F0000", "%s,%O", _
-"beqz", "0x10000000", "0xFC1F0000", "%s,%O", _
-"beqzl", "0x50000000", "0xFC1F0000", "%s,%O", _
-"neg", "0x00000022", "0xFFE007FF", "%d,%t", _
-"negu", "0x00000023", "0xFFE007FF", "%d,%t", _
-"not", "0x00000027", "0xFC1F07FF", "%d,%s", _
-"jalr", "0x0000F809", "0xFC1FFFFF", "%J", _
-"add", "0x00000020", "0xFC0007FF", "%d,%s,%t", _
-"addi", "0x20000000", "0xFC000000", "%t,%s,%i", _
-"addiu", "0x24000000", "0xFC000000", "%t,%s,%i", _
-"addu", "0x00000021", "0xFC0007FF", "%d,%s,%t", _
-"and", "0x00000024", "0xFC0007FF", "%d,%s,%t", _
-"andi", "0x30000000", "0xFC000000", "%t,%s,%I", _
-"beq", "0x10000000", "0xFC000000", "%s,%t,%O", _
-"beql", "0x50000000", "0xFC000000", "%s,%t,%O", _
-"bgez", "0x04010000", "0xFC1F0000", "%s,%O", _
-"bgezal", "0x04110000", "0xFC1F0000", "%s,%O", _
-"bgezl", "0x04030000", "0xFC1F0000", "%s,%O", _
-"bgtz", "0x1C000000", "0xFC1F0000", "%s,%O", _
-"bgtzl", "0x5C000000", "0xFC1F0000", "%s,%O", _
-"bitrev", "0x7C000520", "0xFFE007FF", "%d,%t", _
-"blez", "0x18000000", "0xFC1F0000", "%s,%O", _
-"blezl", "0x58000000", "0xFC1F0000", "%s,%O", _
-"bltz", "0x04000000", "0xFC1F0000", "%s,%O", _
-"bltzl", "0x04020000", "0xFC1F0000", "%s,%O", _
-"bltzal", "0x04100000", "0xFC1F0000", "%s,%O", _
-"bltzall", "0x04120000", "0xFC1F0000", "%s,%O", _
-"bne", "0x14000000", "0xFC000000", "%s,%t,%O", _
-"bnel", "0x54000000", "0xFC000000", "%s,%t,%O", _
-"break", "0x0000000D", "0xFC00003F", "%c", _
-"cache", "0xbc000000", "0xfc000000", "%k,%o", _
-"cfc0", "0x40400000", "0xFFE007FF", "%t,%p", _
-"clo", "0x00000017", "0xFC1F07FF", "%d,%s", _
-"clz", "0x00000016", "0xFC1F07FF", "%d,%s", _
-"ctc0", "0x40C00000", "0xFFE007FF", "%t,%p", _
-"max", "0x0000002C", "0xFC0007FF", "%d,%s,%t", _
-"min", "0x0000002D", "0xFC0007FF", "%d,%s,%t", _
-"dbreak", "0x7000003F", "0xFFFFFFFF", "", _
-"div", "0x0000001A", "0xFC00FFFF", "%s,%t", _
-"divu", "0x0000001B", "0xFC00FFFF", "%s,%t", _
-"dret", "0x7000003E", "0xFFFFFFFF", "", _
-"eret", "0x42000018", "0xFFFFFFFF", "", _
-"ext", "0x7C000000", "0xFC00003F", "%t,%s,%a,%ne", _
-"ins", "0x7C000004", "0xFC00003F", "%t,%s,%a,%ni", _
-"j", "0x08000000", "0xFC000000", "%j", _
-"jr", "0x00000008", "0xFC1FFFFF", "%J", _
-"jalr", "0x00000009", "0xFC1F07FF", "%d,%J", _
-"jal", "0x0C000000", "0xFC000000", "%j", _
-"lb", "0x80000000", "0xFC000000", "%t,%o", _
-"lbu", "0x90000000", "0xFC000000", "%t,%o", _
-"lh", "0x84000000", "0xFC000000", "%t,%o", _
-"lhu", "0x94000000", "0xFC000000", "%t,%o", _
-"ll", "0xC0000000", "0xFC000000", "%t,%o", _
-"lui", "0x3C000000", "0xFFE00000", "%t,%I", _
-"lw", "0x8C000000", "0xFC000000", "%t,%o", _
-"lwl", "0x88000000", "0xFC000000", "%t,%o", _
-"lwr", "0x98000000", "0xFC000000", "%t,%o", _
-"madd", "0x0000001C", "0xFC00FFFF", "%s,%t", _
-"maddu", "0x0000001D", "0xFC00FFFF", "%s,%t", _
-"mfc0", "0x40000000", "0xFFE007FF", "%t,%0", _
-"mfdr", "0x7000003D", "0xFFE007FF", "%t,%r", _
-"mfhi", "0x00000010", "0xFFFF07FF", "%d", _
-"mfic", "0x70000024", "0xFFE007FF", "%t,%p", _
-"mflo", "0x00000012", "0xFFFF07FF", "%d", _
-"movn", "0x0000000B", "0xFC0007FF", "%d,%s,%t", _
-"movz", "0x0000000A", "0xFC0007FF", "%d,%s,%t", _
-"msub", "0x0000002e", "0xfc00ffff", "%s,%t", _
-"msubu", "0x0000002f", "0xfc00ffff", "%s,%t", _
-"mtc0", "0x40800000", "0xFFE007FF", "%t,%0", _
-"mtdr", "0x7080003D", "0xFFE007FF", "%t,%r", _
-"mtic", "0x70000026", "0xFFE007FF", "%t,%p", _
-"halt", "0x70000000", "0xFFFFFFFF", "", _
-"mthi", "0x00000011", "0xFC1FFFFF", "%s", _
-"mtlo", "0x00000013", "0xFC1FFFFF", "%s", _
-"mult", "0x00000018", "0xFC00FFFF", "%s,%t", _
-"multu", "0x00000019", "0xFC0007FF", "%s,%t", _
-"nor", "0x00000027", "0xFC0007FF", "%d,%s,%t", _
-"or", "0x00000025", "0xFC0007FF", "%d,%s,%t", _
-"ori", "0x34000000", "0xFC000000", "%t,%s,%I", _
-"rotr", "0x00200002", "0xFFE0003F", "%d,%t,%a", _
-"rotv", "0x00000046", "0xFC0007FF", "%d,%t,%s", _
-"seb", "0x7C000420", "0xFFE007FF", "%d,%t", _
-"seh", "0x7C000620", "0xFFE007FF", "%d,%t", _
-"sb", "0xA0000000", "0xFC000000", "%t,%o", _
-"sh", "0xA4000000", "0xFC000000", "%t,%o", _
-"sc", "0xE0000000", "0xFC000000", "%t, %o", _
-"sllv", "0x00000004", "0xFC0007FF", "%d,%t,%s", _
-"sll", "0x00000000", "0xFFE0003F", "%d,%t,%a", _
-"slt", "0x0000002A", "0xFC0007FF", "%d,%s,%t", _
-"slti", "0x28000000", "0xFC000000", "%t,%s,%i", _
-"sltiu", "0x2C000000", "0xFC000000", "%t,%s,%I", _
-"sltu", "0x0000002B", "0xFC0007FF", "%d,%s,%t", _
-"sra", "0x00000003", "0xFFE0003F", "%d,%t,%a", _
-"srav", "0x00000007", "0xFC0007FF", "%d,%t,%s", _
-"srlv", "0x00000006", "0xFC0007FF", "%d,%t,%s", _
-"srl", "0x00000002", "0xFFE0003F", "%d,%t,%a", _
-"sw", "0xAC000000", "0xFC000000", "%t,%o", _
-"swl", "0xA8000000", "0xFC000000", "%t,%o", _
-"swr", "0xB8000000", "0xFC000000", "%t,%o", _
-"sub", "0x00000022", "0xFC0007FF", "%d,%s,%t", _
-"subu", "0x00000023", "0xFC0007FF", "%d,%s,%t", _
-"sync", "0x0000000F", "0xFFFFFFFF", "", _
-"syscall", "0x0000000C", "0xFC00003F", "%C", _
-"xor", "0x00000026", "0xFC0007FF", "%d,%s,%t", _
-"xori", "0x38000000", "0xFC000000", "%t,%s,%I", _
-"wsbh", "0x7C0000A0", "0xFFE007FF", "%d,%t", _
-"wsbw", "0x7C0000E0", "0xFFE007FF", "%d,%t", _
-"abs.s", "0x46000005", "0xFFFF003F", "%D,%S", _
-"add.s", "0x46000000", "0xFFE0003F", "%D,%S,%T", _
-"bc1f", "0x45000000", "0xFFFF0000", "%O", _
-"bc1fl", "0x45020000", "0xFFFF0000", "%O", _
-"bc1t", "0x45010000", "0xFFFF0000", "%O", _
-"bc1tl", "0x45030000", "0xFFFF0000", "%O", _
-"c.f.s", "0x46000030", "0xFFE007FF", "%S,%T", _
-"c.un.s", "0x46000031", "0xFFE007FF", "%S,%T", _
-"c.eq.s", "0x46000032", "0xFFE007FF", "%S,%T", _
-"c.ueq.s", "0x46000033", "0xFFE007FF", "%S,%T", _
-"c.olt.s", "0x46000034", "0xFFE007FF", "%S,%T", _
-"c.ult.s", "0x46000035", "0xFFE007FF", "%S,%T", _
-"c.ole.s", "0x46000036", "0xFFE007FF", "%S,%T", _
-"c.ule.s", "0x46000037", "0xFFE007FF", "%S,%T", _
-"c.sf.s", "0x46000038", "0xFFE007FF", "%S,%T", _
-"c.ngle.s", "0x46000039", "0xFFE007FF", "%S,%T", _
-"c.seq.s", "0x4600003A", "0xFFE007FF", "%S,%T", _
-"c.ngl.s", "0x4600003B", "0xFFE007FF", "%S,%T", _
-"c.lt.s", "0x4600003C", "0xFFE007FF", "%S,%T", _
-"c.nge.s", "0x4600003D", "0xFFE007FF", "%S,%T", _
-"c.le.s", "0x4600003E", "0xFFE007FF", "%S,%T", _
-"c.ngt.s", "0x4600003F", "0xFFE007FF", "%S,%T", _
-"ceil.w.s", "0x4600000E", "0xFFFF003F", "%D,%S", _
-"cfc1", "0x44400000", "0xFFE007FF", "%t,%p", _
-"ctc1", "0x44c00000", "0xFFE007FF", "%t,%p", _
-"cvt.s.w", "0x46800020", "0xFFFF003F", "%D,%S", _
-"cvt.w.s", "0x46000024", "0xFFFF003F", "%D,%S", _
-"div.s", "0x46000003", "0xFFE0003F", "%D,%S,%T", _
-"floor.w.s", "0x4600000F", "0xFFFF003F", "%D,%S", _
-"lwc1", "0xc4000000", "0xFC000000", "%T,%o", _
-"mfc1", "0x44000000", "0xFFE007FF", "%t,%1", _
-"mov.s", "0x46000006", "0xFFFF003F", "%D,%S", _
-"mtc1", "0x44800000", "0xFFE007FF", "%t,%1", _
-"mul.s", "0x46000002", "0xFFE0003F", "%D,%S,%T", _
-"neg.s", "0x46000007", "0xFFFF003F", "%D,%S", _
-"round.w.s", "0x4600000C", "0xFFFF003F", "%D,%S", _
-"sqrt.s", "0x46000004", "0xFFFF003F", "%D,%S", _
-"sub.s", "0x46000001", "0xFFE0003F", "%D,%S,%T", _
-"swc1", "0xe4000000", "0xFC000000", "%T,%o", _
-"trunc.w.s", "0x4600000D", "0xFFFF003F", "%D,%S", _
-"bvf", "0x49000000", "0xFFE30000", "%Zc,%O", _
-"bvfl", "0x49020000", "0xFFE30000", "%Zc,%O", _
-"bvt", "0x49010000", "0xFFE30000", "%Zc,%O", _
-"bvtl", "0x49030000", "0xFFE30000", "%Zc,%O", _
-"lv.q", "0xD8000000", "0xFC000002", "%Xq,%Y", _
-"lv.s", "0xC8000000", "0xFC000000", "%Xs,%Y", _
-"lvl.q", "0xD4000000", "0xFC000002", "%Xq,%Y", _
-"lvr.q", "0xD4000002", "0xFC000002", "%Xq,%Y", _
-"mfv", "0x48600000", "0xFFE0FF80", "%t,%zs", _
-"mfvc", "0x48600000", "0xFFE0FF00", "%t,%2d", _
-"mtv", "0x48E00000", "0xFFE0FF80", "%t,%zs", _
-"mtvc", "0x48E00000", "0xFFE0FF00", "%t,%2d", _
-"sv.q", "0xF8000000", "0xFC000002", "%Xq,%Y", _
-"sv.s", "0xE8000000", "0xFC000000", "%Xs,%Y", _
-"svl.q", "0xF4000000", "0xFC000002", "%Xq,%Y", _
-"svr.q", "0xF4000002", "0xFC000002", "%Xq,%Y", _
-"vabs.p", "0xD0010080", "0xFFFF8080", "%zp,%yp", _
-"vabs.q", "0xD0018080", "0xFFFF8080", "%zq,%yq", _
-"vabs.s", "0xD0010000", "0xFFFF8080", "%zs,%ys", _
-"vabs.t", "0xD0018000", "0xFFFF8080", "%zt,%yt", _
-"vadd.p", "0x60000080", "0xFF808080", "%zp,%yp,%xp", _
-"vadd.q", "0x60008080", "0xFF808080", "%zq,%yq,%xq", _
-"vadd.s", "0x60000000", "0xFF808080", "%zs,%ys,%xs", _
-"vadd.t", "0x60008000", "0xFF808080", "%zt,%yt,%xt", _
-"vasin.p", "0xD0170080", "0xFFFF8080", "%zp,%yp", _
-"vasin.q", "0xD0178080", "0xFFFF8080", "%zq,%yq", _
-"vasin.s", "0xD0170000", "0xFFFF8080", "%zs,%ys", _
-"vasin.t", "0xD0178000", "0xFFFF8080", "%zt,%yt", _
-"vavg.p", "0xD0470080", "0xFFFF8080", "%zp,%yp", _
-"vavg.q", "0xD0478080", "0xFFFF8080", "%zq,%yq", _
-"vavg.t", "0xD0478000", "0xFFFF8080", "%zt,%yt", _
-"vbfy1.p", "0xD0420080", "0xFFFF8080", "%zp,%yp", _
-"vbfy1.q", "0xD0428080", "0xFFFF8080", "%zq,%yq", _
-"vbfy2.q", "0xD0438080", "0xFFFF8080", "%zq,%yq", _
-"vcmovf.p", "0xD2A80080", "0xFFF88080", "%zp,%yp,%v3", _
-"vcmovf.q", "0xD2A88080", "0xFFF88080", "%zq,%yq,%v3", _
-"vcmovf.s", "0xD2A80000", "0xFFF88080", "%zs,%ys,%v3", _
-"vcmovf.t", "0xD2A88000", "0xFFF88080", "%zt,%yt,%v3", _
-"vcmovt.p", "0xD2A00080", "0xFFF88080", "%zp,%yp,%v3", _
-"vcmovt.q", "0xD2A08080", "0xFFF88080", "%zq,%yq,%v3", _
-"vcmovt.s", "0xD2A00000", "0xFFF88080", "%zs,%ys,%v3", _
-"vcmovt.t", "0xD2A08000", "0xFFF88080", "%zt,%yt,%v3", _
-"vcmp.p", "0x6C000080", "0xFF8080F0", "%Zn,%yp,%xp", _
-"vcmp.p", "0x6C000080", "0xFFFF80F0", "%Zn,%yp", _
-"vcmp.p", "0x6C000080", "0xFFFFFFF0", "%Zn", _
-"vcmp.q", "0x6C008080", "0xFF8080F0", "%Zn,%yq,%xq", _
-"vcmp.q", "0x6C008080", "0xFFFF80F0", "%Zn,%yq", _
-"vcmp.q", "0x6C008080", "0xFFFFFFF0", "%Zn", _
-"vcmp.s", "0x6C000000", "0xFF8080F0", "%Zn,%ys,%xs", _
-"vcmp.s", "0x6C000000", "0xFFFF80F0", "%Zn,%ys", _
-"vcmp.s", "0x6C000000", "0xFFFFFFF0", "%Zn", _
-"vcmp.t", "0x6C008000", "0xFF8080F0", "%Zn,%yt,%xt", _
-"vcmp.t", "0x6C008000", "0xFFFF80F0", "%Zn,%yt", _
-"vcmp.t", "0x6C008000", "0xFFFFFFF0", "%Zn", _
-"vcos.p", "0xD0130080", "0xFFFF8080", "%zp,%yp", _
-"vcos.q", "0xD0138080", "0xFFFF8080", "%zq,%yq", _
-"vcos.s", "0xD0130000", "0xFFFF8080", "%zs,%ys", _
-"vcos.t", "0xD0138000", "0xFFFF8080", "%zt,%yt", _
-"vcrs.t", "0x66808000", "0xFF808080", "%zt,%yt,%xt", _
-"vcrsp.t", "0xF2808000", "0xFF808080", "%zt,%yt,%xt", _
-"vcst.p", "0xD0600080", "0xFFE0FF80", "%zp,%vk", _
-"vcst.q", "0xD0608080", "0xFFE0FF80", "%zq,%vk", _
-"vcst.s", "0xD0600000", "0xFFE0FF80", "%zs,%vk", _
-"vcst.t", "0xD0608000", "0xFFE0FF80", "%zt,%vk", _
-"vdet.p", "0x67000080", "0xFF808080", "%zs,%yp,%xp", _
-"vdiv.p", "0x63800080", "0xFF808080", "%zp,%yp,%xp", _
-"vdiv.q", "0x63808080", "0xFF808080", "%zq,%yq,%xq", _
-"vdiv.s", "0x63800000", "0xFF808080", "%zs,%ys,%xs", _
-"vdiv.t", "0x63808000", "0xFF808080", "%zt,%yt,%xt", _
-"vdot.p", "0x64800080", "0xFF808080", "%zs,%yp,%xp", _
-"vdot.q", "0x64808080", "0xFF808080", "%zs,%yq,%xq", _
-"vdot.t", "0x64808000", "0xFF808080", "%zs,%yt,%xt", _
-"vexp2.p", "0xD0140080", "0xFFFF8080", "%zp,%yp", _
-"vexp2.q", "0xD0148080", "0xFFFF8080", "%zq,%yq", _
-"vexp2.s", "0xD0140000", "0xFFFF8080", "%zs,%ys", _
-"vexp2.t", "0xD0148000", "0xFFFF8080", "%zt,%yt", _
-"vf2h.p", "0xD0320080", "0xFFFF8080", "%zs,%yp", _
-"vf2h.q", "0xD0328080", "0xFFFF8080", "%zp,%yq", _
-"vf2id.p", "0xD2600080", "0xFFE08080", "%zp,%yp,%v5", _
-"vf2id.q", "0xD2608080", "0xFFE08080", "%zq,%yq,%v5", _
-"vf2id.s", "0xD2600000", "0xFFE08080", "%zs,%ys,%v5", _
-"vf2id.t", "0xD2608000", "0xFFE08080", "%zt,%yt,%v5", _
-"vf2in.p", "0xD2000080", "0xFFE08080", "%zp,%yp,%v5", _
-"vf2in.q", "0xD2008080", "0xFFE08080", "%zq,%yq,%v5", _
-"vf2in.s", "0xD2000000", "0xFFE08080", "%zs,%ys,%v5", _
-"vf2in.t", "0xD2008000", "0xFFE08080", "%zt,%yt,%v5", _
-"vf2iu.p", "0xD2400080", "0xFFE08080", "%zp,%yp,%v5", _
-"vf2iu.q", "0xD2408080", "0xFFE08080", "%zq,%yq,%v5", _
-"vf2iu.s", "0xD2400000", "0xFFE08080", "%zs,%ys,%v5", _
-"vf2iu.t", "0xD2408000", "0xFFE08080", "%zt,%yt,%v5", _
-"vf2iz.p", "0xD2200080", "0xFFE08080", "%zp,%yp,%v5", _
-"vf2iz.q", "0xD2208080", "0xFFE08080", "%zq,%yq,%v5", _
-"vf2iz.s", "0xD2200000", "0xFFE08080", "%zs,%ys,%v5", _
-"vf2iz.t", "0xD2208000", "0xFFE08080", "%zt,%yt,%v5", _
-"vfad.p", "0xD0460080", "0xFFFF8080", "%zp,%yp", _
-"vfad.q", "0xD0468080", "0xFFFF8080", "%zq,%yq", _
-"vfad.t", "0xD0468000", "0xFFFF8080", "%zt,%yt", _
-"vfim.s", "0xDF800000", "0xFF800000", "%xs,%vh", _
-"vflush", "0xFFFF040D", "0xFFFFFFFF", "", _
-"vh2f.p", "0xD0330080", "0xFFFF8080", "%zq,%yp", _
-"vh2f.s", "0xD0330000", "0xFFFF8080", "%zp,%ys", _
-"vhdp.p", "0x66000080", "0xFF808080", "%zs,%yp,%xp", _
-"vhdp.q", "0x66008080", "0xFF808080", "%zs,%yq,%xq", _
-"vhdp.t", "0x66008000", "0xFF808080", "%zs,%yt,%xt", _
-"vhtfm2.p", "0xF0800000", "0xFF808080", "%zp,%ym,%xp", _
-"vhtfm3.t", "0xF1000080", "0xFF808080", "%zt,%yn,%xt", _
-"vhtfm4.q", "0xF1808000", "0xFF808080", "%zq,%yo,%xq", _
-"vi2c.q", "0xD03D8080", "0xFFFF8080", "%zs,%yq", _
-"vi2f.p", "0xD2800080", "0xFFE08080", "%zp,%yp,%v5", _
-"vi2f.q", "0xD2808080", "0xFFE08080", "%zq,%yq,%v5", _
-"vi2f.s", "0xD2800000", "0xFFE08080", "%zs,%ys,%v5", _
-"vi2f.t", "0xD2808000", "0xFFE08080", "%zt,%yt,%v5", _
-"vi2s.p", "0xD03F0080", "0xFFFF8080", "%zs,%yp", _
-"vi2s.q", "0xD03F8080", "0xFFFF8080", "%zp,%yq", _
-"vi2uc.q", "0xD03C8080", "0xFFFF8080", "%zs,%yq", _
-"vi2us.p", "0xD03E0080", "0xFFFF8080", "%zs,%yq", _
-"vi2us.q", "0xD03E8080", "0xFFFF8080", "%zp,%yq", _
-"vidt.p", "0xD0030080", "0xFFFFFF80", "%zp", _
-"vidt.q", "0xD0038080", "0xFFFFFF80", "%zq", _
-"viim.s", "0xDF000000", "0xFF800000", "%xs,%vi", _
-"vlgb.s", "0xD0370000", "0xFFFF8080", "%zs,%ys", _
-"vlog2.p", "0xD0150080", "0xFFFF8080", "%zp,%yp", _
-"vlog2.q", "0xD0158080", "0xFFFF8080", "%zq,%yq", _
-"vlog2.s", "0xD0150000", "0xFFFF8080", "%zs,%ys", _
-"vlog2.t", "0xD0158000", "0xFFFF8080", "%zt,%yt", _
-"vmax.p", "0x6D800080", "0xFF808080", "%zp,%yp,%xp", _
-"vmax.q", "0x6D808080", "0xFF808080", "%zq,%yq,%xq", _
-"vmax.s", "0x6D800000", "0xFF808080", "%zs,%ys,%xs", _
-"vmax.t", "0x6D808000", "0xFF808080", "%zt,%yt,%xt", _
-"vmfvc", "0xD0500000", "0xFFFF0080", "%zs,%2s", _
-"vmidt.p", "0xF3830080", "0xFFFFFF80", "%zm", _
-"vmidt.q", "0xF3838080", "0xFFFFFF80", "%zo", _
-"vmidt.t", "0xF3838000", "0xFFFFFF80", "%zn", _
-"vmin.p", "0x6D000080", "0xFF808080", "%zp,%yp,%xp", _
-"vmin.q", "0x6D008080", "0xFF808080", "%zq,%yq,%xq", _
-"vmin.s", "0x6D000000", "0xFF808080", "%zs,%ys,%xs", _
-"vmin.t", "0x6D008000", "0xFF808080", "%zt,%yt,%xt", _
-"vmmov.p", "0xF3800080", "0xFFFF8080", "%zm,%ym", _
-"vmmov.q", "0xF3808080", "0xFFFF8080", "%zo,%yo", _
-"vmmov.t", "0xF3808000", "0xFFFF8080", "%zn,%yn", _
-"vmmul.p", "0xF0000080", "0xFF808080", "%?%zm,%ym,%xm", _
-"vmmul.q", "0xF0008080", "0xFF808080", "%?%zo,%yo,%xo", _
-"vmmul.t", "0xF0008000", "0xFF808080", "%?%zn,%yn,%xn", _
-"vmone.p", "0xF3870080", "0xFFFFFF80", "%zp", _
-"vmone.q", "0xF3878080", "0xFFFFFF80", "%zq", _
-"vmone.t", "0xF3878000", "0xFFFFFF80", "%zt", _
-"vmov.p", "0xD0000080", "0xFFFF8080", "%zp,%yp", _
-"vmov.q", "0xD0008080", "0xFFFF8080", "%zq,%yq", _
-"vmov.s", "0xD0000000", "0xFFFF8080", "%zs,%ys", _
-"vmov.t", "0xD0008000", "0xFFFF8080", "%zt,%yt", _
-"vmscl.p", "0xF2000080", "0xFF808080", "%zm,%ym,%xs", _
-"vmscl.q", "0xF2008080", "0xFF808080", "%zo,%yo,%xs", _
-"vmscl.t", "0xF2008000", "0xFF808080", "%zn,%yn,%xs", _
-"vmtvc", "0xD0510000", "0xFFFF8000", "%2d,%ys", _
-"vmul.p", "0x64000080", "0xFF808080", "%zp,%yp,%xp", _
-"vmul.q", "0x64008080", "0xFF808080", "%zq,%yq,%xq", _
-"vmul.s", "0x64000000", "0xFF808080", "%zs,%ys,%xs", _
-"vmul.t", "0x64008000", "0xFF808080", "%zt,%yt,%xt", _
-"vmzero.p", "0xF3860080", "0xFFFFFF80", "%zm", _
-"vmzero.q", "0xF3868080", "0xFFFFFF80", "%zo", _
-"vmzero.t", "0xF3868000", "0xFFFFFF80", "%zn", _
-"vneg.p", "0xD0020080", "0xFFFF8080", "%zp,%yp", _
-"vneg.q", "0xD0028080", "0xFFFF8080", "%zq,%yq", _
-"vneg.s", "0xD0020000", "0xFFFF8080", "%zs,%ys", _
-"vneg.t", "0xD0028000", "0xFFFF8080", "%zt,%yt", _
-"vnop", "0xFFFF0000", "0xFFFFFFFF", "", _
-"vnrcp.p", "0xD0180080", "0xFFFF8080", "%zp,%yp", _
-"vnrcp.q", "0xD0188080", "0xFFFF8080", "%zq,%yq", _
-"vnrcp.s", "0xD0180000", "0xFFFF8080", "%zs,%ys", _
-"vnrcp.t", "0xD0188000", "0xFFFF8080", "%zt,%yt", _
-"vnsin.p", "0xD01A0080", "0xFFFF8080", "%zp,%yp", _
-"vnsin.q", "0xD01A8080", "0xFFFF8080", "%zq,%yq", _
-"vnsin.s", "0xD01A0000", "0xFFFF8080", "%zs,%ys", _
-"vnsin.t", "0xD01A8000", "0xFFFF8080", "%zt,%yt", _
-"vocp.p", "0xD0440080", "0xFFFF8080", "%zp,%yp", _
-"vocp.q", "0xD0448080", "0xFFFF8080", "%zq,%yq", _
-"vocp.s", "0xD0440000", "0xFFFF8080", "%zs,%ys", _
-"vocp.t", "0xD0448000", "0xFFFF8080", "%zt,%yt", _
-"vone.p", "0xD0070080", "0xFFFFFF80", "%zp", _
-"vone.q", "0xD0078080", "0xFFFFFF80", "%zq", _
-"vone.s", "0xD0070000", "0xFFFFFF80", "%zs", _
-"vone.t", "0xD0078000", "0xFFFFFF80", "%zt", _
-"vpfxd", "0xDE000000", "0xFF000000", "[%vp4,%vp5,%vp6,%vp7]", _
-"vpfxs", "0xDC000000", "0xFF000000", "[%vp0,%vp1,%vp2,%vp3]", _
-"vpfxt", "0xDD000000", "0xFF000000", "[%vp0,%vp1,%vp2,%vp3]", _
-"vqmul.q", "0xF2808080", "0xFF808080", "%zq,%yq,%xq", _
-"vrcp.p", "0xD0100080", "0xFFFF8080", "%zp,%yp", _
-"vrcp.q", "0xD0108080", "0xFFFF8080", "%zq,%yq", _
-"vrcp.s", "0xD0100000", "0xFFFF8080", "%zs,%ys", _
-"vrcp.t", "0xD0108000", "0xFFFF8080", "%zt,%yt", _
-"vrexp2.p", "0xD01C0080", "0xFFFF8080", "%zp,%yp", _
-"vrexp2.q", "0xD01C8080", "0xFFFF8080", "%zq,%yq", _
-"vrexp2.s", "0xD01C0000", "0xFFFF8080", "%zs,%ys", _
-"vrexp2.t", "0xD01C8000", "0xFFFF8080", "%zt,%yt", _
-"vrndf1.p", "0xD0220080", "0xFFFFFF80", "%zp", _
-"vrndf1.q", "0xD0228080", "0xFFFFFF80", "%zq", _
-"vrndf1.s", "0xD0220000", "0xFFFFFF80", "%zs", _
-"vrndf1.t", "0xD0228000", "0xFFFFFF80", "%zt", _
-"vrndf2.p", "0xD0230080", "0xFFFFFF80", "%zp", _
-"vrndf2.q", "0xD0238080", "0xFFFFFF80", "%zq", _
-"vrndf2.s", "0xD0230000", "0xFFFFFF80", "%zs", _
-"vrndf2.t", "0xD0238000", "0xFFFFFF80", "%zt", _
-"vrndi.p", "0xD0210080", "0xFFFFFF80", "%zp", _
-"vrndi.q", "0xD0218080", "0xFFFFFF80", "%zq", _
-"vrndi.s", "0xD0210000", "0xFFFFFF80", "%zs", _
-"vrndi.t", "0xD0218000", "0xFFFFFF80", "%zt", _
-"vrnds.s", "0xD0200000", "0xFFFF80FF", "%ys", _
-"vrot.p", "0xF3A00080", "0xFFE08080", "%zp,%ys,%vr", _
-"vrot.q", "0xF3A08080", "0xFFE08080", "%zq,%ys,%vr", _
-"vrot.t", "0xF3A08000", "0xFFE08080", "%zt,%ys,%vr", _
-"vrsq.p", "0xD0110080", "0xFFFF8080", "%zp,%yp", _
-"vrsq.q", "0xD0118080", "0xFFFF8080", "%zq,%yq", _
-"vrsq.s", "0xD0110000", "0xFFFF8080", "%zs,%ys", _
-"vrsq.t", "0xD0118000", "0xFFFF8080", "%zt,%yt", _
-"vs2i.p", "0xD03B0080", "0xFFFF8080", "%zq,%yp", _
-"vs2i.s", "0xD03B0000", "0xFFFF8080", "%zp,%ys", _
-"vsat0.p", "0xD0040080", "0xFFFF8080", "%zp,%yp", _
-"vsat0.q", "0xD0048080", "0xFFFF8080", "%zq,%yq", _
-"vsat0.s", "0xD0040000", "0xFFFF8080", "%zs,%ys", _
-"vsat0.t", "0xD0048000", "0xFFFF8080", "%zt,%yt", _
-"vsat1.p", "0xD0050080", "0xFFFF8080", "%zp,%yp", _
-"vsat1.q", "0xD0058080", "0xFFFF8080", "%zq,%yq", _
-"vsat1.s", "0xD0050000", "0xFFFF8080", "%zs,%ys", _
-"vsat1.t", "0xD0058000", "0xFFFF8080", "%zt,%yt", _
-"vsbn.s", "0x61000000", "0xFF808080", "%zs,%ys,%xs", _
-"vsbz.s", "0xD0360000", "0xFFFF8080", "%zs,%ys", _
-"vscl.p", "0x65000080", "0xFF808080", "%zp,%yp,%xs", _
-"vscl.q", "0x65008080", "0xFF808080", "%zq,%yq,%xs", _
-"vscl.t", "0x65008000", "0xFF808080", "%zt,%yt,%xs", _
-"vscmp.p", "0x6E800080", "0xFF808080", "%zp,%yp,%xp", _
-"vscmp.q", "0x6E808080", "0xFF808080", "%zq,%yq,%xq", _
-"vscmp.s", "0x6E800000", "0xFF808080", "%zs,%ys,%xs", _
-"vscmp.t", "0x6E808000", "0xFF808080", "%zt,%yt,%xt", _
-"vsge.p", "0x6F000080", "0xFF808080", "%zp,%yp,%xp", _
-"vsge.q", "0x6F008080", "0xFF808080", "%zq,%yq,%xq", _
-"vsge.s", "0x6F000000", "0xFF808080", "%zs,%ys,%xs", _
-"vsge.t", "0x6F008000", "0xFF808080", "%zt,%yt,%xt", _
-"vsgn.p", "0xD04A0080", "0xFFFF8080", "%zp,%yp", _
-"vsgn.q", "0xD04A8080", "0xFFFF8080", "%zq,%yq", _
-"vsgn.s", "0xD04A0000", "0xFFFF8080", "%zs,%ys", _
-"vsgn.t", "0xD04A8000", "0xFFFF8080", "%zt,%yt", _
-"vsin.p", "0xD0120080", "0xFFFF8080", "%zp,%yp", _
-"vsin.q", "0xD0128080", "0xFFFF8080", "%zq,%yq", _
-"vsin.s", "0xD0120000", "0xFFFF8080", "%zs,%ys", _
-"vsin.t", "0xD0128000", "0xFFFF8080", "%zt,%yt", _
-"vslt.p", "0x6F800080", "0xFF808080", "%zp,%yp,%xp", _
-"vslt.q", "0x6F808080", "0xFF808080", "%zq,%yq,%xq", _
-"vslt.s", "0x6F800000", "0xFF808080", "%zs,%ys,%xs", _
-"vslt.t", "0x6F808000", "0xFF808080", "%zt,%yt,%xt", _
-"vsocp.p", "0xD0450080", "0xFFFF8080", "%zq,%yp", _
-"vsocp.s", "0xD0450000", "0xFFFF8080", "%zp,%ys", _
-"vsqrt.p", "0xD0160080", "0xFFFF8080", "%zp,%yp", _
-"vsqrt.q", "0xD0168080", "0xFFFF8080", "%zq,%yq", _
-"vsqrt.s", "0xD0160000", "0xFFFF8080", "%zs,%ys", _
-"vsqrt.t", "0xD0168000", "0xFFFF8080", "%zt,%yt", _
-"vsrt1.q", "0xD0408080", "0xFFFF8080", "%zq,%yq", _
-"vsrt2.q", "0xD0418080", "0xFFFF8080", "%zq,%yq", _
-"vsrt3.q", "0xD0488080", "0xFFFF8080", "%zq,%yq", _
-"vsrt4.q", "0xD0498080", "0xFFFF8080", "%zq,%yq", _
-"vsub.p", "0x60800080", "0xFF808080", "%zp,%yp,%xp", _
-"vsub.q", "0x60808080", "0xFF808080", "%zq,%yq,%xq", _
-"vsub.s", "0x60800000", "0xFF808080", "%zs,%ys,%xs", _
-"vsub.t", "0x60808000", "0xFF808080", "%zt,%yt,%xt", _
-"vsync", "0xFFFF0000", "0xFFFF0000", "%I", _
-"vsync", "0xFFFF0320", "0xFFFFFFFF", "", _
-"vt4444.q", "0xD0598080", "0xFFFF8080", "%zq,%yq", _
-"vt5551.q", "0xD05A8080", "0xFFFF8080", "%zq,%yq", _
-"vt5650.q", "0xD05B8080", "0xFFFF8080", "%zq,%yq", _
-"vtfm2.p", "0xF0800080", "0xFF808080", "%zp,%ym,%xp", _
-"vtfm3.t", "0xF1008000", "0xFF808080", "%zt,%yn,%xt", _
-"vtfm4.q", "0xF1808080", "0xFF808080", "%zq,%yo,%xq", _
-"vus2i.p", "0xD03A0080", "0xFFFF8080", "%zq,%yp", _
-"vus2i.s", "0xD03A0000", "0xFFFF8080", "%zp,%ys", _
-"vwb.q", "0xF8000002", "0xFC000002", "%Xq,%Y", _
-"vwbn.s", "0xD3000000", "0xFF008080", "%zs,%xs,%I", _
-"vzero.p", "0xD0060080", "0xFFFFFF80", "%zp", _
-"vzero.q", "0xD0068080", "0xFFFFFF80", "%zq", _
-"vzero.s", "0xD0060000", "0xFFFFFF80", "%zs", _
-"vzero.t", "0xD0068000", "0xFFFFFF80", "%zt", _
-"mfvme", "0x68000000", "0xFC000000", "%t,%i", _
-"mtvme", "0xb0000000", "0xFC000000", "%t,%i",
-"vncos.s", "0x68000000", "0xFC000000", "%zs,%i", _
-"vncos.p", "0xD01b0080", "0xFFFF8080", "%zp,%yp", _
-"vncos.q", "0xD01b8080", "0xFFFF8080", "%zq,%yq", _
-"vncos.s", "0xD01b0000", "0xFFFF8080", "%zs,%ys", _
-"vncos.t", "0xD01b8000", "0xFFFF8080", "%zt,%yt", _
-"vnasin.p", "0xD01f0080", "0xFFFF8080", "%zp,%yp", _
-"vnasin.q", "0xD01f8080", "0xFFFF8080", "%zq,%yq", _
-"vnasin.s", "0xD01f0000", "0xFFFF8080", "%zs,%ys", _
-"vnasin.t", "0xD01f8000", "0xFFFF8080", "%zt,%yt",
-"vncos.s", "0x68000000", "0xFC000000", "%zs,%i", _
-"vnlog2.p", "0xD01d0080", "0xFFFF8080", "%zp,%yp", _
-"vnlog2.q", "0xD01d8080", "0xFFFF8080", "%zq,%yq", _
-"vnlog2.s", "0xD01d0000", "0xFFFF8080", "%zs,%ys", _
-"vnlog2.t", "0xD01d8000", "0xFFFF8080", "%zt,%yt", _
-"vnsqrt.p", "0xD01e0080", "0xFFFF8080", "%zp,%yp", _
-"vnsqrt.q", "0xD01e8080", "0xFFFF8080", "%zq,%yq", _
-"vnsqrt.s", "0xD01e0000", "0xFFFF8080", "%zs,%ys", _
-"vnsqrt.t", "0xD01e8000", "0xFFFF8080", "%zt,%yt",
-"vnrsq.p", "0xD0190080", "0xFFFF8080", "%zp,%yp", _
-"vnrsq.q", "0xD0198080", "0xFFFF8080", "%zq,%yq", _
-"vnrsq.s", "0xD0190000", "0xFFFF8080", "%zs,%ys", _
-"vnrsq.t", "0xD0198000", "0xFFFF8080", "%zt,%yt"
-                               }
+#Region "decoder配列"
 
+    Dim decoder As String() = {
+ "nop", "0x00000000", "0xFFFFFFFF", "",
+"li", "0x24000000", "0xFFE00000", "%t,%i",
+"li", "0x34000000", "0xFFE00000", "%t,%I",
+"move", "0x00000021", "0xFC1F07FF", "%d,%s",
+"move", "0x00000025", "0xFC1F07FF", "%d,%s",
+"b", "0x10000000", "0xFFFF0000", "%O",
+"b", "0x04010000", "0xFFFF0000", "%O",
+"bal", "0x04110000", "0xFFFF0000", "%O",
+"bnez", "0x14000000", "0xFC1F0000", "%s,%O",
+"bnezl", "0x54000000", "0xFC1F0000", "%s,%O",
+"beqz", "0x10000000", "0xFC1F0000", "%s,%O",
+"beqzl", "0x50000000", "0xFC1F0000", "%s,%O",
+"neg", "0x00000022", "0xFFE007FF", "%d,%t",
+"negu", "0x00000023", "0xFFE007FF", "%d,%t",
+"not", "0x00000027", "0xFC1F07FF", "%d,%s",
+"jalr", "0x0000F809", "0xFC1FFFFF", "%J",
+"add", "0x00000020", "0xFC0007FF", "%d,%s,%t",
+"addi", "0x20000000", "0xFC000000", "%t,%s,%i",
+"addiu", "0x24000000", "0xFC000000", "%t,%s,%i",
+"addu", "0x00000021", "0xFC0007FF", "%d,%s,%t",
+"and", "0x00000024", "0xFC0007FF", "%d,%s,%t",
+"andi", "0x30000000", "0xFC000000", "%t,%s,%I",
+"beq", "0x10000000", "0xFC000000", "%s,%t,%O",
+"beql", "0x50000000", "0xFC000000", "%s,%t,%O",
+"bgez", "0x04010000", "0xFC1F0000", "%s,%O",
+"bgezal", "0x04110000", "0xFC1F0000", "%s,%O",
+"bgezl", "0x04030000", "0xFC1F0000", "%s,%O",
+"bgtz", "0x1C000000", "0xFC1F0000", "%s,%O",
+"bgtzl", "0x5C000000", "0xFC1F0000", "%s,%O",
+"bitrev", "0x7C000520", "0xFFE007FF", "%d,%t",
+"blez", "0x18000000", "0xFC1F0000", "%s,%O",
+"blezl", "0x58000000", "0xFC1F0000", "%s,%O",
+"bltz", "0x04000000", "0xFC1F0000", "%s,%O",
+"bltzl", "0x04020000", "0xFC1F0000", "%s,%O",
+"bltzal", "0x04100000", "0xFC1F0000", "%s,%O",
+"bltzall", "0x04120000", "0xFC1F0000", "%s,%O",
+"bne", "0x14000000", "0xFC000000", "%s,%t,%O",
+"bnel", "0x54000000", "0xFC000000", "%s,%t,%O",
+"break", "0x0000000D", "0xFC00003F", "%c",
+"cache", "0xbc000000", "0xfc000000", "%k,%o",
+"cfc0", "0x40400000", "0xFFE007FF", "%t,%p",
+"clo", "0x00000017", "0xFC1F07FF", "%d,%s",
+"clz", "0x00000016", "0xFC1F07FF", "%d,%s",
+"ctc0", "0x40C00000", "0xFFE007FF", "%t,%p",
+"max", "0x0000002C", "0xFC0007FF", "%d,%s,%t",
+"min", "0x0000002D", "0xFC0007FF", "%d,%s,%t",
+"dbreak", "0x7000003F", "0xFFFFFFFF", "",
+"div", "0x0000001A", "0xFC00FFFF", "%s,%t",
+"divu", "0x0000001B", "0xFC00FFFF", "%s,%t",
+"dret", "0x7000003E", "0xFFFFFFFF", "",
+"eret", "0x42000018", "0xFFFFFFFF", "",
+"ext", "0x7C000000", "0xFC00003F", "%t,%s,%a,%ne",
+"ins", "0x7C000004", "0xFC00003F", "%t,%s,%a,%ni",
+"j", "0x08000000", "0xFC000000", "%j",
+"jr", "0x00000008", "0xFC1FFFFF", "%J",
+"jalr", "0x00000009", "0xFC1F07FF", "%d,%J",
+"jal", "0x0C000000", "0xFC000000", "%j",
+"lb", "0x80000000", "0xFC000000", "%t,%o",
+"lbu", "0x90000000", "0xFC000000", "%t,%o",
+"lh", "0x84000000", "0xFC000000", "%t,%o",
+"lhu", "0x94000000", "0xFC000000", "%t,%o",
+"ll", "0xC0000000", "0xFC000000", "%t,%o",
+"lui", "0x3C000000", "0xFFE00000", "%t,%I",
+"lw", "0x8C000000", "0xFC000000", "%t,%o",
+"lwl", "0x88000000", "0xFC000000", "%t,%o",
+"lwr", "0x98000000", "0xFC000000", "%t,%o",
+"madd", "0x0000001C", "0xFC00FFFF", "%s,%t",
+"maddu", "0x0000001D", "0xFC00FFFF", "%s,%t",
+"mfc0", "0x40000000", "0xFFE007FF", "%t,%0",
+"mfdr", "0x7000003D", "0xFFE007FF", "%t,%r",
+"mfhi", "0x00000010", "0xFFFF07FF", "%d",
+"mfic", "0x70000024", "0xFFE007FF", "%t,%p",
+"mflo", "0x00000012", "0xFFFF07FF", "%d",
+"movn", "0x0000000B", "0xFC0007FF", "%d,%s,%t",
+"movz", "0x0000000A", "0xFC0007FF", "%d,%s,%t",
+"msub", "0x0000002e", "0xfc00ffff", "%s,%t",
+"msubu", "0x0000002f", "0xfc00ffff", "%s,%t",
+"mtc0", "0x40800000", "0xFFE007FF", "%t,%0",
+"mtdr", "0x7080003D", "0xFFE007FF", "%t,%r",
+"mtic", "0x70000026", "0xFFE007FF", "%t,%p",
+"halt", "0x70000000", "0xFFFFFFFF", "",
+"mthi", "0x00000011", "0xFC1FFFFF", "%s",
+"mtlo", "0x00000013", "0xFC1FFFFF", "%s",
+"mult", "0x00000018", "0xFC00FFFF", "%s,%t",
+"multu", "0x00000019", "0xFC0007FF", "%s,%t",
+"nor", "0x00000027", "0xFC0007FF", "%d,%s,%t",
+"or", "0x00000025", "0xFC0007FF", "%d,%s,%t",
+"ori", "0x34000000", "0xFC000000", "%t,%s,%I",
+"rotr", "0x00200002", "0xFFE0003F", "%d,%t,%a",
+"rotv", "0x00000046", "0xFC0007FF", "%d,%t,%s",
+"seb", "0x7C000420", "0xFFE007FF", "%d,%t",
+"seh", "0x7C000620", "0xFFE007FF", "%d,%t",
+"sb", "0xA0000000", "0xFC000000", "%t,%o",
+"sh", "0xA4000000", "0xFC000000", "%t,%o",
+"sc", "0xE0000000", "0xFC000000", "%t, %o",
+"sllv", "0x00000004", "0xFC0007FF", "%d,%t,%s",
+"sll", "0x00000000", "0xFFE0003F", "%d,%t,%a",
+"slt", "0x0000002A", "0xFC0007FF", "%d,%s,%t",
+"slti", "0x28000000", "0xFC000000", "%t,%s,%i",
+"sltiu", "0x2C000000", "0xFC000000", "%t,%s,%I",
+"sltu", "0x0000002B", "0xFC0007FF", "%d,%s,%t",
+"sra", "0x00000003", "0xFFE0003F", "%d,%t,%a",
+"srav", "0x00000007", "0xFC0007FF", "%d,%t,%s",
+"srlv", "0x00000006", "0xFC0007FF", "%d,%t,%s",
+"srl", "0x00000002", "0xFFE0003F", "%d,%t,%a",
+"sw", "0xAC000000", "0xFC000000", "%t,%o",
+"swl", "0xA8000000", "0xFC000000", "%t,%o",
+"swr", "0xB8000000", "0xFC000000", "%t,%o",
+"sub", "0x00000022", "0xFC0007FF", "%d,%s,%t",
+"subu", "0x00000023", "0xFC0007FF", "%d,%s,%t",
+"sync", "0x0000000F", "0xFFFFFFFF", "",
+"syscall", "0x0000000C", "0xFC00003F", "%C",
+"xor", "0x00000026", "0xFC0007FF", "%d,%s,%t",
+"xori", "0x38000000", "0xFC000000", "%t,%s,%I",
+"wsbh", "0x7C0000A0", "0xFFE007FF", "%d,%t",
+"wsbw", "0x7C0000E0", "0xFFE007FF", "%d,%t",
+"abs.s", "0x46000005", "0xFFFF003F", "%D,%S",
+"add.s", "0x46000000", "0xFFE0003F", "%D,%S,%T",
+"bc1f", "0x45000000", "0xFFFF0000", "%O",
+"bc1fl", "0x45020000", "0xFFFF0000", "%O",
+"bc1t", "0x45010000", "0xFFFF0000", "%O",
+"bc1tl", "0x45030000", "0xFFFF0000", "%O",
+"c.f.s", "0x46000030", "0xFFE007FF", "%S,%T",
+"c.un.s", "0x46000031", "0xFFE007FF", "%S,%T",
+"c.eq.s", "0x46000032", "0xFFE007FF", "%S,%T",
+"c.ueq.s", "0x46000033", "0xFFE007FF", "%S,%T",
+"c.olt.s", "0x46000034", "0xFFE007FF", "%S,%T",
+"c.ult.s", "0x46000035", "0xFFE007FF", "%S,%T",
+"c.ole.s", "0x46000036", "0xFFE007FF", "%S,%T",
+"c.ule.s", "0x46000037", "0xFFE007FF", "%S,%T",
+"c.sf.s", "0x46000038", "0xFFE007FF", "%S,%T",
+"c.ngle.s", "0x46000039", "0xFFE007FF", "%S,%T",
+"c.seq.s", "0x4600003A", "0xFFE007FF", "%S,%T",
+"c.ngl.s", "0x4600003B", "0xFFE007FF", "%S,%T",
+"c.lt.s", "0x4600003C", "0xFFE007FF", "%S,%T",
+"c.nge.s", "0x4600003D", "0xFFE007FF", "%S,%T",
+"c.le.s", "0x4600003E", "0xFFE007FF", "%S,%T",
+"c.ngt.s", "0x4600003F", "0xFFE007FF", "%S,%T",
+"ceil.w.s", "0x4600000E", "0xFFFF003F", "%D,%S",
+"cfc1", "0x44400000", "0xFFE007FF", "%t,%p",
+"ctc1", "0x44c00000", "0xFFE007FF", "%t,%p",
+"cvt.s.w", "0x46800020", "0xFFFF003F", "%D,%S",
+"cvt.w.s", "0x46000024", "0xFFFF003F", "%D,%S",
+"div.s", "0x46000003", "0xFFE0003F", "%D,%S,%T",
+"floor.w.s", "0x4600000F", "0xFFFF003F", "%D,%S",
+"lwc1", "0xc4000000", "0xFC000000", "%T,%o",
+"mfc1", "0x44000000", "0xFFE007FF", "%t,%1",
+"mov.s", "0x46000006", "0xFFFF003F", "%D,%S",
+"mtc1", "0x44800000", "0xFFE007FF", "%t,%1",
+"mul.s", "0x46000002", "0xFFE0003F", "%D,%S,%T",
+"neg.s", "0x46000007", "0xFFFF003F", "%D,%S",
+"round.w.s", "0x4600000C", "0xFFFF003F", "%D,%S",
+"sqrt.s", "0x46000004", "0xFFFF003F", "%D,%S",
+"sub.s", "0x46000001", "0xFFE0003F", "%D,%S,%T",
+"swc1", "0xe4000000", "0xFC000000", "%T,%o",
+"trunc.w.s", "0x4600000D", "0xFFFF003F", "%D,%S",
+"bvf", "0x49000000", "0xFFE30000", "%Zc,%O",
+"bvfl", "0x49020000", "0xFFE30000", "%Zc,%O",
+"bvt", "0x49010000", "0xFFE30000", "%Zc,%O",
+"bvtl", "0x49030000", "0xFFE30000", "%Zc,%O",
+"lv.q", "0xD8000000", "0xFC000002", "%Xq,%Y",
+"lv.s", "0xC8000000", "0xFC000000", "%Xs,%Y",
+"lvl.q", "0xD4000000", "0xFC000002", "%Xq,%Y",
+"lvr.q", "0xD4000002", "0xFC000002", "%Xq,%Y",
+"mfv", "0x48600000", "0xFFE0FF80", "%t,%zs",
+"mfvc", "0x48600000", "0xFFE0FF00", "%t,%2d",
+"mtv", "0x48E00000", "0xFFE0FF80", "%t,%zs",
+"mtvc", "0x48E00000", "0xFFE0FF00", "%t,%2d",
+"sv.q", "0xF8000000", "0xFC000002", "%Xq,%Y",
+"sv.s", "0xE8000000", "0xFC000000", "%Xs,%Y",
+"svl.q", "0xF4000000", "0xFC000002", "%Xq,%Y",
+"svr.q", "0xF4000002", "0xFC000002", "%Xq,%Y",
+"vabs.p", "0xD0010080", "0xFFFF8080", "%zp,%yp",
+"vabs.q", "0xD0018080", "0xFFFF8080", "%zq,%yq",
+"vabs.s", "0xD0010000", "0xFFFF8080", "%zs,%ys",
+"vabs.t", "0xD0018000", "0xFFFF8080", "%zt,%yt",
+"vadd.p", "0x60000080", "0xFF808080", "%zp,%yp,%xp",
+"vadd.q", "0x60008080", "0xFF808080", "%zq,%yq,%xq",
+"vadd.s", "0x60000000", "0xFF808080", "%zs,%ys,%xs",
+"vadd.t", "0x60008000", "0xFF808080", "%zt,%yt,%xt",
+"vasin.p", "0xD0170080", "0xFFFF8080", "%zp,%yp",
+"vasin.q", "0xD0178080", "0xFFFF8080", "%zq,%yq",
+"vasin.s", "0xD0170000", "0xFFFF8080", "%zs,%ys",
+"vasin.t", "0xD0178000", "0xFFFF8080", "%zt,%yt",
+"vavg.s", "0xD0470000", "0xFFFF8080", "%zs,%ys",
+"vavg.p", "0xD0470080", "0xFFFF8080", "%zs,%yp",
+"vavg.q", "0xD0478080", "0xFFFF8080", "%zs,%yq",
+"vavg.t", "0xD0478000", "0xFFFF8080", "%zs,%yt",
+"vbfy1.p", "0xD0420080", "0xFFFF8080", "%zp,%yp",
+"vbfy1.q", "0xD0428080", "0xFFFF8080", "%zq,%yq",
+"vbfy2.q", "0xD0438080", "0xFFFF8080", "%zq,%yq",
+"vcmovf.p", "0xD2A80080", "0xFFF88080", "%zp,%yp,%v3",
+"vcmovf.q", "0xD2A88080", "0xFFF88080", "%zq,%yq,%v3",
+"vcmovf.s", "0xD2A80000", "0xFFF88080", "%zs,%ys,%v3",
+"vcmovf.t", "0xD2A88000", "0xFFF88080", "%zt,%yt,%v3",
+"vcmovt.p", "0xD2A00080", "0xFFF88080", "%zp,%yp,%v3",
+"vcmovt.q", "0xD2A08080", "0xFFF88080", "%zq,%yq,%v3",
+"vcmovt.s", "0xD2A00000", "0xFFF88080", "%zs,%ys,%v3",
+"vcmovt.t", "0xD2A08000", "0xFFF88080", "%zt,%yt,%v3",
+"vcmp.p", "0x6C000080", "0xFF8080F0", "%Zn,%yp,%xp",
+"vcmp.p", "0x6C000080", "0xFFFF80F0", "%Zn,%yp",
+"vcmp.p", "0x6C000080", "0xFFFFFFF0", "%Zn",
+"vcmp.q", "0x6C008080", "0xFF8080F0", "%Zn,%yq,%xq",
+"vcmp.q", "0x6C008080", "0xFFFF80F0", "%Zn,%yq",
+"vcmp.q", "0x6C008080", "0xFFFFFFF0", "%Zn",
+"vcmp.s", "0x6C000000", "0xFF8080F0", "%Zn,%ys,%xs",
+"vcmp.s", "0x6C000000", "0xFFFF80F0", "%Zn,%ys",
+"vcmp.s", "0x6C000000", "0xFFFFFFF0", "%Zn",
+"vcmp.t", "0x6C008000", "0xFF8080F0", "%Zn,%yt,%xt",
+"vcmp.t", "0x6C008000", "0xFFFF80F0", "%Zn,%yt",
+"vcmp.t", "0x6C008000", "0xFFFFFFF0", "%Zn",
+"vcos.p", "0xD0130080", "0xFFFF8080", "%zp,%yp",
+"vcos.q", "0xD0138080", "0xFFFF8080", "%zq,%yq",
+"vcos.s", "0xD0130000", "0xFFFF8080", "%zs,%ys",
+"vcos.t", "0xD0138000", "0xFFFF8080", "%zt,%yt",
+"vcrs.t", "0x66808000", "0xFF808080", "%zt,%yt,%xt",
+"vcrsp.t", "0xF2808000", "0xFF808080", "%zt,%yt,%xt",
+"vcst.p", "0xD0600080", "0xFFE0FF80", "%zp,%vk",
+"vcst.q", "0xD0608080", "0xFFE0FF80", "%zq,%vk",
+"vcst.s", "0xD0600000", "0xFFE0FF80", "%zs,%vk",
+"vcst.t", "0xD0608000", "0xFFE0FF80", "%zt,%vk",
+"vdet.s", "0x67000000", "0xFF808080", "%zs,%ys,%xs",
+"vdet.t", "0x67008000", "0xFF808080", "%zs,%yt,%xt",
+"vdet.p", "0x67000080", "0xFF808080", "%zs,%yp,%xp",
+"vdet.q", "0x67008080", "0xFF808080", "%zs,%yq,%xq",
+"vdiv.p", "0x63800080", "0xFF808080", "%zp,%yp,%xp",
+"vdiv.q", "0x63808080", "0xFF808080", "%zq,%yq,%xq",
+"vdiv.s", "0x63800000", "0xFF808080", "%zs,%ys,%xs",
+"vdiv.t", "0x63808000", "0xFF808080", "%zt,%yt,%xt",
+"vdot.s", "0x64800000", "0xFF808080", "%zs,%ys,%xs",
+"vdot.p", "0x64800080", "0xFF808080", "%zs,%yp,%xp",
+"vdot.q", "0x64808080", "0xFF808080", "%zs,%yq,%xq",
+"vdot.t", "0x64808000", "0xFF808080", "%zs,%yt,%xt",
+"vexp2.p", "0xD0140080", "0xFFFF8080", "%zp,%yp",
+"vexp2.q", "0xD0148080", "0xFFFF8080", "%zq,%yq",
+"vexp2.s", "0xD0140000", "0xFFFF8080", "%zs,%ys",
+"vexp2.t", "0xD0148000", "0xFFFF8080", "%zt,%yt",
+"vf2h.p", "0xD0320080", "0xFFFF8080", "%zs,%yp",
+"vf2h.q", "0xD0328080", "0xFFFF8080", "%zp,%yq",
+"vf2h.s", "0xD0320000", "0xFFFF8080", "%zs, %ys",
+"vf2h.t", "0xD0328000", "0xFFFF8080", "%zp, %yt",
+"vf2id.p", "0xD2600080", "0xFFE08080", "%zp,%yp,%v5",
+"vf2id.q", "0xD2608080", "0xFFE08080", "%zq,%yq,%v5",
+"vf2id.s", "0xD2600000", "0xFFE08080", "%zs,%ys,%v5",
+"vf2id.t", "0xD2608000", "0xFFE08080", "%zt,%yt,%v5",
+"vf2in.p", "0xD2000080", "0xFFE08080", "%zp,%yp,%v5",
+"vf2in.q", "0xD2008080", "0xFFE08080", "%zq,%yq,%v5",
+"vf2in.s", "0xD2000000", "0xFFE08080", "%zs,%ys,%v5",
+"vf2in.t", "0xD2008000", "0xFFE08080", "%zt,%yt,%v5",
+"vf2iu.p", "0xD2400080", "0xFFE08080", "%zp,%yp,%v5",
+"vf2iu.q", "0xD2408080", "0xFFE08080", "%zq,%yq,%v5",
+"vf2iu.s", "0xD2400000", "0xFFE08080", "%zs,%ys,%v5",
+"vf2iu.t", "0xD2408000", "0xFFE08080", "%zt,%yt,%v5",
+"vf2iz.p", "0xD2200080", "0xFFE08080", "%zp,%yp,%v5",
+"vf2iz.q", "0xD2208080", "0xFFE08080", "%zq,%yq,%v5",
+"vf2iz.s", "0xD2200000", "0xFFE08080", "%zs,%ys,%v5",
+"vf2iz.t", "0xD2208000", "0xFFE08080", "%zt,%yt,%v5",
+"vfad.s", "0xD0460000", "0xFFFF8080", "%zs,%ys",
+"vfad.p", "0xD0460080", "0xFFFF8080", "%zs,%yp",
+"vfad.q", "0xD0468080", "0xFFFF8080", "%zs,%yq",
+"vfad.t", "0xD0468000", "0xFFFF8080", "%zs,%yt",
+"vfim.s", "0xDF800000", "0xFF800000", "%xs,%vh",
+"vflush", "0xFFFF040D", "0xFFFFFFFF", "",
+"vh2f.p", "0xD0330080", "0xFFFF8080", "%zq,%yp",
+"vh2f.s", "0xD0330000", "0xFFFF8080", "%zp,%ys",
+"vh2f.q", "0xD0338080", "0xFFFF8080", "%zq, %yp",
+"vh2f.t", "0xD0330000", "0xFFFF8080", "%zq, %yp",
+"vhdp.p", "0x66000080", "0xFF808080", "%zs,%yp,%xp",
+"vhdp.q", "0x66008080", "0xFF808080", "%zs,%yq,%xq",
+"vhdp.t", "0x66008000", "0xFF808080", "%zs,%yt,%xt",
+"vhtfm2.p", "0xF0800000", "0xFF808080", "%zp,%ym,%xp",
+"vhtfm3.t", "0xF1000080", "0xFF808080", "%zt,%yn,%xt",
+"vhtfm4.q", "0xF1808000", "0xFF808080", "%zq,%yo,%xq",
+"vi2c.q", "0xD03D8080", "0xFFFF8080", "%zs,%yq",
+"vi2f.p", "0xD2800080", "0xFFE08080", "%zp,%yp,%v5",
+"vi2f.q", "0xD2808080", "0xFFE08080", "%zq,%yq,%v5",
+"vi2f.s", "0xD2800000", "0xFFE08080", "%zs,%ys,%v5",
+"vi2f.t", "0xD2808000", "0xFFE08080", "%zt,%yt,%v5",
+"vi2s.p", "0xD03F0080", "0xFFFF8080", "%zs,%yp",
+"vi2s.q", "0xD03F8080", "0xFFFF8080", "%zp,%yq",
+"vi2uc.q", "0xD03C8080", "0xFFFF8080", "%zs,%yq",
+"vi2us.p", "0xD03E0080", "0xFFFF8080", "%zs,%yq",
+"vi2us.q", "0xD03E8080", "0xFFFF8080", "%zp,%yq",
+"vidt.p", "0xD0030080", "0xFFFFFF80", "%zp",
+"vidt.q", "0xD0038080", "0xFFFFFF80", "%zq",
+"viim.s", "0xDF000000", "0xFF800000", "%xs,%vi",
+"vlgb.s", "0xD0370000", "0xFFFF8080", "%zs,%ys",
+"vlog2.p", "0xD0150080", "0xFFFF8080", "%zp,%yp",
+"vlog2.q", "0xD0158080", "0xFFFF8080", "%zq,%yq",
+"vlog2.s", "0xD0150000", "0xFFFF8080", "%zs,%ys",
+"vlog2.t", "0xD0158000", "0xFFFF8080", "%zt,%yt",
+"vmax.p", "0x6D800080", "0xFF808080", "%zp,%yp,%xp",
+"vmax.q", "0x6D808080", "0xFF808080", "%zq,%yq,%xq",
+"vmax.s", "0x6D800000", "0xFF808080", "%zs,%ys,%xs",
+"vmax.t", "0x6D808000", "0xFF808080", "%zt,%yt,%xt",
+"vmfvc", "0xD0500000", "0xFFFF0080", "%zs,%2s",
+"vmidt.p", "0xF3830080", "0xFFFFFF80", "%zm",
+"vmidt.q", "0xF3838080", "0xFFFFFF80", "%zo",
+"vmidt.t", "0xF3838000", "0xFFFFFF80", "%zn",
+"vmin.p", "0x6D000080", "0xFF808080", "%zp,%yp,%xp",
+"vmin.q", "0x6D008080", "0xFF808080", "%zq,%yq,%xq",
+"vmin.s", "0x6D000000", "0xFF808080", "%zs,%ys,%xs",
+"vmin.t", "0x6D008000", "0xFF808080", "%zt,%yt,%xt",
+"vmmov.p", "0xF3800080", "0xFFFF8080", "%zm,%ym",
+"vmmov.q", "0xF3808080", "0xFFFF8080", "%zo,%yo",
+"vmmov.t", "0xF3808000", "0xFFFF8080", "%zn,%yn",
+"vmmul.p", "0xF0000080", "0xFF808080", "%?%zm,%ym,%xm",
+"vmmul.q", "0xF0008080", "0xFF808080", "%?%zo,%yo,%xo",
+"vmmul.t", "0xF0008000", "0xFF808080", "%?%zn,%yn,%xn",
+"vmone.p", "0xF3870080", "0xFFFFFF80", "%zm",
+"vmone.q", "0xF3878080", "0xFFFFFF80", "%zo",
+"vmone.t", "0xF3878000", "0xFFFFFF80", "%zn",
+"vmov.p", "0xD0000080", "0xFFFF8080", "%zp,%yp",
+"vmov.q", "0xD0008080", "0xFFFF8080", "%zq,%yq",
+"vmov.s", "0xD0000000", "0xFFFF8080", "%zs,%ys",
+"vmov.t", "0xD0008000", "0xFFFF8080", "%zt,%yt",
+"vmscl.p", "0xF2000080", "0xFF808080", "%zm,%ym,%xs",
+"vmscl.q", "0xF2008080", "0xFF808080", "%zo,%yo,%xs",
+"vmscl.t", "0xF2008000", "0xFF808080", "%zn,%yn,%xs",
+"vmtvc", "0xD0510000", "0xFFFF8000", "%2d,%ys",
+"vmul.p", "0x64000080", "0xFF808080", "%zp,%yp,%xp",
+"vmul.q", "0x64008080", "0xFF808080", "%zq,%yq,%xq",
+"vmul.s", "0x64000000", "0xFF808080", "%zs,%ys,%xs",
+"vmul.t", "0x64008000", "0xFF808080", "%zt,%yt,%xt",
+"vmzero.p", "0xF3860080", "0xFFFFFF80", "%zm",
+"vmzero.q", "0xF3868080", "0xFFFFFF80", "%zo",
+"vmzero.t", "0xF3868000", "0xFFFFFF80", "%zn",
+"vneg.p", "0xD0020080", "0xFFFF8080", "%zp,%yp",
+"vneg.q", "0xD0028080", "0xFFFF8080", "%zq,%yq",
+"vneg.s", "0xD0020000", "0xFFFF8080", "%zs,%ys",
+"vneg.t", "0xD0028000", "0xFFFF8080", "%zt,%yt",
+"vnop", "0xFFFF0000", "0xFFFFFFFF", "",
+"vnrcp.p", "0xD0180080", "0xFFFF8080", "%zp,%yp",
+"vnrcp.q", "0xD0188080", "0xFFFF8080", "%zq,%yq",
+"vnrcp.s", "0xD0180000", "0xFFFF8080", "%zs,%ys",
+"vnrcp.t", "0xD0188000", "0xFFFF8080", "%zt,%yt",
+"vnsin.p", "0xD01A0080", "0xFFFF8080", "%zp,%yp",
+"vnsin.q", "0xD01A8080", "0xFFFF8080", "%zq,%yq",
+"vnsin.s", "0xD01A0000", "0xFFFF8080", "%zs,%ys",
+"vnsin.t", "0xD01A8000", "0xFFFF8080", "%zt,%yt",
+"vocp.p", "0xD0440080", "0xFFFF8080", "%zp,%yp",
+"vocp.q", "0xD0448080", "0xFFFF8080", "%zq,%yq",
+"vocp.s", "0xD0440000", "0xFFFF8080", "%zs,%ys",
+"vocp.t", "0xD0448000", "0xFFFF8080", "%zt,%yt",
+"vone.p", "0xD0070080", "0xFFFFFF80", "%zp",
+"vone.q", "0xD0078080", "0xFFFFFF80", "%zq",
+"vone.s", "0xD0070000", "0xFFFFFF80", "%zs",
+"vone.t", "0xD0078000", "0xFFFFFF80", "%zt",
+"vpfxd", "0xDE000000", "0xFF000000", "[%vp4,%vp5,%vp6,%vp7]",
+"vpfxs", "0xDC000000", "0xFF000000", "[%vp0,%vp1,%vp2,%vp3]",
+"vpfxt", "0xDD000000", "0xFF000000", "[%vp0,%vp1,%vp2,%vp3]",
+"vqmul.q", "0xF2808080", "0xFF808080", "%zq,%yq,%xq",
+"vrcp.p", "0xD0100080", "0xFFFF8080", "%zp,%yp",
+"vrcp.q", "0xD0108080", "0xFFFF8080", "%zq,%yq",
+"vrcp.s", "0xD0100000", "0xFFFF8080", "%zs,%ys",
+"vrcp.t", "0xD0108000", "0xFFFF8080", "%zt,%yt",
+"vrexp2.p", "0xD01C0080", "0xFFFF8080", "%zp,%yp",
+"vrexp2.q", "0xD01C8080", "0xFFFF8080", "%zq,%yq",
+"vrexp2.s", "0xD01C0000", "0xFFFF8080", "%zs,%ys",
+"vrexp2.t", "0xD01C8000", "0xFFFF8080", "%zt,%yt",
+"vrndf1.p", "0xD0220080", "0xFFFFFF80", "%zp",
+"vrndf1.q", "0xD0228080", "0xFFFFFF80", "%zq",
+"vrndf1.s", "0xD0220000", "0xFFFFFF80", "%zs",
+"vrndf1.t", "0xD0228000", "0xFFFFFF80", "%zt",
+"vrndf2.p", "0xD0230080", "0xFFFFFF80", "%zp",
+"vrndf2.q", "0xD0238080", "0xFFFFFF80", "%zq",
+"vrndf2.s", "0xD0230000", "0xFFFFFF80", "%zs",
+"vrndf2.t", "0xD0238000", "0xFFFFFF80", "%zt",
+"vrndi.p", "0xD0210080", "0xFFFFFF80", "%zp",
+"vrndi.q", "0xD0218080", "0xFFFFFF80", "%zq",
+"vrndi.s", "0xD0210000", "0xFFFFFF80", "%zs",
+"vrndi.t", "0xD0218000", "0xFFFFFF80", "%zt",
+"vrnds.s", "0xD0200000", "0xFFFF80FF", "%ys",
+"vrot.s", "0xF3A00000", "0xFFE08080", "%zs,%ys,%vr",
+"vrot.p", "0xF3A00080", "0xFFE08080", "%zp,%ys,%vr",
+"vrot.q", "0xF3A08080", "0xFFE08080", "%zq,%ys,%vr",
+"vrot.t", "0xF3A08000", "0xFFE08080", "%zt,%ys,%vr",
+"vrsq.p", "0xD0110080", "0xFFFF8080", "%zp,%yp",
+"vrsq.q", "0xD0118080", "0xFFFF8080", "%zq,%yq",
+"vrsq.s", "0xD0110000", "0xFFFF8080", "%zs,%ys",
+"vrsq.t", "0xD0118000", "0xFFFF8080", "%zt,%yt",
+"vs2i.p", "0xD03B0080", "0xFFFF8080", "%zq,%yp",
+"vs2i.s", "0xD03B0000", "0xFFFF8080", "%zp,%ys",
+"vsat0.p", "0xD0040080", "0xFFFF8080", "%zp,%yp",
+"vsat0.q", "0xD0048080", "0xFFFF8080", "%zq,%yq",
+"vsat0.s", "0xD0040000", "0xFFFF8080", "%zs,%ys",
+"vsat0.t", "0xD0048000", "0xFFFF8080", "%zt,%yt",
+"vsat1.p", "0xD0050080", "0xFFFF8080", "%zp,%yp",
+"vsat1.q", "0xD0058080", "0xFFFF8080", "%zq,%yq",
+"vsat1.s", "0xD0050000", "0xFFFF8080", "%zs,%ys",
+"vsat1.t", "0xD0058000", "0xFFFF8080", "%zt,%yt",
+"vsbn.s", "0x61000000", "0xFF808080", "%zs,%ys,%xs",
+"vsbz.s", "0xD0360000", "0xFFFF8080", "%zs,%ys",
+"vscl.p", "0x65000080", "0xFF808080", "%zp,%yp,%xs",
+"vscl.s", "0x65000000", "0xFF808080", "%zs,%ys,%xs",
+"vscl.q", "0x65008080", "0xFF808080", "%zq,%yq,%xs",
+"vscl.t", "0x65008000", "0xFF808080", "%zt,%yt,%xs",
+"vscmp.p", "0x6E800080", "0xFF808080", "%zp,%yp,%xp",
+"vscmp.q", "0x6E808080", "0xFF808080", "%zq,%yq,%xq",
+"vscmp.s", "0x6E800000", "0xFF808080", "%zs,%ys,%xs",
+"vscmp.t", "0x6E808000", "0xFF808080", "%zt,%yt,%xt",
+"vsge.p", "0x6F000080", "0xFF808080", "%zp,%yp,%xp",
+"vsge.q", "0x6F008080", "0xFF808080", "%zq,%yq,%xq",
+"vsge.s", "0x6F000000", "0xFF808080", "%zs,%ys,%xs",
+"vsge.t", "0x6F008000", "0xFF808080", "%zt,%yt,%xt",
+"vsgn.p", "0xD04A0080", "0xFFFF8080", "%zp,%yp",
+"vsgn.q", "0xD04A8080", "0xFFFF8080", "%zq,%yq",
+"vsgn.s", "0xD04A0000", "0xFFFF8080", "%zs,%ys",
+"vsgn.t", "0xD04A8000", "0xFFFF8080", "%zt,%yt",
+"vsin.p", "0xD0120080", "0xFFFF8080", "%zp,%yp",
+"vsin.q", "0xD0128080", "0xFFFF8080", "%zq,%yq",
+"vsin.s", "0xD0120000", "0xFFFF8080", "%zs,%ys",
+"vsin.t", "0xD0128000", "0xFFFF8080", "%zt,%yt",
+"vslt.p", "0x6F800080", "0xFF808080", "%zp,%yp,%xp",
+"vslt.q", "0x6F808080", "0xFF808080", "%zq,%yq,%xq",
+"vslt.s", "0x6F800000", "0xFF808080", "%zs,%ys,%xs",
+"vslt.t", "0x6F808000", "0xFF808080", "%zt,%yt,%xt",
+"vsocp.p", "0xD0450080", "0xFFFF8080", "%zq,%yp",
+"vsocp.s", "0xD0450000", "0xFFFF8080", "%zp,%ys",
+"vsqrt.p", "0xD0160080", "0xFFFF8080", "%zp,%yp",
+"vsqrt.q", "0xD0168080", "0xFFFF8080", "%zq,%yq",
+"vsqrt.s", "0xD0160000", "0xFFFF8080", "%zs,%ys",
+"vsqrt.t", "0xD0168000", "0xFFFF8080", "%zt,%yt",
+"vsrt1.q", "0xD0408080", "0xFFFF8080", "%zq,%yq",
+"vsrt2.q", "0xD0418080", "0xFFFF8080", "%zq,%yq",
+"vsrt3.q", "0xD0488080", "0xFFFF8080", "%zq,%yq",
+"vsrt4.q", "0xD0498080", "0xFFFF8080", "%zq,%yq",
+"vsub.p", "0x60800080", "0xFF808080", "%zp,%yp,%xp",
+"vsub.q", "0x60808080", "0xFF808080", "%zq,%yq,%xq",
+"vsub.s", "0x60800000", "0xFF808080", "%zs,%ys,%xs",
+"vsub.t", "0x60808000", "0xFF808080", "%zt,%yt,%xt",
+"vsync", "0xFFFF0000", "0xFFFF0000", "%I",
+"vsync", "0xFFFF0320", "0xFFFFFFFF", "",
+"vt4444.q", "0xD0598080", "0xFFFF8080", "%zq,%yq",
+"vt5551.q", "0xD05A8080", "0xFFFF8080", "%zq,%yq",
+"vt5650.q", "0xD05B8080", "0xFFFF8080", "%zq,%yq",
+"vtfm2.p", "0xF0800080", "0xFF808080", "%zp,%ym,%xp",
+"vtfm3.t", "0xF1008000", "0xFF808080", "%zt,%yn,%xt",
+"vtfm4.q", "0xF1808080", "0xFF808080", "%zq,%yo,%xq",
+"vus2i.p", "0xD03A0080", "0xFFFF8080", "%zq,%yp",
+"vus2i.s", "0xD03A0000", "0xFFFF8080", "%zp,%ys",
+"vwb.q", "0xF8000002", "0xFC000002", "%Xq,%Y",
+"vwbn.s", "0xD3000000", "0xFF008080", "%zs,%ys,%N",
+"vzero.p", "0xD0060080", "0xFFFFFF80", "%zp",
+"vzero.q", "0xD0068080", "0xFFFFFF80", "%zq",
+"vzero.s", "0xD0060000", "0xFFFFFF80", "%zs",
+"vzero.t", "0xD0068000", "0xFFFFFF80", "%zt",
+"mfvme", "0x68000000", "0xFC000000", "%t, %i",
+"mtvme", "0xb0000000", "0xFC000000", "%t, %i",
+"vncos.s", "0x68000000", "0xFC000000", "%zs,%i",
+"vncos.p", "0xD01b0080", "0xFFFF8080", "%zp,%yp",
+"vncos.q", "0xD01b8080", "0xFFFF8080", "%zq,%yq",
+"vncos.s", "0xD01b0000", "0xFFFF8080", "%zs,%ys",
+"vncos.t", "0xD01b8000", "0xFFFF8080", "%zt,%yt",
+"vnasin.p", "0xD01f0080", "0xFFFF8080", "%zp,%yp",
+"vnasin.q", "0xD01f8080", "0xFFFF8080", "%zq,%yq",
+"vnasin.s", "0xD01f0000", "0xFFFF8080", "%zs,%ys",
+"vnasin.t", "0xD01f8000", "0xFFFF8080", "%zt,%yt",
+"vncos.s", "0x68000000", "0xFC000000", "%zs,%i",
+"vnlog2.p", "0xD01d0080", "0xFFFF8080", "%zp,%yp",
+"vnlog2.q", "0xD01d8080", "0xFFFF8080", "%zq,%yq",
+"vnlog2.s", "0xD01d0000", "0xFFFF8080", "%zs,%ys",
+"vnlog2.t", "0xD01d8000", "0xFFFF8080", "%zt,%yt",
+"vnsqrt.p", "0xD01e0080", "0xFFFF8080", "%zp,%yp",
+"vnsqrt.q", "0xD01e8080", "0xFFFF8080", "%zq,%yq",
+"vnsqrt.s", "0xD01e0000", "0xFFFF8080", "%zs,%ys",
+"vnsqrt.t", "0xD01e8000", "0xFFFF8080", "%zt,%yt",
+"vnrsq.p", "0xD0190080", "0xFFFF8080", "%zp,%yp",
+"vnrsq.q", "0xD0198080", "0xFFFF8080", "%zq,%yq",
+"vnrsq.s", "0xD0190000", "0xFFFF8080", "%zs,%ys",
+"vnrsq.t", "0xD0198000", "0xFFFF8080", "%zt,%yt"
+                              }
 #End Region
 
     'decoder PRXTOOLの移植
@@ -1822,6 +1835,8 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                         End If
                         minus &= "0x" & k.ToString("X")
                         str = str.Replace("%i", minus)
+                    Case "N"
+                        str = str.Replace("%N", "0x" & (CInt(((hex >> 16) And &HFF)).ToString("X")))
                     Case "I"
                         str = str.Replace("%I", "0x" & (CInt((hex And &HFFFF)).ToString("X")))
                     Case "j"
@@ -2112,8 +2127,10 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
             opsize = 2
         ElseIf (opcode = VFPU_OP_SIZE_TRIPLE) Then
             opsize = 3
-        Else
+        ElseIf (opcode = VFPU_OP_SIZE_QUAD) Then
             opsize = 4
+        Else
+            opsize = 1
             'opsize = (opcode = VFPU_OP_SIZE_QUAD) * 4 
             ';/* Sanity check. */
         End If
@@ -2123,17 +2140,10 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         negation = CUInt((rotators >> 4) And 1)
 
         If (rothi = rotlo) Then
-            If (negation <> 0) Then
-                elements(0) = "-s"
-                elements(1) = "-s"
-                elements(2) = "-s"
-                elements(3) = "-s"
-            Else
-                elements(0) = "s"
-                elements(1) = "s"
-                elements(2) = "s"
-                elements(3) = "s"
-            End If
+            elements(0) = "s"
+            elements(1) = "s"
+            elements(2) = "s"
+            elements(3) = "s"
         Else
             elements(0) = "0"
             elements(1) = "0"
@@ -2141,12 +2151,7 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
             elements(3) = "0"
         End If
 
-        If (negation <> 0) Then
-            elements(CInt(rothi)) = "-s"
-        Else
-            elements(CInt(rothi)) = "s"
-        End If
-
+        elements(CInt(rothi)) = "s"
         elements(CInt(rotlo)) = "c"
 
         ss = "["
@@ -2155,6 +2160,10 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         'for (i = 0;;)
         opsize = CUInt(opsize - 1)
         For i = 0 To opsize
+            If (negation <> 0 AndAlso elements(CInt(i)) = "s") Then
+                ss &= "-"
+            End If
+
             ss &= elements(CInt(i))
             'len += sprintf(output, "%s", elements[i++]);
             If (i >= opsize) Then
@@ -2191,7 +2200,6 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
 
         Return ss
     End Function
-
 
     Function vfpureg(ByVal reg As Integer, ByVal s As String) As String
         Dim ss As String = ""
@@ -2256,7 +2264,6 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
     'ASM INSERT
 #Region "INSERT ASM"
 
-
     Function assembler(ByVal str As String, ByVal str2 As String) As String
         Try
             Dim hex As Integer = 0
@@ -2291,2266 +2298,2345 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                 mips = mips.Replace(vbTab, "")
                 str = str.Trim
                 ss(0) = ss(0).Replace(sheadm.Value, "")
-                If mips = "nop" Then
-                ElseIf mips = "syscall" Then
-                    hex = 12
-                    hex = hex Or valhex_syscall(str, hex)
-                ElseIf mips = "break" Then
-                    hex = &HD '13
-                    hex = hex Or valhex_syscall(str, hex)
-                ElseIf mips = "sync" Then
-                    hex = 15
-                ElseIf mips = "sll" Then
-                    hex = reg_boolean3(str, hex, 0)
-                    hex = valdec_boolean_para(str, hex, 3)
-                ElseIf mips = "rotr" Then
-                    hex = &H200002
-                    hex = reg_boolean3(str, hex, 0)
-                    hex = valdec_boolean_para(str, hex, 3)
-                ElseIf mips = "rotv" Then
-                    hex = &H46
-                    hex = reg_boolean3(str, hex, 0)
-                ElseIf mips = "srl" Then
-                    hex = &H2
-                    hex = reg_boolean3(str, hex, 0)
-                    hex = valdec_boolean_para(str, hex, 3)
-                ElseIf mips = "sra" Then
-                    hex = &H3
-                    hex = reg_boolean_para(ss(0), hex, 2)
-                    hex = reg_boolean_para(ss(1), hex, 1)
-                    hex = valdec_boolean_para(str, hex, 3)
-                ElseIf mips = "sllv" Then
-                    hex = &H4
-                    hex = reg_boolean3(str, hex, 0)
-                ElseIf mips = "srlv" Then
-                    hex = &H6
-                    hex = reg_boolean3(str, hex, 0)
-                ElseIf mips = "srav" Then
-                    hex = &H7
-                    hex = reg_boolean_para(ss(0), hex, 2)
-                    hex = reg_boolean_para(ss(1), hex, 1)
-                    hex = reg_boolean_para(ss(2), hex, 0)
-                ElseIf mips = "jalr" Then
-                    hex = &H9
-                    If ss.Length = 1 Then
-                        Array.Resize(ss, 2)
-                        ss(1) = ss(0)
-                        ss(0) = "ra"
-                    End If
-                    hex = reg_boolean_para(ss(0), hex, 2)
-                    hex = reg_boolean_para(ss(1), hex, 0)
-                ElseIf mips = "movz" Then
-                    hex = &HA
-                    hex = reg_boolean_para(ss(0), hex, 2)
-                    hex = reg_boolean_para(ss(1), hex, 0)
-                    hex = reg_boolean_para(ss(2), hex, 1)
-                ElseIf mips = "movn" Then
-                    hex = &HB
-                    hex = reg_boolean_para(ss(0), hex, 2)
-                    hex = reg_boolean_para(ss(1), hex, 0)
-                    hex = reg_boolean_para(ss(2), hex, 1)
-                ElseIf mips = "mfhi" Then
-                    hex = &H10
-                    hex = reg_boolean_para(ss(0), hex, 2)
-                ElseIf mips = "mthi" Then
-                    hex = &H11
-                    hex = reg_boolean_para(ss(0), hex, 0)
-                ElseIf mips = "mflo" Then
-                    hex = &H12
-                    hex = reg_boolean_para(ss(0), hex, 2)
-                ElseIf mips = "mtlo" Then
-                    hex = &H13
-                    hex = reg_boolean_para(ss(0), hex, 0)
-                ElseIf mips = "clz" Then
-                    hex = &H16
-                    hex = reg_boolean_para(ss(0), hex, 2)
-                    hex = reg_boolean_para(ss(1), hex, 0)
-                ElseIf mips = "clo" Then
-                    hex = &H17
-                    hex = reg_boolean_para(ss(0), hex, 2)
-                    hex = reg_boolean_para(ss(1), hex, 0)
-                ElseIf mips = "add" Then
-                    hex = &H20
-                    hex = reg_boolean_para(ss(0), hex, 2)
-                    hex = reg_boolean_para(ss(1), hex, 0)
-                    hex = reg_boolean_para(ss(2), hex, 1)
-                ElseIf mips = "addu" Then
-                    hex = &H21
-                    hex = reg_boolean_para(ss(0), hex, 2)
-                    hex = reg_boolean_para(ss(1), hex, 0)
-                    hex = reg_boolean_para(ss(2), hex, 1)
-                ElseIf mips = "mov" Or mips = "move" Then
-                    hex = &H21
-                    hex = reg_boolean_para(ss(0), hex, 2)
-                    hex = reg_boolean_para(ss(1), hex, 0)
-                ElseIf mips = "sub" Then
-                    hex = &H22
-                    hex = reg_boolean_para(ss(0), hex, 2)
-                    hex = reg_boolean_para(ss(1), hex, 0)
-                    hex = reg_boolean_para(ss(2), hex, 1)
-                ElseIf mips = "neg" Then
-                    hex = &H22
-                    hex = reg_boolean_para(ss(0), hex, 2)
-                    hex = reg_boolean_para(ss(1), hex, 1)
-                ElseIf mips = "subu" Then
-                    hex = &H23
-                    hex = reg_boolean_para(ss(0), hex, 2)
-                    hex = reg_boolean_para(ss(1), hex, 0)
-                    hex = reg_boolean_para(ss(2), hex, 1)
-                ElseIf mips = "negu" Then
-                    hex = &H23
-                    hex = reg_boolean_para(ss(0), hex, 2)
-                    hex = reg_boolean_para(ss(1), hex, 1)
-                ElseIf mips = "and" Then
-                    hex = &H24
-                    hex = reg_boolean_para(ss(0), hex, 2)
-                    hex = reg_boolean_para(ss(1), hex, 0)
-                    hex = reg_boolean_para(ss(2), hex, 1)
-                ElseIf mips = "or" Then
-                    hex = &H25
-                    hex = reg_boolean_para(ss(0), hex, 2)
-                    hex = reg_boolean_para(ss(1), hex, 0)
-                    hex = reg_boolean_para(ss(2), hex, 1)
-                ElseIf mips = "xor" Then
-                    hex = &H26
-                    hex = reg_boolean_para(ss(0), hex, 2)
-                    hex = reg_boolean_para(ss(1), hex, 0)
-                    hex = reg_boolean_para(ss(2), hex, 1)
-                ElseIf mips = "nor" Then
-                    hex = &H27
-                    hex = reg_boolean_para(ss(0), hex, 2)
-                    hex = reg_boolean_para(ss(1), hex, 0)
-                    hex = reg_boolean_para(ss(2), hex, 1)
-                ElseIf mips = "not" Then
-                    hex = &H27
-                    hex = reg_boolean_para(ss(0), hex, 2)
-                    hex = reg_boolean_para(ss(1), hex, 0)
-                ElseIf mips = "slt" Then
-                    hex = &H2A
-                    hex = reg_boolean_para(ss(0), hex, 2)
-                    hex = reg_boolean_para(ss(1), hex, 0)
-                    hex = reg_boolean_para(ss(2), hex, 1)
-                ElseIf mips = "sltu" Then
-                    hex = &H2B
-                    hex = reg_boolean_para(ss(0), hex, 2)
-                    hex = reg_boolean_para(ss(1), hex, 0)
-                    hex = reg_boolean_para(ss(2), hex, 1)
-                ElseIf mips = "max" Then
-                    hex = &H2C
-                    hex = reg_boolean_para(ss(0), hex, 2)
-                    hex = reg_boolean_para(ss(1), hex, 0)
-                    hex = reg_boolean_para(ss(2), hex, 1)
-                ElseIf mips = "min" Then
-                    hex = &H2D
-                    hex = reg_boolean_para(ss(0), hex, 2)
-                    hex = reg_boolean_para(ss(1), hex, 0)
-                    hex = reg_boolean_para(ss(2), hex, 1)
-                ElseIf mips = "j" Then
-                    hex = &H8000000
-                    hex = offset_boolean(str, hex)
-                ElseIf mips = "jal" Then
-                    hex = &HC000000
-                    hex = offset_boolean(str, hex)
-                ElseIf mips = "jr" Then
-                    hex = &H8
-                    hex = reg_boolean_para(ss(0), hex, 0)
-                ElseIf mips = "mult" Then
-                    hex = &H18
-                    hex = reg_boolean_para(ss(0), hex, 0)
-                    hex = reg_boolean_para(ss(1), hex, 1)
-                ElseIf mips = "multu" Then
-                    hex = &H19
-                    hex = reg_boolean_para(ss(0), hex, 0)
-                    hex = reg_boolean_para(ss(1), hex, 1)
-                ElseIf mips = "div" Then
-                    hex = &H1A
-                    hex = reg_boolean_para(ss(0), hex, 0)
-                    hex = reg_boolean_para(ss(1), hex, 1)
-                ElseIf mips = "divu" Then
-                    hex = &H1B
-                    hex = reg_boolean_para(ss(0), hex, 0)
-                    hex = reg_boolean_para(ss(1), hex, 1)
-                ElseIf mips = "madd" Then
-                    hex = &H1C
-                    hex = reg_boolean_para(ss(0), hex, 0)
-                    hex = reg_boolean_para(ss(1), hex, 1)
-                ElseIf mips = "maddu" Then
-                    hex = &H1D
-                    hex = reg_boolean_para(ss(0), hex, 0)
-                    hex = reg_boolean_para(ss(1), hex, 1)
-                ElseIf mips = "msub" Then
-                    hex = &H2E
-                    hex = reg_boolean_para(ss(0), hex, 0)
-                    hex = reg_boolean_para(ss(1), hex, 1)
-                ElseIf mips = "msubu" Then
-                    hex = &H2F
-                    hex = reg_boolean_para(ss(0), hex, 0)
-                    hex = reg_boolean_para(ss(1), hex, 1)
-                ElseIf mips = "bltz" Then
-                    hex = &H4000000
-                    hex = reg_boolean_para(ss(0), hex, 0)
-                    hex = offset_boolean2(str, hex, hex2)
-                ElseIf mips = "bgez" Then
-                    hex = &H4010000
-                    hex = reg_boolean_para(ss(0), hex, 0)
-                    hex = offset_boolean2(str, hex, hex2)
-                ElseIf mips = "bltzl" Then
-                    hex = &H4020000
-                    hex = reg_boolean_para(ss(0), hex, 0)
-                    hex = offset_boolean2(str, hex, hex2)
-                ElseIf mips = "bgezl" Then
-                    hex = &H4030000
-                    hex = reg_boolean_para(ss(0), hex, 0)
-                    hex = offset_boolean2(str, hex, hex2)
-                ElseIf mips = "bltzal" Then
-                    hex = &H4100000
-                    hex = reg_boolean_para(ss(0), hex, 0)
-                    hex = offset_boolean2(str, hex, hex2)
-                ElseIf mips = "bgezal" Then
-                    hex = &H4110000
-                    hex = reg_boolean_para(ss(0), hex, 0)
-                    hex = offset_boolean2(str, hex, hex2)
-                ElseIf mips = "bltzall" Then
-                    hex = &H4120000
-                    hex = reg_boolean_para(ss(0), hex, 0)
-                    hex = offset_boolean2(str, hex, hex2)
-                ElseIf mips = "bgezall" Then
-                    hex = &H4130000
-                    hex = reg_boolean_para(ss(0), hex, 0)
-                    hex = offset_boolean2(str, hex, hex2)
-                ElseIf mips = "mtsab" Then
-                    hex = &H4180000
-                    hex = reg_boolean_para(ss(0), hex, 0)
-                    hex = valhex_boolean(ss(1), hex)
-                ElseIf mips = "mtsah" Then
-                    hex = &H4190000
-                    hex = reg_boolean_para(ss(0), hex, 0)
-                    hex = valhex_boolean(ss(1), hex)
 
-                    '0x10 branch
-                ElseIf mips = "b" Then
-                    hex = &H10000000
-                    hex = offset_boolean2(str, hex, hex2)
-                ElseIf mips = "bal" Then
-                    hex = &H4110000
-                    hex = offset_boolean2(str, hex, hex2)
-                ElseIf mips = "bnez" Then
-                    hex = &H14000000
-                    hex = reg_boolean_para(ss(0), hex, 0)
-                    hex = offset_boolean2(str, hex, hex2)
-                ElseIf mips = "bnezl" Then
-                    hex = &H54000000
-                    hex = reg_boolean_para(ss(0), hex, 0)
-                    hex = offset_boolean2(str, hex, hex2)
-                ElseIf mips = "beqz" Then
-                    hex = &H10000000
-                    hex = reg_boolean_para(ss(0), hex, 0)
-                    hex = offset_boolean2(str, hex, hex2)
-                ElseIf mips = "beqzl" Then
-                    hex = &H50000000
-                    hex = reg_boolean_para(ss(0), hex, 0)
-                    hex = offset_boolean2(str, hex, hex2)
-                ElseIf mips = "beq" Then
-                    hex = &H10000000
-                    hex = reg_boolean_para(ss(0), hex, 0)
-                    hex = reg_boolean_para(ss(1), hex, 1)
-                    hex = offset_boolean2(str, hex, hex2)
-                ElseIf mips = "bne" Then
-                    hex = &H14000000
-                    hex = reg_boolean_para(ss(0), hex, 0)
-                    hex = reg_boolean_para(ss(1), hex, 1)
-                    hex = offset_boolean2(str, hex, hex2)
-                ElseIf mips = "blez" Then
-                    hex = &H18000000
-                    hex = reg_boolean_para(ss(0), hex, 0)
-                    hex = reg_boolean_para(ss(1), hex, 1)
-                    hex = offset_boolean2(str, hex, hex2)
-                ElseIf mips = "bgtz" Then
-                    hex = &H1C000000
-                    hex = reg_boolean_para(str, hex, 0)
-                    hex = offset_boolean2(str, hex, hex2)
+                Select Case mips
+                    Case "nop"
+                    Case "syscall"
+                        hex = 12
+                        hex = hex Or valhex_syscall(str, hex)
+                    Case "break"
+                        hex = &HD '13
+                        hex = hex Or valhex_syscall(str, hex)
+                    Case "sync"
+                        hex = 15
+                    Case "sll"
+                        hex = reg_boolean3(str, hex, 0)
+                        hex = valdec_boolean_para(str, hex, 3)
+                    Case "rotr"
+                        hex = &H200002
+                        hex = reg_boolean3(str, hex, 0)
+                        hex = valdec_boolean_para(str, hex, 3)
+                    Case "rotv"
+                        hex = &H46
+                        hex = reg_boolean3(str, hex, 0)
+                    Case "srl"
+                        hex = &H2
+                        hex = reg_boolean3(str, hex, 0)
+                        hex = valdec_boolean_para(str, hex, 3)
+                    Case "sra"
+                        hex = &H3
+                        hex = reg_boolean_para(ss(0), hex, 2)
+                        hex = reg_boolean_para(ss(1), hex, 1)
+                        hex = valdec_boolean_para(str, hex, 3)
+                    Case "sllv"
+                        hex = &H4
+                        hex = reg_boolean3(str, hex, 0)
+                    Case "srlv"
+                        hex = &H6
+                        hex = reg_boolean3(str, hex, 0)
+                    Case "srav"
+                        hex = &H7
+                        hex = reg_boolean_para(ss(0), hex, 2)
+                        hex = reg_boolean_para(ss(1), hex, 1)
+                        hex = reg_boolean_para(ss(2), hex, 0)
+                    Case "jalr"
+                        hex = &H9
+                        If ss.Length = 1 Then
+                            Array.Resize(ss, 2)
+                            ss(1) = ss(0)
+                            ss(0) = "ra"
+                        End If
+                        hex = reg_boolean_para(ss(0), hex, 2)
+                        hex = reg_boolean_para(ss(1), hex, 0)
+                    Case "movz"
+                        hex = &HA
+                        hex = reg_boolean_para(ss(0), hex, 2)
+                        hex = reg_boolean_para(ss(1), hex, 0)
+                        hex = reg_boolean_para(ss(2), hex, 1)
+                    Case "movn"
+                        hex = &HB
+                        hex = reg_boolean_para(ss(0), hex, 2)
+                        hex = reg_boolean_para(ss(1), hex, 0)
+                        hex = reg_boolean_para(ss(2), hex, 1)
+                    Case "mfhi"
+                        hex = &H10
+                        hex = reg_boolean_para(ss(0), hex, 2)
+                    Case "mthi"
+                        hex = &H11
+                        hex = reg_boolean_para(ss(0), hex, 0)
+                    Case "mflo"
+                        hex = &H12
+                        hex = reg_boolean_para(ss(0), hex, 2)
+                    Case "mtlo"
+                        hex = &H13
+                        hex = reg_boolean_para(ss(0), hex, 0)
+                    Case "clz"
+                        hex = &H16
+                        hex = reg_boolean_para(ss(0), hex, 2)
+                        hex = reg_boolean_para(ss(1), hex, 0)
+                    Case "clo"
+                        hex = &H17
+                        hex = reg_boolean_para(ss(0), hex, 2)
+                        hex = reg_boolean_para(ss(1), hex, 0)
+                    Case "add"
+                        hex = &H20
+                        hex = reg_boolean_para(ss(0), hex, 2)
+                        hex = reg_boolean_para(ss(1), hex, 0)
+                        hex = reg_boolean_para(ss(2), hex, 1)
+                    Case "addu"
+                        hex = &H21
+                        hex = reg_boolean_para(ss(0), hex, 2)
+                        hex = reg_boolean_para(ss(1), hex, 0)
+                        hex = reg_boolean_para(ss(2), hex, 1)
+                    Case "move", "mov"
+                        hex = &H21
+                        hex = reg_boolean_para(ss(0), hex, 2)
+                        hex = reg_boolean_para(ss(1), hex, 0)
+                    Case "sub"
+                        hex = &H22
+                        hex = reg_boolean_para(ss(0), hex, 2)
+                        hex = reg_boolean_para(ss(1), hex, 0)
+                        hex = reg_boolean_para(ss(2), hex, 1)
+                    Case "neg"
+                        hex = &H22
+                        hex = reg_boolean_para(ss(0), hex, 2)
+                        hex = reg_boolean_para(ss(1), hex, 1)
+                    Case "subu"
+                        hex = &H23
+                        hex = reg_boolean_para(ss(0), hex, 2)
+                        hex = reg_boolean_para(ss(1), hex, 0)
+                        hex = reg_boolean_para(ss(2), hex, 1)
+                    Case "negu"
+                        hex = &H23
+                        hex = reg_boolean_para(ss(0), hex, 2)
+                        hex = reg_boolean_para(ss(1), hex, 1)
+                    Case "and"
+                        hex = &H24
+                        hex = reg_boolean_para(ss(0), hex, 2)
+                        hex = reg_boolean_para(ss(1), hex, 0)
+                        hex = reg_boolean_para(ss(2), hex, 1)
+                    Case "or"
+                        hex = &H25
+                        hex = reg_boolean_para(ss(0), hex, 2)
+                        hex = reg_boolean_para(ss(1), hex, 0)
+                        hex = reg_boolean_para(ss(2), hex, 1)
+                    Case "xor"
+                        hex = &H26
+                        hex = reg_boolean_para(ss(0), hex, 2)
+                        hex = reg_boolean_para(ss(1), hex, 0)
+                        hex = reg_boolean_para(ss(2), hex, 1)
+                    Case "nor"
+                        hex = &H27
+                        hex = reg_boolean_para(ss(0), hex, 2)
+                        hex = reg_boolean_para(ss(1), hex, 0)
+                        hex = reg_boolean_para(ss(2), hex, 1)
+                    Case "not"
+                        hex = &H27
+                        hex = reg_boolean_para(ss(0), hex, 2)
+                        hex = reg_boolean_para(ss(1), hex, 0)
+                    Case "slt"
+                        hex = &H2A
+                        hex = reg_boolean_para(ss(0), hex, 2)
+                        hex = reg_boolean_para(ss(1), hex, 0)
+                        hex = reg_boolean_para(ss(2), hex, 1)
+                    Case "sltu"
+                        hex = &H2B
+                        hex = reg_boolean_para(ss(0), hex, 2)
+                        hex = reg_boolean_para(ss(1), hex, 0)
+                        hex = reg_boolean_para(ss(2), hex, 1)
+                    Case "max"
+                        hex = &H2C
+                        hex = reg_boolean_para(ss(0), hex, 2)
+                        hex = reg_boolean_para(ss(1), hex, 0)
+                        hex = reg_boolean_para(ss(2), hex, 1)
+                    Case "min"
+                        hex = &H2D
+                        hex = reg_boolean_para(ss(0), hex, 2)
+                        hex = reg_boolean_para(ss(1), hex, 0)
+                        hex = reg_boolean_para(ss(2), hex, 1)
+                    Case "j"
+                        hex = &H8000000
+                        hex = offset_boolean(str, hex)
+                    Case "jal"
+                        hex = &HC000000
+                        hex = offset_boolean(str, hex)
+                    Case "jr"
+                        hex = &H8
+                        hex = reg_boolean_para(ss(0), hex, 0)
+                    Case "mult"
+                        hex = &H18
+                        hex = reg_boolean_para(ss(0), hex, 0)
+                        hex = reg_boolean_para(ss(1), hex, 1)
+                    Case "multu"
+                        hex = &H19
+                        hex = reg_boolean_para(ss(0), hex, 0)
+                        hex = reg_boolean_para(ss(1), hex, 1)
+                    Case "div"
+                        hex = &H1A
+                        hex = reg_boolean_para(ss(0), hex, 0)
+                        hex = reg_boolean_para(ss(1), hex, 1)
+                    Case "divu"
+                        hex = &H1B
+                        hex = reg_boolean_para(ss(0), hex, 0)
+                        hex = reg_boolean_para(ss(1), hex, 1)
+                    Case "madd"
+                        hex = &H1C
+                        hex = reg_boolean_para(ss(0), hex, 0)
+                        hex = reg_boolean_para(ss(1), hex, 1)
+                    Case "maddu"
+                        hex = &H1D
+                        hex = reg_boolean_para(ss(0), hex, 0)
+                        hex = reg_boolean_para(ss(1), hex, 1)
+                    Case "msub"
+                        hex = &H2E
+                        hex = reg_boolean_para(ss(0), hex, 0)
+                        hex = reg_boolean_para(ss(1), hex, 1)
+                    Case "msubu"
+                        hex = &H2F
+                        hex = reg_boolean_para(ss(0), hex, 0)
+                        hex = reg_boolean_para(ss(1), hex, 1)
+                    Case "bltz"
+                        hex = &H4000000
+                        hex = reg_boolean_para(ss(0), hex, 0)
+                        hex = offset_boolean2(str, hex, hex2)
+                    Case "bgez"
+                        hex = &H4010000
+                        hex = reg_boolean_para(ss(0), hex, 0)
+                        hex = offset_boolean2(str, hex, hex2)
+                    Case "bltzl"
+                        hex = &H4020000
+                        hex = reg_boolean_para(ss(0), hex, 0)
+                        hex = offset_boolean2(str, hex, hex2)
+                    Case "bgezl"
+                        hex = &H4030000
+                        hex = reg_boolean_para(ss(0), hex, 0)
+                        hex = offset_boolean2(str, hex, hex2)
+                    Case "bltzal"
+                        hex = &H4100000
+                        hex = reg_boolean_para(ss(0), hex, 0)
+                        hex = offset_boolean2(str, hex, hex2)
+                    Case "bgezal"
+                        hex = &H4110000
+                        hex = reg_boolean_para(ss(0), hex, 0)
+                        hex = offset_boolean2(str, hex, hex2)
+                    Case "bltzall"
+                        hex = &H4120000
+                        hex = reg_boolean_para(ss(0), hex, 0)
+                        hex = offset_boolean2(str, hex, hex2)
+                    Case "bgezall"
+                        hex = &H4130000
+                        hex = reg_boolean_para(ss(0), hex, 0)
+                        hex = offset_boolean2(str, hex, hex2)
+                    Case "mtsab"
+                        hex = &H4180000
+                        hex = reg_boolean_para(ss(0), hex, 0)
+                        hex = valhex_boolean(ss(1), hex)
+                    Case "mtsah"
+                        hex = &H4190000
+                        hex = reg_boolean_para(ss(0), hex, 0)
+                        hex = valhex_boolean(ss(1), hex)
 
-                    '0x20 add/boolean
-                ElseIf mips = "addi" Then
-                    hex = &H20000000
-                    hex = reg_boolean2(str, hex, 0)
-                    hex = valhex_boolean(str, hex)
-                ElseIf mips = "addiu" Then
-                    hex = &H24000000
-                    hex = reg_boolean2(str, hex, 0)
-                    hex = valhex_boolean(str, hex)
-                ElseIf mips = "li" Then
-                    hex = &H24000000
-                    hex = reg_boolean_para(ss(0), hex, 1)
-                    hex = valhex_boolean(str, hex)
-                ElseIf mips = "slti" Then
-                    hex = &H28000000
-                    hex = reg_boolean2(str, hex, 0)
-                    hex = valhex_boolean(str, hex)
-                ElseIf mips = "sltiu" Then
-                    hex = &H2C000000
-                    hex = reg_boolean2(str, hex, 0)
-                    hex = valhex_boolean(str, hex)
-                ElseIf mips = "andi" Then
-                    hex = &H30000000
-                    hex = reg_boolean2(str, hex, 0)
-                    hex = valhex_boolean(str, hex)
-                ElseIf mips = "ori" Then
-                    hex = &H34000000
-                    hex = reg_boolean2(str, hex, 0)
-                    hex = valhex_boolean(str, hex)
-                ElseIf mips = "xori" Then
-                    hex = &H38000000
-                    hex = reg_boolean2(str, hex, 0)
-                    hex = valhex_boolean(str, hex)
-                ElseIf mips = "lui" Then
-                    hex = &H3C000000
-                    hex = reg_boolean_para(str, hex, 1)
-                    hex = valhex_boolean(str, hex)
+                        '0x10 branch
+                    Case "b"
+                        hex = &H10000000
+                        hex = offset_boolean2(str, hex, hex2)
+                    Case "bal"
+                        hex = &H4110000
+                        hex = offset_boolean2(str, hex, hex2)
+                    Case "bnez"
+                        hex = &H14000000
+                        hex = reg_boolean_para(ss(0), hex, 0)
+                        hex = offset_boolean2(str, hex, hex2)
+                    Case "bnezl"
+                        hex = &H54000000
+                        hex = reg_boolean_para(ss(0), hex, 0)
+                        hex = offset_boolean2(str, hex, hex2)
+                    Case "beqz"
+                        hex = &H10000000
+                        hex = reg_boolean_para(ss(0), hex, 0)
+                        hex = offset_boolean2(str, hex, hex2)
+                    Case "beqzl"
+                        hex = &H50000000
+                        hex = reg_boolean_para(ss(0), hex, 0)
+                        hex = offset_boolean2(str, hex, hex2)
+                    Case "beq"
+                        hex = &H10000000
+                        hex = reg_boolean_para(ss(0), hex, 0)
+                        hex = reg_boolean_para(ss(1), hex, 1)
+                        hex = offset_boolean2(str, hex, hex2)
+                    Case "bne"
+                        hex = &H14000000
+                        hex = reg_boolean_para(ss(0), hex, 0)
+                        hex = reg_boolean_para(ss(1), hex, 1)
+                        hex = offset_boolean2(str, hex, hex2)
+                    Case "blez"
+                        hex = &H18000000
+                        hex = reg_boolean_para(ss(0), hex, 0)
+                        hex = reg_boolean_para(ss(1), hex, 1)
+                        hex = offset_boolean2(str, hex, hex2)
+                    Case "bgtz"
+                        hex = &H1C000000
+                        hex = reg_boolean_para(str, hex, 0)
+                        hex = offset_boolean2(str, hex, hex2)
 
-                    '0x40 FPU
-                ElseIf mips = "mfc0" Then
-                    hex = &H40000000
-                    hex = reg_boolean_para(ss(0), hex, 1)
-                    hex = hex Or (cop_sel(ss(1), "COP0") << 11)
-                ElseIf mips = "mtc0" Then
-                    hex = &H40800000
-                    hex = reg_boolean_para(ss(0), hex, 1)
-                    hex = hex Or (cop_sel(ss(1), "COP0") << 11)
-                ElseIf mips = "cfc0" Then
-                    hex = &H40400000
-                    hex = reg_boolean_para(ss(0), hex, 1)
-                    hex = hex Or (cop_sel(ss(1), "") << 11)
-                ElseIf mips = "ctc0" Then
-                    hex = &H40C00000
-                    hex = reg_boolean_para(ss(0), hex, 1)
-                    hex = hex Or (cop_sel(ss(1), "") << 11)
-                ElseIf mips = "eret" Then
-                    hex = &H42000018
-                ElseIf mips = "cfc1" Then
-                    hex = &H44400000
-                    hex = reg_boolean_para(ss(0), hex, 1)
-                    hex = hex Or (cop_sel(ss(1), "") << 11)
-                ElseIf mips = "ctc1" Then
-                    hex = &H44C00000
-                    hex = reg_boolean_para(ss(0), hex, 1)
-                    hex = hex Or (cop_sel(ss(1), "") << 11)
-                ElseIf mips = "mfc1" Then
-                    hex = &H44000000
-                    hex = reg_boolean_para(ss(0), hex, 1)
-                    hex = float_sel(ss(1), hex, 2)
-                ElseIf mips = "mtc1" Then
-                    hex = &H44800000
-                    hex = reg_boolean_para(ss(0), hex, 1)
-                    hex = float_sel(ss(1), hex, 2)
-                ElseIf mips = "bc1f" Then
-                    hex = &H45000000
-                    hex = offset_boolean2(str, hex, hex2)
-                ElseIf mips = "bc1t" Then
-                    hex = &H45010000
-                    hex = offset_boolean2(str, hex, hex2)
-                ElseIf mips = "bc1tl" Then
-                    hex = &H45020000
-                    hex = offset_boolean2(str, hex, hex2)
-                ElseIf mips = "bc1tl" Then
-                    hex = &H45030000
-                    hex = offset_boolean2(str, hex, hex2)
-                ElseIf mips = "add.s" Then
-                    hex = &H46000000
-                    hex = float_sel(ss(0), hex, 3)
-                    hex = float_sel(ss(1), hex, 2)
-                    hex = float_sel(ss(2), hex, 1)
-                ElseIf mips = "sub.s" Then
-                    hex = &H46000001
-                    hex = float_sel(ss(0), hex, 3)
-                    hex = float_sel(ss(1), hex, 2)
-                    hex = float_sel(ss(2), hex, 1)
-                ElseIf mips = "mul.s" Then
-                    hex = &H46000002
-                    hex = float_sel(ss(0), hex, 3)
-                    hex = float_sel(ss(1), hex, 2)
-                    hex = float_sel(ss(2), hex, 1)
-                ElseIf mips = "div.s" Then
-                    hex = &H46000003
-                    hex = float_sel(ss(0), hex, 3)
-                    hex = float_sel(ss(1), hex, 2)
-                    hex = float_sel(ss(2), hex, 1)
-                ElseIf mips = "sqrt.s" Then
-                    hex = &H46000004
-                    hex = float_sel(ss(0), hex, 3)
-                    hex = float_sel(ss(1), hex, 2)
-                ElseIf mips = "abs.s" Then
-                    hex = &H46000005
-                    hex = float_sel(ss(0), hex, 3)
-                    hex = float_sel(ss(1), hex, 2)
-                ElseIf mips = "mov.s" Then
-                    hex = &H46000006
-                    hex = float_sel(ss(0), hex, 3)
-                    hex = float_sel(ss(1), hex, 2)
-                ElseIf mips = "neg.s" Then
-                    hex = &H46000007
-                    hex = float_sel(ss(0), hex, 3)
-                    hex = float_sel(ss(1), hex, 2)
-                ElseIf mips = "round.w.s" Then
-                    hex = &H4600000C
-                    hex = float_sel(ss(0), hex, 3)
-                    hex = float_sel(ss(1), hex, 2)
-                ElseIf mips = "trunc.w.s" Then
-                    hex = &H4600000D
-                    hex = float_sel(ss(0), hex, 3)
-                    hex = float_sel(ss(1), hex, 2)
-                ElseIf mips = "ceil.w.s" Then
-                    hex = &H4600000E
-                    hex = float_sel(ss(0), hex, 3)
-                    hex = float_sel(ss(1), hex, 2)
-                ElseIf mips = "floor.w.s" Then
-                    hex = &H4600000F
-                    hex = float_sel(ss(0), hex, 3)
-                    hex = float_sel(ss(1), hex, 2)
-                ElseIf mips = "cvt.s.w" Then
-                    hex = &H46800020
-                    hex = float_sel(ss(0), hex, 3)
-                    hex = float_sel(ss(1), hex, 2)
-                ElseIf mips = "cvt.w.s" Then
-                    hex = &H46000024
-                    hex = float_sel(ss(0), hex, 3)
-                    hex = float_sel(ss(1), hex, 2)
-                ElseIf mips = "c.f.s" Then
-                    hex = &H46000030
-                    hex = float_sel(ss(0), hex, 2)
-                    hex = float_sel(ss(1), hex, 1)
-                ElseIf mips = "c.un.s" Then
-                    hex = &H46000031
-                    hex = float_sel(ss(0), hex, 2)
-                    hex = float_sel(ss(1), hex, 1)
-                ElseIf mips = "c.eq.s" Then
-                    hex = &H46000032
-                    hex = float_sel(ss(0), hex, 2)
-                    hex = float_sel(ss(1), hex, 1)
-                ElseIf mips = "c.ueq.s" Then
-                    hex = &H46000033
-                    hex = float_sel(ss(0), hex, 2)
-                    hex = float_sel(ss(1), hex, 1)
-                ElseIf mips = "c.olt.s" Then
-                    hex = &H46000034
-                    hex = float_sel(ss(0), hex, 2)
-                    hex = float_sel(ss(1), hex, 1)
-                ElseIf mips = "c.ult.s" Then
-                    hex = &H46000035
-                    hex = float_sel(ss(0), hex, 2)
-                    hex = float_sel(ss(1), hex, 1)
-                ElseIf mips = "c.ole.s" Then
-                    hex = &H46000036
-                    hex = float_sel(ss(0), hex, 2)
-                    hex = float_sel(ss(1), hex, 1)
-                ElseIf mips = "c.ule.s" Then
-                    hex = &H46000037
-                    hex = float_sel(ss(0), hex, 2)
-                    hex = float_sel(ss(1), hex, 1)
-                ElseIf mips = "c.sf.s" Then
-                    hex = &H46000038
-                    hex = float_sel(ss(0), hex, 2)
-                    hex = float_sel(ss(1), hex, 1)
-                ElseIf mips = "c.ngle.s" Then
-                    hex = &H46000039
-                    hex = float_sel(ss(0), hex, 2)
-                    hex = float_sel(ss(1), hex, 1)
-                ElseIf mips = "c.seq.s" Then
-                    hex = &H4600003A
-                    hex = float_sel(ss(0), hex, 2)
-                    hex = float_sel(ss(1), hex, 1)
-                ElseIf mips = "c.ngl.s" Then
-                    hex = &H4600003B
-                    hex = float_sel(ss(0), hex, 2)
-                    hex = float_sel(ss(1), hex, 1)
-                ElseIf mips = "c.lt.s" Then
-                    hex = &H4600003C
-                    hex = float_sel(ss(0), hex, 2)
-                    hex = float_sel(ss(1), hex, 1)
-                ElseIf mips = "c.nge.s" Then
-                    hex = &H4600003D
-                    hex = float_sel(ss(0), hex, 2)
-                    hex = float_sel(ss(1), hex, 1)
-                ElseIf mips = "c.le.s" Then
-                    hex = &H4600003E
-                    hex = float_sel(ss(0), hex, 2)
-                    hex = float_sel(ss(1), hex, 1)
-                ElseIf mips = "c.ngt.s" Then
-                    hex = &H4600003F
-                    hex = float_sel(ss(0), hex, 2)
-                    hex = float_sel(ss(1), hex, 1)
-
-                    '0x50
-                ElseIf mips = "beql" Then
-                    hex = &H50000000
-                    hex = reg_boolean_para(ss(0), hex, 0)
-                    hex = reg_boolean_para(ss(1), hex, 1)
-                    hex = offset_boolean2(str, hex, hex2)
-                ElseIf mips = "bnel" Then
-                    hex = &H54000000
-                    hex = reg_boolean_para(ss(0), hex, 0)
-                    hex = reg_boolean_para(ss(1), hex, 1)
-                    hex = offset_boolean2(str, hex, hex2)
-                ElseIf mips = "blezl" Then
-                    hex = &H58000000
-                    hex = reg_boolean_para(str, hex, 0)
-                    hex = offset_boolean2(str, hex, hex2)
-                ElseIf mips = "bgtzl" Then
-                    hex = &H5C000000
-                    hex = reg_boolean_para(str, hex, 0)
-                    hex = offset_boolean2(str, hex, hex2)
-                ElseIf mips = "mfic" Then
-                    hex = &H70000024
-                    hex = reg_boolean_para(ss(0), hex, 1)
-                    hex = valdec_boolean_para(str, hex, 2)
-                ElseIf mips = "mtic" Then
-                    hex = &H70000026
-                    hex = reg_boolean_para(ss(0), hex, 1)
-                    hex = valdec_boolean_para(str, hex, 2)
-                ElseIf mips = "mfdr" Then
-                    hex = &H7000003D
-                    hex = reg_boolean_para(ss(0), hex, 1)
-                    hex = debug_reg(ss(1), hex)
-                ElseIf mips = "mtdr" Then
-                    hex = &H7080003D
-                    hex = reg_boolean_para(ss(0), hex, 1)
-                    hex = debug_reg(ss(1), hex)
-                ElseIf mips = "dbreak" Then
-                    hex = &H7000003F
-                ElseIf mips = "dret" Then
-                    hex = &H7000003E
-                ElseIf mips = "haltl" Then
-                    hex = &H70000000
-                ElseIf mips = "seb" Then
-                    hex = &H7C000420
-                    hex = reg_boolean_para(ss(0), hex, 2)
-                    hex = reg_boolean_para(ss(1), hex, 1)
-                ElseIf mips = "seh" Then
-                    hex = &H7C000620
-                    hex = reg_boolean_para(ss(0), hex, 2)
-                    hex = reg_boolean_para(ss(1), hex, 1)
-                ElseIf mips = "wsbh" Then
-                    hex = &H7C0000A0
-                    hex = reg_boolean_para(ss(0), hex, 2)
-                    hex = reg_boolean_para(ss(1), hex, 1)
-                ElseIf mips = "wsbw" Then
-                    hex = &H7C0000E0
-                    hex = reg_boolean_para(ss(0), hex, 2)
-                    hex = reg_boolean_para(ss(1), hex, 1)
-                ElseIf mips = "bitrev" Then
-                    hex = &H7C000520
-                    hex = reg_boolean_para(ss(0), hex, 2)
-                    hex = reg_boolean_para(ss(1), hex, 1)
-                ElseIf mips = "halt" Then
-                    hex = &H7C000000
-                ElseIf mips = "ext" Then
-                    hex = &H7C000000
-                    hex = reg_boolean_para(ss(0), hex, 1)
-                    hex = reg_boolean_para(ss(1), hex, 0)
-                    hex = valdec_boolean_para(ss(2), hex, 3)
-                    hex = valdec_ext_para(ss(3), hex, 2)
-                ElseIf mips = "ins" Then
-                    hex = &H7C000004
-                    hex = reg_boolean_para(ss(0), hex, 1)
-                    hex = reg_boolean_para(ss(1), hex, 0)
-                    hex = valdec_boolean_para(ss(2), hex, 3)
-                    hex = valdec_ins_para(ss(3), hex, 2)
-
-                    '0x80
-                ElseIf mips = "lb" Then
-                    hex = &H80000000
-                    hex = reg_boolean2(str, hex, 0)
-                    hex = offset_boolean3(str, hex)
-                ElseIf mips = "lh" Then
-                    hex = &H84000000
-                    hex = reg_boolean2(str, hex, 0)
-                    hex = offset_boolean3(str, hex)
-                ElseIf mips = "lw" Then
-                    hex = &H8C000000
-                    hex = reg_boolean2(str, hex, 0)
-                    hex = offset_boolean3(str, hex)
-                ElseIf mips = "lbu" Then
-                    hex = &H90000000
-                    hex = reg_boolean2(str, hex, 0)
-                    hex = offset_boolean3(str, hex)
-                ElseIf mips = "lhu" Then
-                    hex = &H94000000
-                    hex = reg_boolean2(str, hex, 0)
-                    hex = offset_boolean3(str, hex)
-                ElseIf mips = "lwu" Then
-                    hex = &H9C000000
-                    hex = reg_boolean2(str, hex, 0)
-                    hex = offset_boolean3(str, hex)
-                ElseIf mips = "lwl" Then
-                    hex = &H88000000
-                    hex = reg_boolean2(str, hex, 0)
-                    hex = offset_boolean3(str, hex)
-                ElseIf mips = "lwr" Then
-                    hex = &H98000000
-                    hex = reg_boolean2(str, hex, 0)
-                    hex = offset_boolean3(str, hex)
-
-                    '0xA0
-                ElseIf mips = "sb" Then
-                    hex = &HA0000000
-                    hex = reg_boolean2(str, hex, 0)
-                    hex = offset_boolean3(str, hex)
-                ElseIf mips = "sh" Then
-                    hex = &HA4000000
-                    hex = reg_boolean2(str, hex, 0)
-                    hex = offset_boolean3(str, hex)
-                ElseIf mips = "sw" Then
-                    hex = &HAC000000
-                    hex = reg_boolean2(str, hex, 0)
-                    hex = offset_boolean3(str, hex)
-                ElseIf mips = "swl" Then
-                    hex = &HA8000000
-                    hex = reg_boolean2(str, hex, 0)
-                    hex = offset_boolean3(str, hex)
-                ElseIf mips = "swr" Then
-                    hex = &HB8000000
-                    hex = reg_boolean2(str, hex, 0)
-                    hex = offset_boolean3(str, hex)
-                    '0xc0
-                ElseIf mips = "ll" Then
-                    hex = &HC0000000
-                    hex = reg_boolean_para(ss(0), hex, 1)
-                    hex = reg_boolean_para(reg_boolean_lbsb(ss(1)), hex, 0)
-                    hex = offset_boolean3(str, hex)
-                ElseIf mips = "lwc1" Then
-                    hex = &HC4000000
-                    hex = float_sel(ss(0), hex, 1)
-                    hex = reg_boolean_para(reg_boolean_lbsb(ss(1)), hex, 0)
-                    hex = offset_boolean3(str, hex)
-
-                    '0xe0
-                ElseIf mips = "sc" Then
-                    hex = &HE0000000
-                    hex = reg_boolean_para(ss(0), hex, 1)
-                    hex = reg_boolean_para(reg_boolean_lbsb(ss(1)), hex, 0)
-                    hex = offset_boolean3(str, hex)
-                ElseIf mips = "swc1" Then
-                    hex = &HE4000000
-                    hex = float_sel(ss(0), hex, 1)
-                    hex = reg_boolean_para(reg_boolean_lbsb(ss(1)), hex, 0)
-                    hex = offset_boolean3(str, hex)
-
-                ElseIf mips = "cache" Then
-                    hex = &HBC000000
-                    hex = valdec_boolean_para(ss(0), hex, 1)
-                    hex = reg_boolean_para(reg_boolean_lbsb(ss(1)), hex, 0)
-                    hex = offset_boolean3(str, hex)
-
-                    'vfpu
-                ElseIf mips = "bvf" Then
-                    '"bvf", "0x49000000", "0xFFE30000", "%Zc,%O", _
-                    hex = &H49000000
-                    hex = Zc(ss(0), hex)
-                    hex = offset_boolean2(str, hex, hex2)
-                ElseIf mips = "bvfl" Then
-                    '"bvfl", "0x49020000", "0xFFE30000", "%Zc,%O", _
-                    hex = &H49020000
-                    hex = Zc(ss(0), hex)
-                    hex = offset_boolean2(str, hex, hex2)
-                ElseIf mips = "bvt" Then
-                    '"bvt", "0x49010000", "0xFFE30000", "%Zc,%O", _
-                    hex = &H49010000
-                    hex = Zc(ss(0), hex)
-                    hex = offset_boolean2(str, hex, hex2)
-                ElseIf mips = "bvtl" Then
-                    '"bvtl", "0x49030000", "0xFFE30000", "%Zc,%O", _
-                    hex = &H49030000
-                    hex = Zc(ss(0), hex)
-                    hex = offset_boolean2(str, hex, hex2)
-                ElseIf mips = "lv.q" Then
-                    '"lv.q", "0xD8000000", "0xFC000002", "%Xq,%Y", _
-                    hex = &HD8000000
-                    hex = Xq(ss(0), hex)
-                    hex = Y(str, hex)
-                    hex = reg_boolean_para(reg_boolean_lbsb(ss(1)), hex, 0)
-                ElseIf mips = "lv.s" Then
-                    '"lv.s", "0xC8000000", "0xFC000000", "%Xs,%Y", _
-                    hex = &HC8000000
-                    hex = Xs(ss(0), hex)
-                    hex = Y(str, hex)
-                    hex = reg_boolean_para(reg_boolean_lbsb(ss(1)), hex, 0)
-                ElseIf mips = "lvl.q" Then
-                    '"lvl.q", "0xD4000000", "0xFC000002", "%Xq,%Y", _
-                    hex = &HD4000000
-                    hex = Xq(ss(0), hex)
-                    hex = Y(str, hex)
-                    hex = reg_boolean_para(reg_boolean_lbsb(ss(1)), hex, 0)
-                ElseIf mips = "lvr.q" Then
-                    '"lvr.q", "0xD4000002", "0xFC000002", "%Xq,%Y", _
-                    hex = &HD4000002
-                    hex = Xq(ss(0), hex)
-                    hex = Y(str, hex)
-                    hex = reg_boolean_para(reg_boolean_lbsb(ss(1)), hex, 0)
-                ElseIf mips = "sv.q" Then
-                    '"sv.q", "0xF8000000", "0xFC000002", "%Xq,%Y", _
-                    hex = &HF8000000
-                    hex = Xq(ss(0), hex)
-                    hex = Y(str, hex)
-                    hex = reg_boolean_para(reg_boolean_lbsb(ss(1)), hex, 0)
-                ElseIf mips = "sv.s" Then
-                    '"sv.s", "0xE8000000", "0xFC000000", "%Xs,%Y", _
-                    hex = &HE8000000
-                    hex = Xs(ss(0), hex)
-                    hex = Y(str, hex)
-                    hex = reg_boolean_para(reg_boolean_lbsb(ss(1)), hex, 0)
-                ElseIf mips = "svl.q" Then
-                    '"svl.q", "0xF4000000", "0xFC000002", "%Xq,%Y", _
-                    hex = &HF4000000
-                    hex = Xq(ss(0), hex)
-                    hex = Y(str, hex)
-                    hex = reg_boolean_para(reg_boolean_lbsb(ss(1)), hex, 0)
-                ElseIf mips = "svr.q" Then
-                    '"svr.q", "0xF4000002", "0xFC000002", "%Xq,%Y", _
-                    hex = &HF4000002
-                    hex = Xq(ss(0), hex)
-                    hex = Y(str, hex)
-                    hex = reg_boolean_para(reg_boolean_lbsb(ss(1)), hex, 0)
-
-                ElseIf mips = "mfv" Then
-                    '"mfv", "0x48600000", "0xFFE0FF80", "%t,%zs", _
-                    hex = &H48600000
-                    hex = reg_boolean_para(ss(0), hex, 1)
-                    hex = xyzs(ss(1), hex, 0)
-
-                ElseIf mips = "mfvc" Then
-                    '"mfvc", "0x48600000", "0xFFE0FF00", "%t,%2d", _
-                    hex = &H48600080
-                    hex = reg_boolean_para(ss(0), hex, 1)
-                    hex = cop2_parse(ss(1), hex)
-
-                ElseIf mips = "mtv" Then
-                    '"mtv", "0x48E00000", "0xFFE0FF80", "%t,%zs", _
-                    hex = &H48E00000
-                    hex = reg_boolean_para(ss(0), hex, 1)
-                    hex = xyzs(ss(1), hex, 0)
-
-                ElseIf mips = "mtvc" Then
-                    '"mtvc", "0x48E00000", "0xFFE0FF00", "%t,%2d", _
-                    hex = &H48E00080
-                    hex = reg_boolean_para(ss(0), hex, 1)
-                    hex = cop2_parse(ss(1), hex)
-
-                ElseIf mips = "vabs.p" Then
-                    '"vabs.p", "0xD0010080", "0xFFFF8080", "%zp,%yp", _
-                    hex = &HD0010080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                ElseIf mips = "vabs.t" Then
-                    '"vabs.t", "0xD0018000", "0xFFFF8080", "%zt,%yt", _
-                    hex = &HD0018000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-                ElseIf mips = "vabs.s" Then
-                    '"vabs.s", "0xD0010000", "0xFFFF8080", "%zs,%ys", _
-                    hex = &HD0010000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                ElseIf mips = "vabs.q" Then
-                    '"vabs.q", "0xD0018080", "0xFFFF8080", "%zq,%yq", _
-                    hex = &HD0018080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                ElseIf mips = "vadd.q" Then
-                    '"vadd.q", "0x60008080", "0xFF808080", "%zq,%yq,%xq", _
-                    hex = &H60008080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                    hex = xyzq(ss(2), hex, 2)
-                ElseIf mips = "vadd.p" Then
-                    '"vadd.p", "0x60000080", "0xFF808080", "%zp,%yp,%xp", _
-                    hex = &H60000080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                    hex = xyzp(ss(2), hex, 2)
-                ElseIf mips = "vadd.s" Then
-                    '"vadd.s", "0x60000000", "0xFF808080", "%zs,%ys,%xs", _
-                    hex = &H60000000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                    hex = xyzs(ss(2), hex, 2)
-                ElseIf mips = "vadd.t" Then
-                    '"vadd.t", "0x60008000", "0xFF808080", "%zt,%yt,%xt", _
-                    hex = &H60008000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-                    hex = xyzt(ss(2), hex, 2)
-
-                ElseIf mips = "vasin.p" Then
-                    '"vasin.p", "0xD0170080", "0xFFFF8080", "%zp,%yp", _
-                    hex = &HD0170080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                ElseIf mips = "vasin.q" Then
-                    '"vasin.q", "0xD0178080", "0xFFFF8080", "%zq,%yq", _
-                    hex = &HD0178080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                ElseIf mips = "vasin.s" Then
-                    '"vasin.s", "0xD0170000", "0xFFFF8080", "%zs,%ys", _
-                    hex = &HD0170000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                ElseIf mips = "vasin.t" Then
-                    '"vasin.t", "0xD0178000", "0xFFFF8080", "%zt,%yt", _
-                    hex = &HD0178000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-
-                ElseIf mips = "vnasin.p" Then
-                    '"vnasin.p", "0xD01f0080", "0xFFFF8080", "%zp,%yp", _
-                    hex = &HD01F0080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                ElseIf mips = "vnasin.q" Then
-                    '"vnasin.q", "0xD01f8080", "0xFFFF8080", "%zq,%yq", _
-                    hex = &HD01F8080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                ElseIf mips = "vnasin.s" Then
-                    '"vnasin.s", "0xD01f0000", "0xFFFF8080", "%zs,%ys", _
-                    hex = &HD01F0000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                ElseIf mips = "vnasin.t" Then
-                    '"vnasin.t", "0xD01f8000", "0xFFFF8080", "%zt,%yt", _
-                    hex = &HD01F8000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-
-                ElseIf mips = "vavg.p" Then
-                    '"vavg.p", "0xD0470080", "0xFFFF8080", "%zp,%yp", _
-                    hex = &HD0470080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                ElseIf mips = "vavg.q" Then
-                    '"vavg.q", "0xD0478080", "0xFFFF8080", "%zq,%yq", _
-                    hex = &HD0478080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                ElseIf mips = "vavg.t" Then
-                    '"vavg.t", "0xD0478000", "0xFFFF8080", "%zt,%yt", _
-                    hex = &HD0478000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-
-                ElseIf mips = "vbfy1.p" Then
-                    '"vbfy1.p", "0xD0420080", "0xFFFF8080", "%zp,%yp", _
-                    hex = &HD0420080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                ElseIf mips = "vbfy1.q" Then
-                    '"vbfy1.q", "0xD0428080", "0xFFFF8080", "%zq,%yq", _
-                    hex = &HD0428080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                ElseIf mips = "vbfy2.q" Then
-                    '"vbfy2.q", "0xD0438080", "0xFFFF8080", "%zq,%yq", _
-                    hex = &HD0438080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-
-                ElseIf mips = "vcmp.p" Then
-                    '"vcmp.p", "0x6C000080", "0xFF8080F0", "%Zn,%yp,%xp", _
-                    hex = &H6C000080
-                    hex = Zn(ss(0), hex)
-                    If ss.Length >= 2 Then
-                        hex = xyzp(ss(1), hex, 1)
-                    End If
-                    If ss.Length >= 3 Then
-                        hex = xyzp(ss(2), hex, 2)
-                    End If
-                ElseIf mips = "vcmp.q" Then
-                    '"vcmp.q", "0x6C008080", "0xFF8080F0", "%Zn,%yq,%xq", _
-                    hex = &H6C008080
-                    hex = Zn(ss(0), hex)
-                    If ss.Length >= 2 Then
-                        hex = xyzq(ss(1), hex, 1)
-                    End If
-                    If ss.Length >= 3 Then
-                        hex = xyzq(ss(2), hex, 2)
-                    End If
-                ElseIf mips = "vcmp.s" Then
-                    '"vcmp.s", "0x6C000000", "0xFF8080F0", "%Zn,%ys,%xs", _
-                    hex = &H6C000000
-                    hex = Zn(ss(0), hex)
-                    If ss.Length >= 2 Then
-                        hex = xyzs(ss(1), hex, 1)
-                    End If
-                    If ss.Length >= 3 Then
-                        hex = xyzs(ss(2), hex, 2)
-                    End If
-                ElseIf mips = "vcmp.t" Then
-                    '"vcmp.t", "0x6C008000", "0xFF8080F0", "%Zn,%yt,%xt", _
-                    hex = &H6C008000
-                    hex = Zn(ss(0), hex)
-                    If ss.Length >= 2 Then
-                        hex = xyzt(ss(1), hex, 1)
-                    End If
-                    If ss.Length >= 3 Then
-                        hex = xyzt(ss(2), hex, 2)
-                    End If
-
-                ElseIf mips = "vcos.p" Then
-                    '"vcos.p", "0xD0130080", "0xFFFF8080", "%zp,%yp", _
-                    hex = &HD0130080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                ElseIf mips = "vcos.q" Then
-                    '"vcos.q", "0xD0138080", "0xFFFF8080", "%zq,%yq", _
-                    hex = &HD0138080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                ElseIf mips = "vcos.s" Then
-                    '"vcos.s", "0xD0130000", "0xFFFF8080", "%zs,%ys", _
-                    hex = &HD0130000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                ElseIf mips = "vcos.t" Then
-                    '"vcos.t", "0xD0138000", "0xFFFF8080", "%zt,%yt", _
-                    hex = &HD0138000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-
-                ElseIf mips = "vcrs.t" Then
-                    '"vcrs.t", "0x66808000", "0xFF808080", "%zt,%yt,%xt", _
-                    hex = &H66808000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-                    hex = xyzt(ss(2), hex, 2)
-                ElseIf mips = "vcrsp.t" Then
-                    '"vcrsp.t", "0xF2808000", "0xFF808080", "%zt,%yt,%xt", _
-                    hex = &HF2808000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-                    hex = xyzt(ss(2), hex, 2)
-                ElseIf mips = "vdet.p" Then
-                    '"vdet.p", "0x67000080", "0xFF808080", "%zs,%yp,%xp", _
-                    hex = &H67000080
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                    hex = xyzp(ss(2), hex, 2)
-
-                ElseIf mips = "vdiv.p" Then
-                    '"vdiv.p", "0x63800080", "0xFF808080", "%zp,%yp,%xp", _
-                    hex = &H63800080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                    hex = xyzp(ss(2), hex, 2)
-                ElseIf mips = "vdiv.q" Then
-                    '"vdiv.q", "0x63808080", "0xFF808080", "%zq,%yq,%xq", _
-                    hex = &H63808080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                    hex = xyzq(ss(2), hex, 2)
-                ElseIf mips = "vdiv.s" Then
-                    '"vdiv.s", "0x63800000", "0xFF808080", "%zs,%ys,%xs", _
-                    hex = &H63800000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                    hex = xyzs(ss(2), hex, 2)
-                ElseIf mips = "vdiv.t" Then
-                    '"vdiv.t", "0x63808000", "0xFF808080", "%zt,%yt,%xt", _
-                    hex = &H63808000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-                    hex = xyzt(ss(2), hex, 2)
-
-                ElseIf mips = "vdot.p" Then
-                    '"vdot.p", "0x64800080", "0xFF808080", "%zs,%yp,%xp", _
-                    hex = &H64800080
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                    hex = xyzp(ss(2), hex, 2)
-                ElseIf mips = "vdot.q" Then
-                    '"vdot.q", "0x64808080", "0xFF808080", "%zs,%yq,%xq", _
-                    hex = &H64808080
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                    hex = xyzq(ss(2), hex, 2)
-                ElseIf mips = "vdot.t" Then
-                    '"vdot.t", "0x64808000", "0xFF808080", "%zs,%yt,%xt", _
-                    hex = &H64808000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-                    hex = xyzt(ss(2), hex, 2)
-
-                ElseIf mips = "vexp2.p" Then
-                    '"vexp2.p", "0xD0140080", "0xFFFF8080", "%zp,%yp", _
-                    hex = &HD0140080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                ElseIf mips = "vexp2.q" Then
-                    '"vexp2.q", "0xD0148080", "0xFFFF8080", "%zq,%yq", _
-                    hex = &HD0148080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                ElseIf mips = "vexp2.s" Then
-                    '"vexp2.s", "0xD0140000", "0xFFFF8080", "%zs,%ys", _
-                    hex = &HD0140000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                ElseIf mips = "vexp2.t" Then
-                    '"vexp2.t", "0xD0148000", "0xFFFF8080", "%zt,%yt", _
-                    hex = &HD0148000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-
-                ElseIf mips = "vf2h.p" Then
-                    '"vf2h.p", "0xD0320080", "0xFFFF8080", "%zs,%yp", _
-                    hex = &HD0320080
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                ElseIf mips = "vf2h.q" Then
-                    '"vf2h.q", "0xD0328080", "0xFFFF8080", "%zp,%yq", _
-                    hex = &HD0328080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-
-                ElseIf mips = "vfad.p" Then
-                    '"vfad.p", "0xD0460080", "0xFFFF8080", "%zp,%yp", _
-                    hex = &HD0460080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                ElseIf mips = "vfad.q" Then
-                    '"vfad.q", "0xD0468080", "0xFFFF8080", "%zq,%yq", _
-                    hex = &HD0468080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                ElseIf mips = "vfad.t" Then
-                    '"vfad.t", "0xD0468000", "0xFFFF8080", "%zt,%yt", _
-                    hex = &HD0468000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-                ElseIf mips = "vfim.s" Then
-                    '"vfim.s", "0xDF800000", "0xFF800000", "%xs,%vh", _
-                    hex = &HDF800000
-                    hex = xyzs(ss(0), hex, 2)
-                    If str.Contains("hf") Then
+                        '0x20 add/boolean
+                    Case "addi"
+                        hex = &H20000000
+                        hex = reg_boolean2(str, hex, 0)
                         hex = valhex_boolean(str, hex)
-                    ElseIf str.Contains("+inf") Then
-                        hex = hex Or &H7C00
-                    ElseIf str.Contains("-inf") Then
-                        hex = hex Or &HFC00
-                    ElseIf str.Contains("+nan") Then
-                        hex = hex Or &H7FFF
-                    ElseIf str.Contains("-nan") Then
-                        hex = hex Or &HFFFF
-                    End If
-                ElseIf mips = "viim.s" Then
-                    '"viim.s", "0xDF000000", "0xFF800000", "%xs,%vi", _
-                    hex = &HDF000000
-                    hex = xyzs(ss(0), hex, 2)
-                    hex = valhex_boolean(str, hex)
-                ElseIf mips = "vflush" Then
-                    '"vflush", "0xFFFF040D", "0xFFFFFFFF", "", _
-                    hex = &HFFFF040D
+                    Case "addiu"
+                        hex = &H24000000
+                        hex = reg_boolean2(str, hex, 0)
+                        hex = valhex_boolean(str, hex)
+                    Case "li"
+                        hex = &H24000000
+                        hex = reg_boolean_para(ss(0), hex, 1)
+                        hex = valhex_boolean(str, hex)
+                    Case "slti"
+                        hex = &H28000000
+                        hex = reg_boolean2(str, hex, 0)
+                        hex = valhex_boolean(str, hex)
+                    Case "sltiu"
+                        hex = &H2C000000
+                        hex = reg_boolean2(str, hex, 0)
+                        hex = valhex_boolean(str, hex)
+                    Case "andi"
+                        hex = &H30000000
+                        hex = reg_boolean2(str, hex, 0)
+                        hex = valhex_boolean(str, hex)
+                    Case "ori"
+                        hex = &H34000000
+                        hex = reg_boolean2(str, hex, 0)
+                        hex = valhex_boolean(str, hex)
+                    Case "xori"
+                        hex = &H38000000
+                        hex = reg_boolean2(str, hex, 0)
+                        hex = valhex_boolean(str, hex)
+                    Case "lui"
+                        hex = &H3C000000
+                        hex = reg_boolean_para(str, hex, 1)
+                        hex = valhex_boolean(str, hex)
 
-                ElseIf mips = "vh2f.p" Then
-                    '"vh2f.p","0xD0330080","0xFFFF8080","%zq,%yp",
-                    hex = &HD0330080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                ElseIf mips = "vh2f.s" Then
-                    '"vh2f.s","0xD0330000","0xFFFF8080","%zp,%ys",
-                    hex = &HD0330000
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                ElseIf mips = "vhdp.p" Then
-                    '"vhdp.p","0x66000080","0xFF808080","%zs,%yp,%xp",
-                    hex = &H66000080
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                    hex = xyzp(ss(2), hex, 2)
-                ElseIf mips = "vhdp.q" Then
-                    '"vhdp.q","0x66008080","0xFF808080","%zs,%yq,%xq",
-                    hex = &H66008080
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                    hex = xyzq(ss(2), hex, 2)
-                ElseIf mips = "vhdp.t" Then
-                    '"vhdp.t","0x66008000","0xFF808080","%zs,%yt,%xt",
-                    hex = &H66008000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-                    hex = xyzt(ss(2), hex, 2)
-                ElseIf mips = "vi2c.q" Then
-                    '"vi2c.q","0xD03D8080","0xFFFF8080","%zs,%yq",
-                    hex = &HD03D8080
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                ElseIf mips = "vi2s.p" Then
-                    '"vi2s.p","0xD03F0080","0xFFFF8080","%zs,%yp",
-                    hex = &HD03F0080
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                ElseIf mips = "vi2s.q" Then
-                    '"vi2s.q","0xD03F8080","0xFFFF8080","%zp,%yq",
-                    hex = &HD03F8080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                ElseIf mips = "vi2uc.q" Then
-                    '"vi2uc.q","0xD03C8080","0xFFFF8080","%zs,%yq",
-                    hex = &HD03C8080
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                ElseIf mips = "vi2us.p" Then
-                    '"vi2us.p","0xD03E0080","0xFFFF8080","%zs,%yq",
-                    hex = &HD03E0080
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                ElseIf mips = "vi2us.q" Then
-                    '"vi2us.q","0xD03E8080","0xFFFF8080","%zp,%yq",
-                    hex = &HD03E8080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                ElseIf mips = "vidt.p" Then
-                    '"vidt.p","0xD0030080","0xFFFFFF80","%zp",
-                    hex = &HD0030080
-                    hex = xyzp(ss(0), hex, 0)
-                ElseIf mips = "vidt.q" Then
-                    '"vidt.q","0xD0038080","0xFFFFFF80","%zq",
-                    hex = &HD0038080
-                    hex = xyzq(ss(0), hex, 0)
-                ElseIf mips = "vlgb.s" Then
-                    '"vlgb.s","0xD0370000","0xFFFF8080","%zs,%ys",
-                    hex = &HD0370000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                ElseIf mips = "vlog2.p" Then
-                    '"vlog2.p","0xD0150080","0xFFFF8080","%zp,%yp",
-                    hex = &HD0150080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                ElseIf mips = "vlog2.q" Then
-                    '"vlog2.q","0xD0158080","0xFFFF8080","%zq,%yq",
-                    hex = &HD0158080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                ElseIf mips = "vlog2.s" Then
-                    '"vlog2.s","0xD0150000","0xFFFF8080","%zs,%ys",
-                    hex = &HD0150000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                ElseIf mips = "vlog2.t" Then
-                    '"vlog2.t","0xD0158000","0xFFFF8080","%zt,%yt",
-                    hex = &HD0158000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
+                        '0x40 FPU
+                    Case "mfc0"
+                        hex = &H40000000
+                        hex = reg_boolean_para(ss(0), hex, 1)
+                        hex = hex Or (cop_sel(ss(1), "COP0") << 11)
+                    Case "mtc0"
+                        hex = &H40800000
+                        hex = reg_boolean_para(ss(0), hex, 1)
+                        hex = hex Or (cop_sel(ss(1), "COP0") << 11)
+                    Case "cfc0"
+                        hex = &H40400000
+                        hex = reg_boolean_para(ss(0), hex, 1)
+                        hex = hex Or (cop_sel(ss(1), "") << 11)
+                    Case "ctc0"
+                        hex = &H40C00000
+                        hex = reg_boolean_para(ss(0), hex, 1)
+                        hex = hex Or (cop_sel(ss(1), "") << 11)
+                    Case "eret"
+                        hex = &H42000018
+                    Case "cfc1"
+                        hex = &H44400000
+                        hex = reg_boolean_para(ss(0), hex, 1)
+                        hex = hex Or (cop_sel(ss(1), "") << 11)
+                    Case "ctc1"
+                        hex = &H44C00000
+                        hex = reg_boolean_para(ss(0), hex, 1)
+                        hex = hex Or (cop_sel(ss(1), "") << 11)
+                    Case "mfc1"
+                        hex = &H44000000
+                        hex = reg_boolean_para(ss(0), hex, 1)
+                        hex = float_sel(ss(1), hex, 2)
+                    Case "mtc1"
+                        hex = &H44800000
+                        hex = reg_boolean_para(ss(0), hex, 1)
+                        hex = float_sel(ss(1), hex, 2)
+                    Case "bc1f"
+                        hex = &H45000000
+                        hex = offset_boolean2(str, hex, hex2)
+                    Case "bc1t"
+                        hex = &H45010000
+                        hex = offset_boolean2(str, hex, hex2)
+                    Case "bc1tl"
+                        hex = &H45020000
+                        hex = offset_boolean2(str, hex, hex2)
+                    Case "bc1tl"
+                        hex = &H45030000
+                        hex = offset_boolean2(str, hex, hex2)
+                    Case "add.s"
+                        hex = &H46000000
+                        hex = float_sel(ss(0), hex, 3)
+                        hex = float_sel(ss(1), hex, 2)
+                        hex = float_sel(ss(2), hex, 1)
+                    Case "sub.s"
+                        hex = &H46000001
+                        hex = float_sel(ss(0), hex, 3)
+                        hex = float_sel(ss(1), hex, 2)
+                        hex = float_sel(ss(2), hex, 1)
+                    Case "mul.s"
+                        hex = &H46000002
+                        hex = float_sel(ss(0), hex, 3)
+                        hex = float_sel(ss(1), hex, 2)
+                        hex = float_sel(ss(2), hex, 1)
+                    Case "div.s"
+                        hex = &H46000003
+                        hex = float_sel(ss(0), hex, 3)
+                        hex = float_sel(ss(1), hex, 2)
+                        hex = float_sel(ss(2), hex, 1)
+                    Case "sqrt.s"
+                        hex = &H46000004
+                        hex = float_sel(ss(0), hex, 3)
+                        hex = float_sel(ss(1), hex, 2)
+                    Case "abs.s"
+                        hex = &H46000005
+                        hex = float_sel(ss(0), hex, 3)
+                        hex = float_sel(ss(1), hex, 2)
+                    Case "mov.s"
+                        hex = &H46000006
+                        hex = float_sel(ss(0), hex, 3)
+                        hex = float_sel(ss(1), hex, 2)
+                    Case "neg.s"
+                        hex = &H46000007
+                        hex = float_sel(ss(0), hex, 3)
+                        hex = float_sel(ss(1), hex, 2)
+                    Case "round.w.s"
+                        hex = &H4600000C
+                        hex = float_sel(ss(0), hex, 3)
+                        hex = float_sel(ss(1), hex, 2)
+                    Case "trunc.w.s"
+                        hex = &H4600000D
+                        hex = float_sel(ss(0), hex, 3)
+                        hex = float_sel(ss(1), hex, 2)
+                    Case "ceil.w.s"
+                        hex = &H4600000E
+                        hex = float_sel(ss(0), hex, 3)
+                        hex = float_sel(ss(1), hex, 2)
+                    Case "floor.w.s"
+                        hex = &H4600000F
+                        hex = float_sel(ss(0), hex, 3)
+                        hex = float_sel(ss(1), hex, 2)
+                    Case "cvt.s.w"
+                        hex = &H46800020
+                        hex = float_sel(ss(0), hex, 3)
+                        hex = float_sel(ss(1), hex, 2)
+                    Case "cvt.w.s"
+                        hex = &H46000024
+                        hex = float_sel(ss(0), hex, 3)
+                        hex = float_sel(ss(1), hex, 2)
+                    Case "c.f.s"
+                        hex = &H46000030
+                        hex = float_sel(ss(0), hex, 2)
+                        hex = float_sel(ss(1), hex, 1)
+                    Case "c.un.s"
+                        hex = &H46000031
+                        hex = float_sel(ss(0), hex, 2)
+                        hex = float_sel(ss(1), hex, 1)
+                    Case "c.eq.s"
+                        hex = &H46000032
+                        hex = float_sel(ss(0), hex, 2)
+                        hex = float_sel(ss(1), hex, 1)
+                    Case "c.ueq.s"
+                        hex = &H46000033
+                        hex = float_sel(ss(0), hex, 2)
+                        hex = float_sel(ss(1), hex, 1)
+                    Case "c.olt.s"
+                        hex = &H46000034
+                        hex = float_sel(ss(0), hex, 2)
+                        hex = float_sel(ss(1), hex, 1)
+                    Case "c.ult.s"
+                        hex = &H46000035
+                        hex = float_sel(ss(0), hex, 2)
+                        hex = float_sel(ss(1), hex, 1)
+                    Case "c.ole.s"
+                        hex = &H46000036
+                        hex = float_sel(ss(0), hex, 2)
+                        hex = float_sel(ss(1), hex, 1)
+                    Case "c.ule.s"
+                        hex = &H46000037
+                        hex = float_sel(ss(0), hex, 2)
+                        hex = float_sel(ss(1), hex, 1)
+                    Case "c.sf.s"
+                        hex = &H46000038
+                        hex = float_sel(ss(0), hex, 2)
+                        hex = float_sel(ss(1), hex, 1)
+                    Case "c.ngle.s"
+                        hex = &H46000039
+                        hex = float_sel(ss(0), hex, 2)
+                        hex = float_sel(ss(1), hex, 1)
+                    Case "c.seq.s"
+                        hex = &H4600003A
+                        hex = float_sel(ss(0), hex, 2)
+                        hex = float_sel(ss(1), hex, 1)
+                    Case "c.ngl.s"
+                        hex = &H4600003B
+                        hex = float_sel(ss(0), hex, 2)
+                        hex = float_sel(ss(1), hex, 1)
+                    Case "c.lt.s"
+                        hex = &H4600003C
+                        hex = float_sel(ss(0), hex, 2)
+                        hex = float_sel(ss(1), hex, 1)
+                    Case "c.nge.s"
+                        hex = &H4600003D
+                        hex = float_sel(ss(0), hex, 2)
+                        hex = float_sel(ss(1), hex, 1)
+                    Case "c.le.s"
+                        hex = &H4600003E
+                        hex = float_sel(ss(0), hex, 2)
+                        hex = float_sel(ss(1), hex, 1)
+                    Case "c.ngt.s"
+                        hex = &H4600003F
+                        hex = float_sel(ss(0), hex, 2)
+                        hex = float_sel(ss(1), hex, 1)
 
-                ElseIf mips = "vnlog2.p" Then
-                    '"vnlog2.p","0xD01D0080","0xFFFF8080","%zp,%yp",
-                    hex = &HD01D0080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                ElseIf mips = "vnlog2.q" Then
-                    '"vnlog2.q","0xD01D8080","0xFFFF8080","%zq,%yq",
-                    hex = &HD01D8080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                ElseIf mips = "vnlog2.s" Then
-                    '"vnlog2.s","0xD01D0000","0xFFFF8080","%zs,%ys",
-                    hex = &HD01D0000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                ElseIf mips = "vnlog2.t" Then
-                    '"vnlog2.t","0xD01D8000","0xFFFF8080","%zt,%yt",
-                    hex = &HD01D8000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-                ElseIf mips = "vmax.p" Then
-                    '"vmax.p","0x6D800080","0xFF808080","%zp,%yp,%xp",
-                    hex = &H6D800080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                    hex = xyzp(ss(2), hex, 2)
-                ElseIf mips = "vmax.q" Then
-                    '"vmax.q","0x6D808080","0xFF808080","%zq,%yq,%xq",
-                    hex = &H6D808080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                    hex = xyzq(ss(2), hex, 2)
-                ElseIf mips = "vmax.s" Then
-                    '"vmax.s","0x6D800000","0xFF808080","%zs,%ys,%xs",
-                    hex = &H6D800000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                    hex = xyzs(ss(2), hex, 2)
-                ElseIf mips = "vmax.t" Then
-                    '"vmax.t","0x6D808000","0xFF808080","%zt,%yt,%xt",
-                    hex = &H6D808000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-                    hex = xyzt(ss(2), hex, 2)
-                ElseIf mips = "vmin.p" Then
-                    '"vmin.p","0x6D000080","0xFF808080","%zp,%yp,%xp",
-                    hex = &H6D000080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                    hex = xyzp(ss(2), hex, 2)
-                ElseIf mips = "vmin.q" Then
-                    '"vmin.q","0x6D008080","0xFF808080","%zq,%yq,%xq",
-                    hex = &H6D008080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                    hex = xyzq(ss(2), hex, 2)
-                ElseIf mips = "vmin.s" Then
-                    '"vmin.s","0x6D000000","0xFF808080","%zs,%ys,%xs",
-                    hex = &H6D000000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                    hex = xyzs(ss(2), hex, 2)
-                ElseIf mips = "vmin.t" Then
-                    '"vmin.t","0x6D008000","0xFF808080","%zt,%yt,%xt",
-                    hex = &H6D008000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-                    hex = xyzt(ss(2), hex, 2)
-                ElseIf mips = "vmone.p" Then
-                    '"vmone.p","0xF3870080","0xFFFFFF80","%zp",
-                    hex = &HF3870080
-                    hex = xyzp(ss(0), hex, 0)
-                ElseIf mips = "vmone.q" Then
-                    '"vmone.q","0xF3878080","0xFFFFFF80","%zq",
-                    hex = &HF3878080
-                    hex = xyzq(ss(0), hex, 0)
-                ElseIf mips = "vmone.t" Then
-                    '"vmone.t","0xF3878000","0xFFFFFF80","%zt",
-                    hex = &HF3878000
-                    hex = xyzt(ss(0), hex, 0)
-                ElseIf mips = "vmov.p" Then
-                    '"vmov.p","0xD0000080","0xFFFF8080","%zp,%yp",
-                    hex = &HD0000080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                ElseIf mips = "vmov.q" Then
-                    '"vmov.q","0xD0008080","0xFFFF8080","%zq,%yq",
-                    hex = &HD0008080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                ElseIf mips = "vmov.s" Then
-                    '"vmov.s","0xD0000000","0xFFFF8080","%zs,%ys",
-                    hex = &HD0000000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                ElseIf mips = "vmov.t" Then
-                    '"vmov.t","0xD0008000","0xFFFF8080","%zt,%yt",
-                    hex = &HD0008000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-                ElseIf mips = "vmul.p" Then
-                    '"vmul.p","0x64000080","0xFF808080","%zp,%yp,%xp",
-                    hex = &H64000080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                    hex = xyzp(ss(2), hex, 2)
-                ElseIf mips = "vmul.q" Then
-                    '"vmul.q","0x64008080","0xFF808080","%zq,%yq,%xq",
-                    hex = &H64008080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                    hex = xyzq(ss(2), hex, 2)
-                ElseIf mips = "vmul.s" Then
-                    '"vmul.s","0x64000000","0xFF808080","%zs,%ys,%xs",
-                    hex = &H64000000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                    hex = xyzs(ss(2), hex, 2)
-                ElseIf mips = "vmul.t" Then
-                    '"vmul.t","0x64008000","0xFF808080","%zt,%yt,%xt",
-                    hex = &H64008000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-                    hex = xyzt(ss(2), hex, 2)
-                ElseIf mips = "vneg.p" Then
-                    '"vneg.p","0xD0020080","0xFFFF8080","%zp,%yp",
-                    hex = &HD0020080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                ElseIf mips = "vneg.q" Then
-                    '"vneg.q","0xD0028080","0xFFFF8080","%zq,%yq",
-                    hex = &HD0028080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                ElseIf mips = "vneg.s" Then
-                    '"vneg.s","0xD0020000","0xFFFF8080","%zs,%ys",
-                    hex = &HD0020000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                ElseIf mips = "vneg.t" Then
-                    '"vneg.t","0xD0028000","0xFFFF8080","%zt,%yt",
-                    hex = &HD0028000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-                ElseIf mips = "vnop" Then
-                    '"vnop","0xFFFF0000","0xFFFFFFFF","",
-                    hex = &HFFFF0000
-                ElseIf mips = "vnrcp.p" Then
-                    '"vnrcp.p","0xD0180080","0xFFFF8080","%zp,%yp",
-                    hex = &HD0180080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                ElseIf mips = "vnrcp.q" Then
-                    '"vnrcp.q","0xD0188080","0xFFFF8080","%zq,%yq",
-                    hex = &HD0188080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                ElseIf mips = "vnrcp.s" Then
-                    '"vnrcp.s","0xD0180000","0xFFFF8080","%zs,%ys",
-                    hex = &HD0180000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                ElseIf mips = "vnrcp.t" Then
-                    '"vnrcp.t","0xD0188000","0xFFFF8080","%zt,%yt",
-                    hex = &HD0188000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-                ElseIf mips = "vnsin.p" Then
-                    '"vnsin.p","0xD01A0080","0xFFFF8080","%zp,%yp",
-                    hex = &HD01A0080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                ElseIf mips = "vnsin.q" Then
-                    '"vnsin.q","0xD01A8080","0xFFFF8080","%zq,%yq",
-                    hex = &HD01A8080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                ElseIf mips = "vnsin.s" Then
-                    '"vnsin.s","0xD01A0000","0xFFFF8080","%zs,%ys",
-                    hex = &HD01A0000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                ElseIf mips = "vnsin.t" Then
-                    '"vnsin.t","0xD01A8000","0xFFFF8080","%zt,%yt",
-                    hex = &HD01A8000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-                ElseIf mips = "vncos.p" Then
-                    '"vncos.p","0xD01b0080","0xFFFF8080","%zp,%yp",
-                    hex = &HD01B0080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                ElseIf mips = "vncos.q" Then
-                    hex = &HD01B8080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                ElseIf mips = "vncos.s" Then
-                    hex = &HD01B0000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                ElseIf mips = "vncos.t" Then
-                    hex = &HD01B8000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-                ElseIf mips = "vocp.p" Then
-                    '"vocp.p","0xD0440080","0xFFFF8080","%zp,%yp",
-                    hex = &HD0440080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                ElseIf mips = "vocp.q" Then
-                    '"vocp.q","0xD0448080","0xFFFF8080","%zq,%yq",
-                    hex = &HD0448080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                ElseIf mips = "vocp.s" Then
-                    '"vocp.s","0xD0440000","0xFFFF8080","%zs,%ys",
-                    hex = &HD0440000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                ElseIf mips = "vocp.t" Then
-                    '"vocp.t","0xD0448000","0xFFFF8080","%zt,%yt",
-                    hex = &HD0448000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-                ElseIf mips = "vone.p" Then
-                    '"vone.p","0xD0070080","0xFFFFFF80","%zp",
-                    hex = &HD0070080
-                    hex = xyzp(ss(0), hex, 0)
-                ElseIf mips = "vone.q" Then
-                    '"vone.q","0xD0078080","0xFFFFFF80","%zq",
-                    hex = &HD0078080
-                    hex = xyzq(ss(0), hex, 0)
-                ElseIf mips = "vone.s" Then
-                    '"vone.s","0xD0070000","0xFFFFFF80","%zs",
-                    hex = &HD0070000
-                    hex = xyzs(ss(0), hex, 0)
-                ElseIf mips = "vone.t" Then
-                    '"vone.t","0xD0078000","0xFFFFFF80","%zt",
-                    hex = &HD0078000
-                    hex = xyzt(ss(0), hex, 0)
-                ElseIf mips = "vqmul.q" Then
-                    '"vqmul.q","0xF2808080","0xFF808080","%zq,%yq,%xq",
-                    hex = &HF2808080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                    hex = xyzq(ss(2), hex, 2)
-                ElseIf mips = "vrcp.p" Then
-                    '"vrcp.p","0xD0100080","0xFFFF8080","%zp,%yp",
-                    hex = &HD0100080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                ElseIf mips = "vrcp.q" Then
-                    '"vrcp.q","0xD0108080","0xFFFF8080","%zq,%yq",
-                    hex = &HD0108080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                ElseIf mips = "vrcp.s" Then
-                    '"vrcp.s","0xD0100000","0xFFFF8080","%zs,%ys",
-                    hex = &HD0100000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                ElseIf mips = "vrcp.t" Then
-                    '"vrcp.t","0xD0108000","0xFFFF8080","%zt,%yt",
-                    hex = &HD0108000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-                ElseIf mips = "vrexp2.p" Then
-                    '"vrexp2.p","0xD01C0080","0xFFFF8080","%zp,%yp",
-                    hex = &HD01C0080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                ElseIf mips = "vrexp2.q" Then
-                    '"vrexp2.q","0xD01C8080","0xFFFF8080","%zq,%yq",
-                    hex = &HD01C8080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                ElseIf mips = "vrexp2.s" Then
-                    '"vrexp2.s","0xD01C0000","0xFFFF8080","%zs,%ys",
-                    hex = &HD01C0000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                ElseIf mips = "vrexp2.t" Then
-                    '"vrexp2.t","0xD01C8000","0xFFFF8080","%zt,%yt",
-                    hex = &HD01C8000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-                ElseIf mips = "vrndf1.p" Then
-                    '"vrndf1.p","0xD0220080","0xFFFFFF80","%zp",
-                    hex = &HD0220080
-                    hex = xyzp(ss(0), hex, 0)
-                ElseIf mips = "vrndf1.q" Then
-                    '"vrndf1.q","0xD0228080","0xFFFFFF80","%zq",
-                    hex = &HD0228080
-                    hex = xyzq(ss(0), hex, 0)
-                ElseIf mips = "vrndf1.s" Then
-                    '"vrndf1.s","0xD0220000","0xFFFFFF80","%zs",
-                    hex = &HD0220000
-                    hex = xyzs(ss(0), hex, 0)
-                ElseIf mips = "vrndf1.t" Then
-                    '"vrndf1.t","0xD0228000","0xFFFFFF80","%zt",
-                    hex = &HD0228000
-                    hex = xyzt(ss(0), hex, 0)
-                ElseIf mips = "vrndf2.p" Then
-                    '"vrndf2.p","0xD0230080","0xFFFFFF80","%zp",
-                    hex = &HD0230080
-                    hex = xyzp(ss(0), hex, 0)
-                ElseIf mips = "vrndf2.q" Then
-                    '"vrndf2.q","0xD0238080","0xFFFFFF80","%zq",
-                    hex = &HD0238080
-                    hex = xyzq(ss(0), hex, 0)
-                ElseIf mips = "vrndf2.s" Then
-                    '"vrndf2.s","0xD0230000","0xFFFFFF80","%zs",
-                    hex = &HD0230000
-                    hex = xyzs(ss(0), hex, 0)
-                ElseIf mips = "vrndf2.t" Then
-                    '"vrndf2.t","0xD0238000","0xFFFFFF80","%zt",
-                    hex = &HD0238000
-                    hex = xyzt(ss(0), hex, 0)
-                ElseIf mips = "vrndi.p" Then
-                    '"vrndi.p","0xD0210080","0xFFFFFF80","%zp",
-                    hex = &HD0210080
-                    hex = xyzp(ss(0), hex, 0)
-                ElseIf mips = "vrndi.q" Then
-                    '"vrndi.q","0xD0218080","0xFFFFFF80","%zq",
-                    hex = &HD0218080
-                    hex = xyzq(ss(0), hex, 0)
-                ElseIf mips = "vrndi.s" Then
-                    '"vrndi.s","0xD0210000","0xFFFFFF80","%zs",
-                    hex = &HD0210000
-                    hex = xyzs(ss(0), hex, 0)
-                ElseIf mips = "vrndi.t" Then
-                    '"vrndi.t","0xD0218000","0xFFFFFF80","%zt",
-                    hex = &HD0218000
-                    hex = xyzt(ss(0), hex, 0)
-                ElseIf mips = "vrnds.s" Then
-                    '"vrnds.s","0xD0200000","0xFFFF80FF","%ys",
-                    hex = &HD0200000
-                    hex = xyzs(ss(0), hex, 1)
-                ElseIf mips = "vrsq.p" Then
-                    '"vrsq.p","0xD0110080","0xFFFF8080","%zp,%yp",
-                    hex = &HD0110080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                ElseIf mips = "vrsq.q" Then
-                    '"vrsq.q","0xD0118080","0xFFFF8080","%zq,%yq",
-                    hex = &HD0118080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                ElseIf mips = "vrsq.s" Then
-                    '"vrsq.s","0xD0110000","0xFFFF8080","%zs,%ys",
-                    hex = &HD0110000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                ElseIf mips = "vrsq.t" Then
-                    '"vrsq.t","0xD0118000","0xFFFF8080","%zt,%yt",
-                    hex = &HD0118000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
+                        '0x50
+                    Case "beql"
+                        hex = &H50000000
+                        hex = reg_boolean_para(ss(0), hex, 0)
+                        hex = reg_boolean_para(ss(1), hex, 1)
+                        hex = offset_boolean2(str, hex, hex2)
+                    Case "bnel"
+                        hex = &H54000000
+                        hex = reg_boolean_para(ss(0), hex, 0)
+                        hex = reg_boolean_para(ss(1), hex, 1)
+                        hex = offset_boolean2(str, hex, hex2)
+                    Case "blezl"
+                        hex = &H58000000
+                        hex = reg_boolean_para(str, hex, 0)
+                        hex = offset_boolean2(str, hex, hex2)
+                    Case "bgtzl"
+                        hex = &H5C000000
+                        hex = reg_boolean_para(str, hex, 0)
+                        hex = offset_boolean2(str, hex, hex2)
+                    Case "mfic"
+                        hex = &H70000024
+                        hex = reg_boolean_para(ss(0), hex, 1)
+                        hex = valdec_boolean_para(str, hex, 2)
+                    Case "mtic"
+                        hex = &H70000026
+                        hex = reg_boolean_para(ss(0), hex, 1)
+                        hex = valdec_boolean_para(str, hex, 2)
+                    Case "mfdr"
+                        hex = &H7000003D
+                        hex = reg_boolean_para(ss(0), hex, 1)
+                        hex = debug_reg(ss(1), hex)
+                    Case "mtdr"
+                        hex = &H7080003D
+                        hex = reg_boolean_para(ss(0), hex, 1)
+                        hex = debug_reg(ss(1), hex)
+                    Case "dbreak"
+                        hex = &H7000003F
+                    Case "dret"
+                        hex = &H7000003E
+                    Case "haltl"
+                        hex = &H70000000
+                    Case "seb"
+                        hex = &H7C000420
+                        hex = reg_boolean_para(ss(0), hex, 2)
+                        hex = reg_boolean_para(ss(1), hex, 1)
+                    Case "seh"
+                        hex = &H7C000620
+                        hex = reg_boolean_para(ss(0), hex, 2)
+                        hex = reg_boolean_para(ss(1), hex, 1)
+                    Case "wsbh"
+                        hex = &H7C0000A0
+                        hex = reg_boolean_para(ss(0), hex, 2)
+                        hex = reg_boolean_para(ss(1), hex, 1)
+                    Case "wsbw"
+                        hex = &H7C0000E0
+                        hex = reg_boolean_para(ss(0), hex, 2)
+                        hex = reg_boolean_para(ss(1), hex, 1)
+                    Case "bitrev"
+                        hex = &H7C000520
+                        hex = reg_boolean_para(ss(0), hex, 2)
+                        hex = reg_boolean_para(ss(1), hex, 1)
+                    Case "halt"
+                        hex = &H7C000000
+                    Case "ext"
+                        hex = &H7C000000
+                        hex = reg_boolean_para(ss(0), hex, 1)
+                        hex = reg_boolean_para(ss(1), hex, 0)
+                        hex = valdec_boolean_para(ss(2), hex, 3)
+                        hex = valdec_ext_para(ss(3), hex, 2)
+                    Case "ins"
+                        hex = &H7C000004
+                        hex = reg_boolean_para(ss(0), hex, 1)
+                        hex = reg_boolean_para(ss(1), hex, 0)
+                        hex = valdec_boolean_para(ss(2), hex, 3)
+                        hex = valdec_ins_para(ss(3), hex, 2)
 
-                ElseIf mips = "vnrsq.p" Then
-                    '"vnrsq.p","0xD0190080","0xFFFF8080","%zp,%yp",
-                    hex = &HD0190080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                ElseIf mips = "vnrsq.q" Then
-                    '"vnrsq.q","0xD0198080","0xFFFF8080","%zq,%yq",
-                    hex = &HD0198080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                ElseIf mips = "vnrsq.s" Then
-                    '"vnrsq.s","0xD0190000","0xFFFF8080","%zs,%ys",
-                    hex = &HD0190000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                ElseIf mips = "vnrsq.t" Then
-                    '"vnrsq.t","0xD0198000","0xFFFF8080","%zt,%yt",
-                    hex = &HD0198000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
+                        '0x80
+                    Case "lb"
+                        hex = &H80000000
+                        hex = reg_boolean2(str, hex, 0)
+                        hex = offset_boolean3(str, hex)
+                    Case "lh"
+                        hex = &H84000000
+                        hex = reg_boolean2(str, hex, 0)
+                        hex = offset_boolean3(str, hex)
+                    Case "lw"
+                        hex = &H8C000000
+                        hex = reg_boolean2(str, hex, 0)
+                        hex = offset_boolean3(str, hex)
+                    Case "lbu"
+                        hex = &H90000000
+                        hex = reg_boolean2(str, hex, 0)
+                        hex = offset_boolean3(str, hex)
+                    Case "lhu"
+                        hex = &H94000000
+                        hex = reg_boolean2(str, hex, 0)
+                        hex = offset_boolean3(str, hex)
+                    Case "lwu"
+                        hex = &H9C000000
+                        hex = reg_boolean2(str, hex, 0)
+                        hex = offset_boolean3(str, hex)
+                    Case "lwl"
+                        hex = &H88000000
+                        hex = reg_boolean2(str, hex, 0)
+                        hex = offset_boolean3(str, hex)
+                    Case "lwr"
+                        hex = &H98000000
+                        hex = reg_boolean2(str, hex, 0)
+                        hex = offset_boolean3(str, hex)
 
-                ElseIf mips = "vs2i.p" Then
-                    '"vs2i.p","0xD03B0080","0xFFFF8080","%zq,%yp",
-                    hex = &HD03B0080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                ElseIf mips = "vs2i.s" Then
-                    '"vs2i.s","0xD03B0000","0xFFFF8080","%zp,%ys",
-                    hex = &HD03B0000
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                ElseIf mips = "vsat0.p" Then
-                    '"vsat0.p","0xD0040080","0xFFFF8080","%zp,%yp",
-                    hex = &HD0040080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                ElseIf mips = "vsat0.q" Then
-                    '"vsat0.q","0xD0048080","0xFFFF8080","%zq,%yq",
-                    hex = &HD0048080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                ElseIf mips = "vsat0.s" Then
-                    '"vsat0.s","0xD0040000","0xFFFF8080","%zs,%ys",
-                    hex = &HD0040000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                ElseIf mips = "vsat0.t" Then
-                    '"vsat0.t","0xD0048000","0xFFFF8080","%zt,%yt",
-                    hex = &HD0048000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-                ElseIf mips = "vsat1.p" Then
-                    '"vsat1.p","0xD0050080","0xFFFF8080","%zp,%yp",
-                    hex = &HD0050080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                ElseIf mips = "vsat1.q" Then
-                    '"vsat1.q","0xD0058080","0xFFFF8080","%zq,%yq",
-                    hex = &HD0058080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                ElseIf mips = "vsat1.s" Then
-                    '"vsat1.s","0xD0050000","0xFFFF8080","%zs,%ys",
-                    hex = &HD0050000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                ElseIf mips = "vsat1.t" Then
-                    '"vsat1.t","0xD0058000","0xFFFF8080","%zt,%yt",
-                    hex = &HD0058000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-                ElseIf mips = "vsbn.s" Then
-                    '"vsbn.s","0x61000000","0xFF808080","%zs,%ys,%xs",
-                    hex = &H61000000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                    hex = xyzs(ss(2), hex, 2)
-                ElseIf mips = "vsbz.s" Then
-                    '"vsbz.s","0xD0360000","0xFFFF8080","%zs,%ys",
-                    hex = &HD0360000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                ElseIf mips = "vscl.p" Then
-                    '"vscl.p","0x65000080","0xFF808080","%zp,%yp,%xs",
-                    hex = &H65000080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                    hex = xyzs(ss(2), hex, 2)
-                ElseIf mips = "vscl.q" Then
-                    '"vscl.q","0x65008080","0xFF808080","%zq,%yq,%xs",
-                    hex = &H65008080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                    hex = xyzs(ss(2), hex, 2)
-                ElseIf mips = "vscl.t" Then
-                    '"vscl.t","0x65008000","0xFF808080","%zt,%yt,%xs",
-                    hex = &H65008000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-                    hex = xyzs(ss(2), hex, 2)
-                ElseIf mips = "vscmp.p" Then
-                    '"vscmp.p","0x6E800080","0xFF808080","%zp,%yp,%xp",
-                    hex = &H6E800080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                    hex = xyzp(ss(2), hex, 2)
-                ElseIf mips = "vscmp.q" Then
-                    '"vscmp.q","0x6E808080","0xFF808080","%zq,%yq,%xq",
-                    hex = &H6E808080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                    hex = xyzq(ss(2), hex, 2)
-                ElseIf mips = "vscmp.s" Then
-                    '"vscmp.s","0x6E800000","0xFF808080","%zs,%ys,%xs",
-                    hex = &H6E800000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                    hex = xyzs(ss(2), hex, 2)
-                ElseIf mips = "vscmp.t" Then
-                    '"vscmp.t","0x6E808000","0xFF808080","%zt,%yt,%xt",
-                    hex = &H6E808000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-                    hex = xyzt(ss(2), hex, 2)
-                ElseIf mips = "vsge.p" Then
-                    '"vsge.p","0x6F000080","0xFF808080","%zp,%yp,%xp",
-                    hex = &H6F000080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                    hex = xyzp(ss(2), hex, 2)
-                ElseIf mips = "vsge.q" Then
-                    '"vsge.q","0x6F008080","0xFF808080","%zq,%yq,%xq",
-                    hex = &H6F008080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                    hex = xyzq(ss(2), hex, 2)
-                ElseIf mips = "vsge.s" Then
-                    '"vsge.s","0x6F000000","0xFF808080","%zs,%ys,%xs",
-                    hex = &H6F000000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                    hex = xyzs(ss(2), hex, 2)
-                ElseIf mips = "vsge.t" Then
-                    '"vsge.t","0x6F008000","0xFF808080","%zt,%yt,%xt",
-                    hex = &H6F008000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-                    hex = xyzt(ss(2), hex, 2)
-                ElseIf mips = "vsgn.p" Then
-                    '"vsgn.p","0xD04A0080","0xFFFF8080","%zp,%yp",
-                    hex = &HD04A0080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                ElseIf mips = "vsgn.q" Then
-                    '"vsgn.q","0xD04A8080","0xFFFF8080","%zq,%yq",
-                    hex = &HD04A8080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                ElseIf mips = "vsgn.s" Then
-                    '"vsgn.s","0xD04A0000","0xFFFF8080","%zs,%ys",
-                    hex = &HD04A0000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                ElseIf mips = "vsgn.t" Then
-                    '"vsgn.t","0xD04A8000","0xFFFF8080","%zt,%yt",
-                    hex = &HD04A8000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-                ElseIf mips = "vsin.p" Then
-                    '"vsin.p","0xD0120080","0xFFFF8080","%zp,%yp",
-                    hex = &HD0120080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                ElseIf mips = "vsin.q" Then
-                    '"vsin.q","0xD0128080","0xFFFF8080","%zq,%yq",
-                    hex = &HD0128080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                ElseIf mips = "vsin.s" Then
-                    '"vsin.s","0xD0120000","0xFFFF8080","%zs,%ys",
-                    hex = &HD0120000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                ElseIf mips = "vsin.t" Then
-                    '"vsin.t","0xD0128000","0xFFFF8080","%zt,%yt",
-                    hex = &HD0128000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-                ElseIf mips = "vslt.p" Then
-                    '"vslt.p","0x6F800080","0xFF808080","%zp,%yp,%xp",
-                    hex = &H6F800080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                    hex = xyzp(ss(2), hex, 2)
-                ElseIf mips = "vslt.q" Then
-                    '"vslt.q","0x6F808080","0xFF808080","%zq,%yq,%xq",
-                    hex = &H6F808080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                    hex = xyzq(ss(2), hex, 2)
-                ElseIf mips = "vslt.s" Then
-                    '"vslt.s","0x6F800000","0xFF808080","%zs,%ys,%xs",
-                    hex = &H6F800000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                    hex = xyzs(ss(2), hex, 2)
-                ElseIf mips = "vslt.t" Then
-                    '"vslt.t","0x6F808000","0xFF808080","%zt,%yt,%xt",
-                    hex = &H6F808000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-                    hex = xyzt(ss(2), hex, 2)
-                ElseIf mips = "vsocp.p" Then
-                    '"vsocp.p","0xD0450080","0xFFFF8080","%zq,%yp",
-                    hex = &HD0450080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                ElseIf mips = "vsocp.s" Then
-                    '"vsocp.s","0xD0450000","0xFFFF8080","%zp,%ys",
-                    hex = &HD0450000
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                ElseIf mips = "vsqrt.p" Then
-                    '"vsqrt.p","0xD0160080","0xFFFF8080","%zp,%yp",
-                    hex = &HD0160080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                ElseIf mips = "vsqrt.q" Then
-                    '"vsqrt.q","0xD0168080","0xFFFF8080","%zq,%yq",
-                    hex = &HD0168080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                ElseIf mips = "vsqrt.s" Then
-                    '"vsqrt.s","0xD0160000","0xFFFF8080","%zs,%ys",
-                    hex = &HD0160000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                ElseIf mips = "vsqrt.t" Then
-                    '"vsqrt.t","0xD0168000","0xFFFF8080","%zt,%yt",
-                    hex = &HD0168000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-                ElseIf mips = "vnsqrt.p" Then
-                    '"vnsqrt.p","0xD01e0080","0xFFFF8080","%zp,%yp",
-                    hex = &HD01E0080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                ElseIf mips = "vnsqrt.q" Then
-                    '"vnsqrt.q","0xD01e8080","0xFFFF8080","%zq,%yq",
-                    hex = &HD01E8080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                ElseIf mips = "vnsqrt.s" Then
-                    '"vnsqrt.s","0xD01e0000","0xFFFF8080","%zs,%ys",
-                    hex = &HD01E0000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                ElseIf mips = "vnsqrt.t" Then
-                    '"vsqrt.t","0xD01e8000","0xFFFF8080","%zt,%yt",
-                    hex = &HD01E8000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-                ElseIf mips = "vsrt1.q" Then
-                    '"vsrt1.q","0xD0408080","0xFFFF8080","%zq,%yq",
-                    hex = &HD0408080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                ElseIf mips = "vsrt2.q" Then
-                    '"vsrt2.q","0xD0418080","0xFFFF8080","%zq,%yq",
-                    hex = &HD0418080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                ElseIf mips = "vsrt3.q" Then
-                    '"vsrt3.q","0xD0488080","0xFFFF8080","%zq,%yq",
-                    hex = &HD0488080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                ElseIf mips = "vsrt4.q" Then
-                    '"vsrt4.q","0xD0498080","0xFFFF8080","%zq,%yq",
-                    hex = &HD0498080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                ElseIf mips = "vsub.p" Then
-                    '"vsub.p","0x60800080","0xFF808080","%zp,%yp,%xp",
-                    hex = &H60800080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                    hex = xyzp(ss(2), hex, 2)
-                ElseIf mips = "vsub.q" Then
-                    '"vsub.q","0x60808080","0xFF808080","%zq,%yq,%xq",
-                    hex = &H60808080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                    hex = xyzq(ss(2), hex, 2)
-                ElseIf mips = "vsub.s" Then
-                    '"vsub.s","0x60800000","0xFF808080","%zs,%ys,%xs",
-                    hex = &H60800000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                    hex = xyzs(ss(2), hex, 2)
-                ElseIf mips = "vsub.t" Then
-                    '"vsub.t","0x60808000","0xFF808080","%zt,%yt,%xt",
-                    hex = &H60808000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-                    hex = xyzt(ss(2), hex, 2)
-                ElseIf mips = "vsync" Then
-                    '"vsync","0xFFFF0320","0xFFFFFFFF","",
-                    hex = &HFFFF0320
-                ElseIf mips = "vt4444.q" Then
-                    '"vt4444.q","0xD0598080","0xFFFF8080","%zq,%yq",
-                    hex = &HD0598080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                ElseIf mips = "vt5551.q" Then
-                    '"vt5551.q","0xD05A8080","0xFFFF8080","%zq,%yq",
-                    hex = &HD05A8080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                ElseIf mips = "vt5650.q" Then
-                    '"vt5650.q","0xD05B8080","0xFFFF8080","%zq,%yq",
-                    hex = &HD05B8080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                ElseIf mips = "vus2i.p" Then
-                    '"vus2i.p","0xD03A0080","0xFFFF8080","%zq,%yp",
-                    hex = &HD03A0080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                ElseIf mips = "vus2i.s" Then
-                    '"vus2i.s","0xD03A0000","0xFFFF8080","%zp,%ys",
-                    hex = &HD03A0000
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                ElseIf mips = "vzero.p" Then
-                    '"vzero.p","0xD0060080","0xFFFFFF80","%zp",
-                    hex = &HD0060080
-                    hex = xyzp(ss(0), hex, 0)
-                ElseIf mips = "vzero.q" Then
-                    '"vzero.q","0xD0068080","0xFFFFFF80","%zq",
-                    hex = &HD0068080
-                    hex = xyzq(ss(0), hex, 0)
-                ElseIf mips = "vzero.s" Then
-                    '"vzero.s","0xD0060000","0xFFFFFF80","%zs",
-                    hex = &HD0060000
-                    hex = xyzs(ss(0), hex, 0)
-                ElseIf mips = "vzero.t" Then
-                    '"vzero.t","0xD0068000","0xFFFFFF80","%zt",
-                    hex = &HD0068000
-                    hex = xyzt(ss(0), hex, 0)
+                        '0xA0
+                    Case "sb"
+                        hex = &HA0000000
+                        hex = reg_boolean2(str, hex, 0)
+                        hex = offset_boolean3(str, hex)
+                    Case "sh"
+                        hex = &HA4000000
+                        hex = reg_boolean2(str, hex, 0)
+                        hex = offset_boolean3(str, hex)
+                    Case "sw"
+                        hex = &HAC000000
+                        hex = reg_boolean2(str, hex, 0)
+                        hex = offset_boolean3(str, hex)
+                    Case "swl"
+                        hex = &HA8000000
+                        hex = reg_boolean2(str, hex, 0)
+                        hex = offset_boolean3(str, hex)
+                    Case "swr"
+                        hex = &HB8000000
+                        hex = reg_boolean2(str, hex, 0)
+                        hex = offset_boolean3(str, hex)
+                        '0xc0
+                    Case "ll"
+                        hex = &HC0000000
+                        hex = reg_boolean_para(ss(0), hex, 1)
+                        hex = reg_boolean_para(reg_boolean_lbsb(ss(1)), hex, 0)
+                        hex = offset_boolean3(str, hex)
+                    Case "lwc1"
+                        hex = &HC4000000
+                        hex = float_sel(ss(0), hex, 1)
+                        hex = reg_boolean_para(reg_boolean_lbsb(ss(1)), hex, 0)
+                        hex = offset_boolean3(str, hex)
 
-                ElseIf mips = "vcmovf.p" Then
-                    '"vcmovf.p","0xD2A80080","0xFFF88080","%zp,%yp,%v3",
-                    hex = &HD2A80080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                    hex = VI3(ss(2), hex)
-                ElseIf mips = "vcmovf.q" Then
-                    '"vcmovf.q","0xD2A88080","0xFFF88080","%zq,%yq,%v3",
-                    hex = &HD2A88080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                    hex = VI3(ss(2), hex)
-                ElseIf mips = "vcmovf.s" Then
-                    '"vcmovf.s","0xD2A80000","0xFFF88080","%zs,%ys,%v3",
-                    hex = &HD2A80000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                    hex = VI3(ss(2), hex)
-                ElseIf mips = "vcmovf.t" Then
-                    '"vcmovf.t","0xD2A88000","0xFFF88080","%zt,%yt,%v3",
-                    hex = &HD2A88000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-                    hex = VI3(ss(2), hex)
-                ElseIf mips = "vcmovt.p" Then
-                    '"vcmovt.p","0xD2A00080","0xFFF88080","%zp,%yp,%v3",
-                    hex = &HD2A00080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                    hex = VI3(ss(2), hex)
-                ElseIf mips = "vcmovt.q" Then
-                    '"vcmovt.q","0xD2A08080","0xFFF88080","%zq,%yq,%v3",
-                    hex = &HD2A08080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                    hex = VI3(ss(2), hex)
-                ElseIf mips = "vcmovt.s" Then
-                    '"vcmovt.s","0xD2A00000","0xFFF88080","%zs,%ys,%v3",
-                    hex = &HD2A00000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                    hex = VI3(ss(2), hex)
-                ElseIf mips = "vcmovt.t" Then
-                    '"vcmovt.t","0xD2A08000","0xFFF88080","%zt,%yt,%v3",
-                    hex = &HD2A08000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-                    hex = VI3(ss(2), hex)
-                ElseIf mips = "vcst.p" Then
-                    '"vcst.p","0xD0600080","0xFFE0FF80","%zp,%vk",
-                    hex = &HD0600080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = VK(ss(1), hex)
-                ElseIf mips = "vcst.q" Then
-                    '"vcst.q","0xD0608080","0xFFE0FF80","%zq,%vk",
-                    hex = &HD0608080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = VK(ss(1), hex)
-                ElseIf mips = "vcst.s" Then
-                    '"vcst.s","0xD0600000","0xFFE0FF80","%zs,%vk",
-                    hex = &HD0600000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = VK(ss(1), hex)
-                ElseIf mips = "vcst.t" Then
-                    '"vcst.t","0xD0608000","0xFFE0FF80","%zt,%vk",
-                    hex = &HD0608000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = VK(ss(1), hex)
-                ElseIf mips = "vf2id.p" Then
-                    '"vf2id.p","0xD2600080","0xFFE08080","%zp,%yp,%v5",
-                    hex = &HD2600080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                    hex = VI5(ss(2), hex)
-                ElseIf mips = "vf2id.q" Then
-                    '"vf2id.q","0xD2608080","0xFFE08080","%zq,%yq,%v5",
-                    hex = &HD2608080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                    hex = VI5(ss(2), hex)
-                ElseIf mips = "vf2id.s" Then
-                    '"vf2id.s","0xD2600000","0xFFE08080","%zs,%ys,%v5",
-                    hex = &HD2600000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                    hex = VI5(ss(2), hex)
-                ElseIf mips = "vf2id.t" Then
-                    '"vf2id.t","0xD2608000","0xFFE08080","%zt,%yt,%v5",
-                    hex = &HD2608000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-                    hex = VI5(ss(2), hex)
-                ElseIf mips = "vf2in.p" Then
-                    '"vf2in.p","0xD2000080","0xFFE08080","%zp,%yp,%v5",
-                    hex = &HD2000080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                    hex = VI5(ss(2), hex)
-                ElseIf mips = "vf2in.q" Then
-                    '"vf2in.q","0xD2008080","0xFFE08080","%zq,%yq,%v5",
-                    hex = &HD2008080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                    hex = VI5(ss(2), hex)
-                ElseIf mips = "vf2in.s" Then
-                    '"vf2in.s","0xD2000000","0xFFE08080","%zs,%ys,%v5",
-                    hex = &HD2000000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                    hex = VI5(ss(2), hex)
-                ElseIf mips = "vf2in.t" Then
-                    '"vf2in.t","0xD2008000","0xFFE08080","%zt,%yt,%v5",
-                    hex = &HD2008000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-                    hex = VI5(ss(2), hex)
-                ElseIf mips = "vf2iu.p" Then
-                    '"vf2iu.p","0xD2400080","0xFFE08080","%zp,%yp,%v5",
-                    hex = &HD2400080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                    hex = VI5(ss(2), hex)
-                ElseIf mips = "vf2iu.q" Then
-                    '"vf2iu.q","0xD2408080","0xFFE08080","%zq,%yq,%v5",
-                    hex = &HD2408080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                    hex = VI5(ss(2), hex)
-                ElseIf mips = "vf2iu.s" Then
-                    '"vf2iu.s","0xD2400000","0xFFE08080","%zs,%ys,%v5",
-                    hex = &HD2400000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                    hex = VI5(ss(2), hex)
-                ElseIf mips = "vf2iu.t" Then
-                    '"vf2iu.t","0xD2408000","0xFFE08080","%zt,%yt,%v5",
-                    hex = &HD2408000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-                    hex = VI5(ss(2), hex)
-                ElseIf mips = "vf2iz.p" Then
-                    '"vf2iz.p","0xD2200080","0xFFE08080","%zp,%yp,%v5",
-                    hex = &HD2200080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                    hex = VI5(ss(2), hex)
-                ElseIf mips = "vf2iz.q" Then
-                    '"vf2iz.q","0xD2208080","0xFFE08080","%zq,%yq,%v5",
-                    hex = &HD2208080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                    hex = VI5(ss(2), hex)
-                ElseIf mips = "vf2iz.s" Then
-                    '"vf2iz.s","0xD2200000","0xFFE08080","%zs,%ys,%v5",
-                    hex = &HD2200000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                    hex = VI5(ss(2), hex)
-                ElseIf mips = "vf2iz.t" Then
-                    '"vf2iz.t","0xD2208000","0xFFE08080","%zt,%yt,%v5",
-                    hex = &HD2208000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-                    hex = VI5(ss(2), hex)
-                ElseIf mips = "vi2f.p" Then
-                    '"vi2f.p","0xD2800080","0xFFE08080","%zp,%yp,%v5",
-                    hex = &HD2800080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzp(ss(1), hex, 1)
-                    hex = VI5(ss(2), hex)
-                ElseIf mips = "vi2f.q" Then
-                    '"vi2f.q","0xD2808080","0xFFE08080","%zq,%yq,%v5",
-                    hex = &HD2808080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzq(ss(1), hex, 1)
-                    hex = VI5(ss(2), hex)
-                ElseIf mips = "vi2f.s" Then
-                    '"vi2f.s","0xD2800000","0xFFE08080","%zs,%ys,%v5",
-                    hex = &HD2800000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                    hex = VI5(ss(2), hex)
-                ElseIf mips = "vi2f.t" Then
-                    '"vi2f.t","0xD2808000","0xFFE08080","%zt,%yt,%v5",
-                    hex = &HD2808000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzt(ss(1), hex, 1)
-                    hex = VI5(ss(2), hex)
+                        '0xe0
+                    Case "sc"
+                        hex = &HE0000000
+                        hex = reg_boolean_para(ss(0), hex, 1)
+                        hex = reg_boolean_para(reg_boolean_lbsb(ss(1)), hex, 0)
+                        hex = offset_boolean3(str, hex)
+                    Case "swc1"
+                        hex = &HE4000000
+                        hex = float_sel(ss(0), hex, 1)
+                        hex = reg_boolean_para(reg_boolean_lbsb(ss(1)), hex, 0)
+                        hex = offset_boolean3(str, hex)
 
-                ElseIf mips = "vhtfm2.p" Then
-                    '"vhtfm2.p","0xF0800000","0xFF808080","%zp,%ym,%xp",
-                    hex = &HF0800000
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzpm(ss(1), hex, 1)
-                    hex = xyzp(ss(2), hex, 2)
-                ElseIf mips = "vhtfm3.t" Then
-                    '"vhtfm3.t","0xF1000080","0xFF808080","%zt,%yn,%xt",
-                    hex = &HF1000080
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyztn(ss(1), hex, 1)
-                    hex = xyzt(ss(2), hex, 2)
-                ElseIf mips = "vhtfm4.q" Then
-                    '"vhtfm4.q","0xF1808000","0xFF808080","%zq,%yo,%xq",
-                    hex = &HF1808000
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzqo(ss(1), hex, 1)
-                    hex = xyzq(ss(2), hex, 2)
-                ElseIf mips = "vmidt.p" Then
-                    '"vmidt.p","0xF3830080","0xFFFFFF80","%zm",
-                    hex = &HF3830080
-                    hex = xyzpm(ss(0), hex, 0)
-                ElseIf mips = "vmidt.q" Then
-                    '"vmidt.q","0xF3838080","0xFFFFFF80","%zo",
-                    hex = &HF3838080
-                    hex = xyzqo(ss(0), hex, 0)
-                ElseIf mips = "vmidt.t" Then
-                    '"vmidt.t","0xF3838000","0xFFFFFF80","%zn",
-                    hex = &HF3838000
-                    hex = xyztn(ss(0), hex, 0)
-                ElseIf mips = "vmmov.p" Then
-                    '"vmmov.p","0xF3800080","0xFFFF8080","%zm,%ym",
-                    hex = &HF3800080
-                    hex = xyzpm(ss(0), hex, 0)
-                    hex = xyzpm(ss(1), hex, 1)
-                ElseIf mips = "vmmov.q" Then
-                    '"vmmov.q","0xF3808080","0xFFFF8080","%zo,%yo",
-                    hex = &HF3808080
-                    hex = xyzqo(ss(0), hex, 0)
-                    hex = xyzqo(ss(1), hex, 1)
-                ElseIf mips = "vmmov.t" Then
-                    '"vmmov.t","0xF3808000","0xFFFF8080","%zn,%yn",
-                    hex = &HF3808000
-                    hex = xyztn(ss(0), hex, 0)
-                    hex = xyztn(ss(1), hex, 1)
-                ElseIf mips = "vmscl.p" Then
-                    '"vmscl.p","0xF2000080","0xFF808080","%zm,%ym,%xs",
-                    hex = &HF2000080
-                    hex = xyzpm(ss(0), hex, 0)
-                    hex = xyzpm(ss(1), hex, 1)
-                    hex = xyzs(ss(2), hex, 2)
-                ElseIf mips = "vmscl.q" Then
-                    '"vmscl.q","0xF2008080","0xFF808080","%zo,%yo,%xs",
-                    hex = &HF2008080
-                    hex = xyzqo(ss(0), hex, 0)
-                    hex = xyzqo(ss(1), hex, 1)
-                    hex = xyzs(ss(2), hex, 2)
-                ElseIf mips = "vmscl.t" Then
-                    '"vmscl.t","0xF2008000","0xFF808080","%zn,%yn,%xs",
-                    hex = &HF2008000
-                    hex = xyztn(ss(0), hex, 0)
-                    hex = xyztn(ss(1), hex, 1)
-                    hex = xyzs(ss(2), hex, 2)
-                ElseIf mips = "vmzero.p" Then
-                    '"vmzero.p","0xF3860080","0xFFFFFF80","%zm",
-                    hex = &HF3860080
-                    hex = xyzpm(ss(0), hex, 0)
-                ElseIf mips = "vmzero.q" Then
-                    '"vmzero.q","0xF3868080","0xFFFFFF80","%zo",
-                    hex = &HF3868080
-                    hex = xyzqo(ss(0), hex, 0)
-                ElseIf mips = "vmzero.t" Then
-                    '"vmzero.t","0xF3868000","0xFFFFFF80","%zn",
-                    hex = &HF3868000
-                    hex = xyztn(ss(0), hex, 0)
-                ElseIf mips = "vtfm2.p" Then
-                    '"vtfm2.p","0xF0800080","0xFF808080","%zp,%ym,%xp",
-                    hex = &HF0800080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzpm(ss(1), hex, 1)
-                    hex = xyzp(ss(2), hex, 2)
-                ElseIf mips = "vtfm3.t" Then
-                    '"vtfm3.t","0xF1008000","0xFF808080","%zt,%yn,%xt",
-                    hex = &HF1008000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyztn(ss(1), hex, 1)
-                    hex = xyzt(ss(2), hex, 2)
-                ElseIf mips = "vtfm4.q" Then
-                    '"vtfm4.q","0xF1808080","0xFF808080","%zq,%yo,%xq",
-                    hex = &HF1808080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzqo(ss(1), hex, 1)
-                    hex = xyzq(ss(2), hex, 2)
+                    Case "cache"
+                        hex = &HBC000000
+                        hex = valdec_boolean_para(ss(0), hex, 1)
+                        hex = reg_boolean_para(reg_boolean_lbsb(ss(1)), hex, 0)
+                        hex = offset_boolean3(str, hex)
 
-                ElseIf mips = "vmmul.p" Then
-                    '"vmmul.p","0xF0000080","0xFF808080","%?%zm,%ym,%xm",
-                    hex = &HF0000080
-                    hex = xyzpm(ss(0), hex, 0)
-                    Dim x As Integer = xyzqo(ss(1), hex, 0)
-                    If (x And &H20) <> 0 Then
-                        x = x And &H5F
-                    Else
-                        x = x Or &H20
-                    End If
-                    hex = hex Or (x << 8)
-                    hex = xyzpm(ss(2), hex, 2)
-                ElseIf mips = "vmmul.q" Then
-                    '"vmmul.q","0xF0008080","0xFF808080","%?%zo,%yo,%xo",
-                    hex = &HF0008080
-                    hex = xyzqo(ss(0), hex, 0)
-                    Dim x As Integer = xyzqo(ss(1), hex, 0)
-                    If (x And &H20) <> 0 Then
-                        x = x And &H5F
-                    Else
-                        x = x Or &H20
-                    End If
-                    hex = hex Or (x << 8)
-                    hex = xyzqo(ss(2), hex, 2)
-                ElseIf mips = "vmmul.t" Then
-                    '"vmmul.t","0xF0008000","0xFF808080","%?%zn,%yn,%xn",
-                    hex = &HF0008000
-                    hex = xyztn(ss(0), hex, 0)
-                    Dim x As Integer = xyzqo(ss(1), hex, 0)
-                    If (x And &H20) <> 0 Then
-                        x = x And &H5F
-                    Else
-                        x = x Or &H20
-                    End If
-                    hex = hex Or (x << 8)
-                    hex = xyztn(ss(2), hex, 2)
+                        'vfpu
+                    Case "bvf"
+                        '"bvf", "0x49000000", "0xFFE30000", "%Zc,%O", _
+                        hex = &H49000000
+                        hex = Zc(ss(0), hex)
+                        hex = offset_boolean2(str, hex, hex2)
+                    Case "bvfl"
+                        '"bvfl", "0x49020000", "0xFFE30000", "%Zc,%O", _
+                        hex = &H49020000
+                        hex = Zc(ss(0), hex)
+                        hex = offset_boolean2(str, hex, hex2)
+                    Case "bvt"
+                        '"bvt", "0x49010000", "0xFFE30000", "%Zc,%O", _
+                        hex = &H49010000
+                        hex = Zc(ss(0), hex)
+                        hex = offset_boolean2(str, hex, hex2)
+                    Case "bvtl"
+                        '"bvtl", "0x49030000", "0xFFE30000", "%Zc,%O", _
+                        hex = &H49030000
+                        hex = Zc(ss(0), hex)
+                        hex = offset_boolean2(str, hex, hex2)
+                    Case "lv.q"
+                        '"lv.q", "0xD8000000", "0xFC000002", "%Xq,%Y", _
+                        hex = &HD8000000
+                        hex = Xq(ss(0), hex)
+                        hex = Y(str, hex)
+                        hex = reg_boolean_para(reg_boolean_lbsb(ss(1)), hex, 0)
+                    Case "lv.s"
+                        '"lv.s", "0xC8000000", "0xFC000000", "%Xs,%Y", _
+                        hex = &HC8000000
+                        hex = Xs(ss(0), hex)
+                        hex = Y(str, hex)
+                        hex = reg_boolean_para(reg_boolean_lbsb(ss(1)), hex, 0)
+                    Case "lvl.q"
+                        '"lvl.q", "0xD4000000", "0xFC000002", "%Xq,%Y", _
+                        hex = &HD4000000
+                        hex = Xq(ss(0), hex)
+                        hex = Y(str, hex)
+                        hex = reg_boolean_para(reg_boolean_lbsb(ss(1)), hex, 0)
+                    Case "lvr.q"
+                        '"lvr.q", "0xD4000002", "0xFC000002", "%Xq,%Y", _
+                        hex = &HD4000002
+                        hex = Xq(ss(0), hex)
+                        hex = Y(str, hex)
+                        hex = reg_boolean_para(reg_boolean_lbsb(ss(1)), hex, 0)
+                    Case "sv.q"
+                        '"sv.q", "0xF8000000", "0xFC000002", "%Xq,%Y", _
+                        hex = &HF8000000
+                        hex = Xq(ss(0), hex)
+                        hex = Y(str, hex)
+                        hex = reg_boolean_para(reg_boolean_lbsb(ss(1)), hex, 0)
+                    Case "sv.s"
+                        '"sv.s", "0xE8000000", "0xFC000000", "%Xs,%Y", _
+                        hex = &HE8000000
+                        hex = Xs(ss(0), hex)
+                        hex = Y(str, hex)
+                        hex = reg_boolean_para(reg_boolean_lbsb(ss(1)), hex, 0)
+                    Case "svl.q"
+                        '"svl.q", "0xF4000000", "0xFC000002", "%Xq,%Y", _
+                        hex = &HF4000000
+                        hex = Xq(ss(0), hex)
+                        hex = Y(str, hex)
+                        hex = reg_boolean_para(reg_boolean_lbsb(ss(1)), hex, 0)
+                    Case "svr.q"
+                        '"svr.q", "0xF4000002", "0xFC000002", "%Xq,%Y", _
+                        hex = &HF4000002
+                        hex = Xq(ss(0), hex)
+                        hex = Y(str, hex)
+                        hex = reg_boolean_para(reg_boolean_lbsb(ss(1)), hex, 0)
 
-                ElseIf mips = "vmfvc" Then
-                    '"vmfvc","0xD0500000","0xFFFF0080","%zs,%2s",
-                    hex = &HD0500000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = sd(ss(1), hex, 1)
-                ElseIf mips = "vmtvc" Then
-                    '"vmtvc","0xD0510000","0xFFFF8000","%2d,%ys",
-                    hex = &HD0510000
-                    hex = sd(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                ElseIf mips = "vsync" Then
-                    '"vsync","0xFFFF0000","0xFFFF0000","%I",
-                    hex = &HFFFF0000
-                    hex = Imm(ss(0), hex)
-                ElseIf mips = "vwb.q" Then
-                    '"vwb.q","0xF8000002","0xFC000002","%Xq,%Y",
-                    hex = &HF8000002
-                    hex = Xq(ss(0), hex)
-                    hex = Y(ss(1), hex)
-                ElseIf mips = "vwbn.s" Then
-                    '"vwbn.s","0xD3000000","0xFF008080","%zs,%xs,%I",
-                    hex = &HD3000000
-                    hex = xyzs(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 2)
-                    hex = Imm(ss(2), hex)
-                ElseIf mips = "mfvme" Then
-                    '"mfvme","0x68000000","0xFC000000","%t,%i",
-                    hex = &H68000000
-                    hex = reg_boolean_para(ss(0), hex, 1)
-                    hex = Imm(ss(1), hex)
-                ElseIf mips = "mtvme" Then
-                    '"mtvme","0xb0000000","0xFC000000","%t,%i",
-                    hex = &HB0000000
-                    hex = reg_boolean_para(ss(0), hex, 1)
-                    hex = Imm(ss(1), hex)
-                ElseIf mips = "vrot.p" Then
-                    '"vrot.p","0xF3A00080","0xFFE08080","%zp,%ys,%vr",
-                    hex = &HF3A00080
-                    hex = xyzp(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                    hex = VR(str, hex, 2)
-                ElseIf mips = "vrot.q" Then
-                    '"vrot.q","0xF3A08080","0xFFE08080","%zq,%ys,%vr",
-                    hex = &HF3A08080
-                    hex = xyzq(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                    hex = VR(str, hex, 4)
-                ElseIf mips = "vrot.t" Then
-                    '"vrot.t","0xF3A08000","0xFFE08080","%zt,%ys,%vr",
-                    hex = &HF3A08000
-                    hex = xyzt(ss(0), hex, 0)
-                    hex = xyzs(ss(1), hex, 1)
-                    hex = VR(str, hex, 3)
-                ElseIf mips = "vpfxd" Then
-                    '"vpfxd","0xDE000000","0xFF000000","[%vp4,%vp5,%vp6,%vp7]",
-                    hex = &HDE000000
-                    hex = vp4567(ss(0), hex, 4)
-                    hex = vp4567(ss(1), hex, 5)
-                    hex = vp4567(ss(2), hex, 6)
-                    hex = vp4567(ss(3), hex, 7)
-                ElseIf mips = "vpfxs" Then
-                    '"vpfxs","0xDC000000","0xFF000000","[%vp0,%vp1,%vp2,%vp3]",
-                    hex = &HDC000000
-                    hex = vp0123(ss(0).Replace("[", ""), hex, 0)
-                    hex = vp0123(ss(1), hex, 1)
-                    hex = vp0123(ss(2), hex, 2)
-                    hex = vp0123(ss(3).Replace("]", ""), hex, 3)
-                ElseIf mips = "vpfxt" Then
-                    '"vpfxt","0xDD000000","0xFF000000","[%vp0,%vp1,%vp2,%vp3]",
-                    hex = &HDD000000
-                    hex = vp0123(ss(0).Replace("[", ""), hex, 0)
-                    hex = vp0123(ss(1), hex, 1)
-                    hex = vp0123(ss(2), hex, 2)
-                    hex = vp0123(ss(3).Replace("]", ""), hex, 3)
-                ElseIf mips = ".word" Then
-                    hex = valword(str.Trim)
-                ElseIf mips = ".float" Then
-                    hex = cvt_float(valfloat(str.Trim.Replace(".float", "")))
-                End If
+                    Case "mfv"
+                        '"mfv", "0x48600000", "0xFFE0FF80", "%t,%zs", _
+                        hex = &H48600000
+                        hex = reg_boolean_para(ss(0), hex, 1)
+                        hex = xyzs(ss(1), hex, 0)
+
+                    Case "mfvc"
+                        '"mfvc", "0x48600000", "0xFFE0FF00", "%t,%2d", _
+                        hex = &H48600080
+                        hex = reg_boolean_para(ss(0), hex, 1)
+                        hex = cop2_parse(ss(1), hex)
+
+                    Case "mtv"
+                        '"mtv", "0x48E00000", "0xFFE0FF80", "%t,%zs", _
+                        hex = &H48E00000
+                        hex = reg_boolean_para(ss(0), hex, 1)
+                        hex = xyzs(ss(1), hex, 0)
+
+                    Case "mtvc"
+                        '"mtvc", "0x48E00000", "0xFFE0FF00", "%t,%2d", _
+                        hex = &H48E00080
+                        hex = reg_boolean_para(ss(0), hex, 1)
+                        hex = cop2_parse(ss(1), hex)
+
+                    Case "vabs.p"
+                        '"vabs.p", "0xD0010080", "0xFFFF8080", "%zp,%yp", _
+                        hex = &HD0010080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                    Case "vabs.t"
+                        '"vabs.t", "0xD0018000", "0xFFFF8080", "%zt,%yt", _
+                        hex = &HD0018000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+                    Case "vabs.s"
+                        '"vabs.s", "0xD0010000", "0xFFFF8080", "%zs,%ys", _
+                        hex = &HD0010000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                    Case "vabs.q"
+                        '"vabs.q", "0xD0018080", "0xFFFF8080", "%zq,%yq", _
+                        hex = &HD0018080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                    Case "vadd.q"
+                        '"vadd.q", "0x60008080", "0xFF808080", "%zq,%yq,%xq", _
+                        hex = &H60008080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                        hex = xyzq(ss(2), hex, 2)
+                    Case "vadd.p"
+                        '"vadd.p", "0x60000080", "0xFF808080", "%zp,%yp,%xp", _
+                        hex = &H60000080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                        hex = xyzp(ss(2), hex, 2)
+                    Case "vadd.s"
+                        '"vadd.s", "0x60000000", "0xFF808080", "%zs,%ys,%xs", _
+                        hex = &H60000000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                        hex = xyzs(ss(2), hex, 2)
+                    Case "vadd.t"
+                        '"vadd.t", "0x60008000", "0xFF808080", "%zt,%yt,%xt", _
+                        hex = &H60008000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+                        hex = xyzt(ss(2), hex, 2)
+
+                    Case "vasin.p"
+                        '"vasin.p", "0xD0170080", "0xFFFF8080", "%zp,%yp", _
+                        hex = &HD0170080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                    Case "vasin.q"
+                        '"vasin.q", "0xD0178080", "0xFFFF8080", "%zq,%yq", _
+                        hex = &HD0178080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                    Case "vasin.s"
+                        '"vasin.s", "0xD0170000", "0xFFFF8080", "%zs,%ys", _
+                        hex = &HD0170000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                    Case "vasin.t"
+                        '"vasin.t", "0xD0178000", "0xFFFF8080", "%zt,%yt", _
+                        hex = &HD0178000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+
+                    Case "vnasin.p"
+                        '"vnasin.p", "0xD01f0080", "0xFFFF8080", "%zp,%yp", _
+                        hex = &HD01F0080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                    Case "vnasin.q"
+                        '"vnasin.q", "0xD01f8080", "0xFFFF8080", "%zq,%yq", _
+                        hex = &HD01F8080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                    Case "vnasin.s"
+                        '"vnasin.s", "0xD01f0000", "0xFFFF8080", "%zs,%ys", _
+                        hex = &HD01F0000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                    Case "vnasin.t"
+                        '"vnasin.t", "0xD01f8000", "0xFFFF8080", "%zt,%yt", _
+                        hex = &HD01F8000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+
+                    Case "vavg.p"
+                        '"vavg.p", "0xD0470080", "0xFFFF8080", "%zs,%yp", _
+                        hex = &HD0470080
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                    Case "vavg.q"
+                        '"vavg.q", "0xD0478080", "0xFFFF8080", "%zs,%yq", _
+                        hex = &HD0478080
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                    Case "vavg.t"
+                        '"vavg.t", "0xD0478000", "0xFFFF8080", "%zs,%yt", _
+                        hex = &HD0478000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+                    Case "vavg.s"
+                        '"vavg.s", "0xD0470000", "0xFFFF8080", "%zs,%ys", _
+                        hex = &HD0470000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+
+                    Case "vbfy1.p"
+                        '"vbfy1.p", "0xD0420080", "0xFFFF8080", "%zp,%yp", _
+                        hex = &HD0420080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                    Case "vbfy1.q"
+                        '"vbfy1.q", "0xD0428080", "0xFFFF8080", "%zq,%yq", _
+                        hex = &HD0428080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                    Case "vbfy2.q"
+                        '"vbfy2.q", "0xD0438080", "0xFFFF8080", "%zq,%yq", _
+                        hex = &HD0438080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+
+                    Case "vcmp.p"
+                        '"vcmp.p", "0x6C000080", "0xFF8080F0", "%Zn,%yp,%xp", _
+                        hex = &H6C000080
+                        hex = Zn(ss(0), hex)
+                        If ss.Length >= 2 Then
+                            hex = xyzp(ss(1), hex, 1)
+                        End If
+                        If ss.Length >= 3 Then
+                            hex = xyzp(ss(2), hex, 2)
+                        End If
+                    Case "vcmp.q"
+                        '"vcmp.q", "0x6C008080", "0xFF8080F0", "%Zn,%yq,%xq", _
+                        hex = &H6C008080
+                        hex = Zn(ss(0), hex)
+                        If ss.Length >= 2 Then
+                            hex = xyzq(ss(1), hex, 1)
+                        End If
+                        If ss.Length >= 3 Then
+                            hex = xyzq(ss(2), hex, 2)
+                        End If
+                    Case "vcmp.s"
+                        '"vcmp.s", "0x6C000000", "0xFF8080F0", "%Zn,%ys,%xs", _
+                        hex = &H6C000000
+                        hex = Zn(ss(0), hex)
+                        If ss.Length >= 2 Then
+                            hex = xyzs(ss(1), hex, 1)
+                        End If
+                        If ss.Length >= 3 Then
+                            hex = xyzs(ss(2), hex, 2)
+                        End If
+                    Case "vcmp.t"
+                        '"vcmp.t", "0x6C008000", "0xFF8080F0", "%Zn,%yt,%xt", _
+                        hex = &H6C008000
+                        hex = Zn(ss(0), hex)
+                        If ss.Length >= 2 Then
+                            hex = xyzt(ss(1), hex, 1)
+                        End If
+                        If ss.Length >= 3 Then
+                            hex = xyzt(ss(2), hex, 2)
+                        End If
+
+                    Case "vcos.p"
+                        '"vcos.p", "0xD0130080", "0xFFFF8080", "%zp,%yp", _
+                        hex = &HD0130080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                    Case "vcos.q"
+                        '"vcos.q", "0xD0138080", "0xFFFF8080", "%zq,%yq", _
+                        hex = &HD0138080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                    Case "vcos.s"
+                        '"vcos.s", "0xD0130000", "0xFFFF8080", "%zs,%ys", _
+                        hex = &HD0130000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                    Case "vcos.t"
+                        '"vcos.t", "0xD0138000", "0xFFFF8080", "%zt,%yt", _
+                        hex = &HD0138000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+
+                    Case "vcrs.t", "vouterp.t"
+                        '"vcrs.t", "0x66808000", "0xFF808080", "%zt,%yt,%xt", _
+                        hex = &H66808000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+                        hex = xyzt(ss(2), hex, 2)
+                    Case "vcrsp.t"
+                        '"vcrsp.t", "0xF2808000", "0xFF808080", "%zt,%yt,%xt", _
+                        hex = &HF2808000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+                        hex = xyzt(ss(2), hex, 2)
+                    Case "vdet.s", "vcdps.s"
+                        hex = &H67000000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                        hex = xyzs(ss(2), hex, 2)
+
+                    Case "vdet.p", "vcdps.p"
+                        '"vdet.p", "0x67000080", "0xFF808080", "%zs,%yp,%xp", _
+                        hex = &H67000080
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                        hex = xyzp(ss(2), hex, 2)
+                    Case "vdet.t", "vcdps.t"
+                        hex = &H67008000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+                        hex = xyzt(ss(2), hex, 2)
+
+                    Case "vdet.q", "vcdps.q"
+                        '"vdet.p", "0x67008080", "0xFF808080", "%zs,%yq,%xq", _
+                        hex = &H67008080
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                        hex = xyzq(ss(2), hex, 2)
+
+                    Case "vdiv.p"
+                        '"vdiv.p", "0x63800080", "0xFF808080", "%zp,%yp,%xp", _
+                        hex = &H63800080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                        hex = xyzp(ss(2), hex, 2)
+                    Case "vdiv.q"
+                        '"vdiv.q", "0x63808080", "0xFF808080", "%zq,%yq,%xq", _
+                        hex = &H63808080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                        hex = xyzq(ss(2), hex, 2)
+                    Case "vdiv.s"
+                        '"vdiv.s", "0x63800000", "0xFF808080", "%zs,%ys,%xs", _
+                        hex = &H63800000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                        hex = xyzs(ss(2), hex, 2)
+                    Case "vdiv.t"
+                        '"vdiv.t", "0x63808000", "0xFF808080", "%zt,%yt,%xt", _
+                        hex = &H63808000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+                        hex = xyzt(ss(2), hex, 2)
+
+
+                    Case "vdot.s"
+                        '"vdot.s", "0x64800080", "0xFF808080", "%zs,%ys,%xs", _
+                        hex = &H64800000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                        hex = xyzs(ss(2), hex, 2)
+                    Case "vdot.p"
+                        '"vdot.p", "0x64800080", "0xFF808080", "%zs,%yp,%xp", _
+                        hex = &H64800080
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                        hex = xyzp(ss(2), hex, 2)
+                    Case "vdot.q"
+                        '"vdot.q", "0x64808080", "0xFF808080", "%zs,%yq,%xq", _
+                        hex = &H64808080
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                        hex = xyzq(ss(2), hex, 2)
+                    Case "vdot.t"
+                        '"vdot.t", "0x64808000", "0xFF808080", "%zs,%yt,%xt", _
+                        hex = &H64808000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+                        hex = xyzt(ss(2), hex, 2)
+
+                    Case "vexp2.p"
+                        '"vexp2.p", "0xD0140080", "0xFFFF8080", "%zp,%yp", _
+                        hex = &HD0140080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                    Case "vexp2.q"
+                        '"vexp2.q", "0xD0148080", "0xFFFF8080", "%zq,%yq", _
+                        hex = &HD0148080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                    Case "vexp2.s"
+                        '"vexp2.s", "0xD0140000", "0xFFFF8080", "%zs,%ys", _
+                        hex = &HD0140000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                    Case "vexp2.t"
+                        '"vexp2.t", "0xD0148000", "0xFFFF8080", "%zt,%yt", _
+                        hex = &HD0148000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+
+                    Case "vf2h.p"
+                        '"vf2h.p", "0xD0320080", "0xFFFF8080", "%zs,%yp", _
+                        hex = &HD0320080
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                    Case "vf2h.q"
+                        '"vf2h.q", "0xD0328080", "0xFFFF8080", "%zp,%yq", _
+                        hex = &HD0328080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                    Case "vf2h.s"
+                        '"vf2h.s", "0xD0320000", "0xFFFF8080", "%zs,%ys", _
+                        hex = &HD0320000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                    Case "vf2h.t"
+                        '"vf2h.t", "0xD0328000", "0xFFFF8080", "%zq,%yt", _
+                        hex = &HD0328000
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+
+                    Case "vfad.p", "vsum.p"
+                        '"vfad.p", "0xD0460080", "0xFFFF8080", "%zs,%yp", _
+                        hex = &HD0460080
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                    Case "vfad.q", "vsum.q"
+                        '"vfad.q", "0xD0468080", "0xFFFF8080", "%zs,%yq", _
+                        hex = &HD0468080
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                    Case "vfad.t", "vsum.t"
+                        '"vfad.t", "0xD0468000", "0xFFFF8080", "%zs,%yt", _
+                        hex = &HD0468000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+                    Case "vfad.s", "vsum.s"
+                        '"vfad.s", "0xD0468000", "0xFFFF8080", "%zs,%ys", _
+                        hex = &HD0460000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+
+                    Case "vfim.s"
+                        '"vfim.s", "0xDF800000", "0xFF800000", "%xs,%vh", _
+                        hex = &HDF800000
+                        hex = xyzs(ss(0), hex, 2)
+                        If str.Contains("hf") Then
+                            hex = valhex_boolean(str, hex)
+                        ElseIf str.Contains("+inf") Then
+                            hex = hex Or &H7C00
+                        ElseIf str.Contains("-inf") Then
+                            hex = hex Or &HFC00
+                        ElseIf str.Contains("+nan") Then
+                            hex = hex Or &H7FFF
+                        ElseIf str.Contains("-nan") Then
+                            hex = hex Or &HFFFF
+                        End If
+                    Case "viim.s"
+                        '"viim.s", "0xDF000000", "0xFF800000", "%xs,%vi", _
+                        hex = &HDF000000
+                        hex = xyzs(ss(0), hex, 2)
+                        hex = valhex_boolean(str, hex)
+                    Case "vflush"
+                        '"vflush", "0xFFFF040D", "0xFFFFFFFF", "", _
+                        hex = &HFFFF040D
+
+                    Case "vh2f.p"
+                        '"vh2f.p","0xD0330080","0xFFFF8080","%zq,%yp",
+                        hex = &HD0330080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                    Case "vh2f.s"
+                        '"vh2f.s","0xD0330000","0xFFFF8080","%zp,%ys",
+                        hex = &HD0330000
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                    Case "vh2f.t"
+                        '"vh2f.p","0xD0330080","0xFFFF8080","%zq,%yp",
+                        hex = &HD0338000
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                    Case "vh2f.q"
+                        '"vh2f.q","0xD0338080","0xFFFF8080","%zq,%yp",
+                        hex = &HD0338080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+
+                    Case "vhdp.p"
+                        '"vhdp.p","0x66000080","0xFF808080","%zs,%yp,%xp",
+                        hex = &H66000080
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                        hex = xyzp(ss(2), hex, 2)
+                    Case "vhdp.q"
+                        '"vhdp.q","0x66008080","0xFF808080","%zs,%yq,%xq",
+                        hex = &H66008080
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                        hex = xyzq(ss(2), hex, 2)
+                    Case "vhdp.t"
+                        '"vhdp.t","0x66008000","0xFF808080","%zs,%yt,%xt",
+                        hex = &H66008000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+                        hex = xyzt(ss(2), hex, 2)
+                    Case "vi2c.q"
+                        '"vi2c.q","0xD03D8080","0xFFFF8080","%zs,%yq",
+                        hex = &HD03D8080
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                    Case "vi2s.p"
+                        '"vi2s.p","0xD03F0080","0xFFFF8080","%zs,%yp",
+                        hex = &HD03F0080
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                    Case "vi2s.q"
+                        '"vi2s.q","0xD03F8080","0xFFFF8080","%zp,%yq",
+                        hex = &HD03F8080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                    Case "vi2uc.q"
+                        '"vi2uc.q","0xD03C8080","0xFFFF8080","%zs,%yq",
+                        hex = &HD03C8080
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                    Case "vi2us.p"
+                        '"vi2us.p","0xD03E0080","0xFFFF8080","%zs,%yq",
+                        hex = &HD03E0080
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                    Case "vi2us.q"
+                        '"vi2us.q","0xD03E8080","0xFFFF8080","%zp,%yq",
+                        hex = &HD03E8080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                    Case "vidt.p"
+                        '"vidt.p","0xD0030080","0xFFFFFF80","%zp",
+                        hex = &HD0030080
+                        hex = xyzp(ss(0), hex, 0)
+                    Case "vidt.q"
+                        '"vidt.q","0xD0038080","0xFFFFFF80","%zq",
+                        hex = &HD0038080
+                        hex = xyzq(ss(0), hex, 0)
+                    Case "vlgb.s"
+                        '"vlgb.s","0xD0370000","0xFFFF8080","%zs,%ys",
+                        hex = &HD0370000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                    Case "vlog2.p"
+                        '"vlog2.p","0xD0150080","0xFFFF8080","%zp,%yp",
+                        hex = &HD0150080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                    Case "vlog2.q"
+                        '"vlog2.q","0xD0158080","0xFFFF8080","%zq,%yq",
+                        hex = &HD0158080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                    Case "vlog2.s"
+                        '"vlog2.s","0xD0150000","0xFFFF8080","%zs,%ys",
+                        hex = &HD0150000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                    Case "vlog2.t"
+                        '"vlog2.t","0xD0158000","0xFFFF8080","%zt,%yt",
+                        hex = &HD0158000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+
+                    Case "vnlog2.p"
+                        '"vnlog2.p","0xD01D0080","0xFFFF8080","%zp,%yp",
+                        hex = &HD01D0080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                    Case "vnlog2.q"
+                        '"vnlog2.q","0xD01D8080","0xFFFF8080","%zq,%yq",
+                        hex = &HD01D8080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                    Case "vnlog2.s"
+                        '"vnlog2.s","0xD01D0000","0xFFFF8080","%zs,%ys",
+                        hex = &HD01D0000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                    Case "vnlog2.t"
+                        '"vnlog2.t","0xD01D8000","0xFFFF8080","%zt,%yt",
+                        hex = &HD01D8000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+                    Case "vmax.p"
+                        '"vmax.p","0x6D800080","0xFF808080","%zp,%yp,%xp",
+                        hex = &H6D800080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                        hex = xyzp(ss(2), hex, 2)
+                    Case "vmax.q"
+                        '"vmax.q","0x6D808080","0xFF808080","%zq,%yq,%xq",
+                        hex = &H6D808080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                        hex = xyzq(ss(2), hex, 2)
+                    Case "vmax.s"
+                        '"vmax.s","0x6D800000","0xFF808080","%zs,%ys,%xs",
+                        hex = &H6D800000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                        hex = xyzs(ss(2), hex, 2)
+                    Case "vmax.t"
+                        '"vmax.t","0x6D808000","0xFF808080","%zt,%yt,%xt",
+                        hex = &H6D808000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+                        hex = xyzt(ss(2), hex, 2)
+                    Case "vmin.p"
+                        '"vmin.p","0x6D000080","0xFF808080","%zp,%yp,%xp",
+                        hex = &H6D000080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                        hex = xyzp(ss(2), hex, 2)
+                    Case "vmin.q"
+                        '"vmin.q","0x6D008080","0xFF808080","%zq,%yq,%xq",
+                        hex = &H6D008080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                        hex = xyzq(ss(2), hex, 2)
+                    Case "vmin.s"
+                        '"vmin.s","0x6D000000","0xFF808080","%zs,%ys,%xs",
+                        hex = &H6D000000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                        hex = xyzs(ss(2), hex, 2)
+                    Case "vmin.t"
+                        '"vmin.t","0x6D008000","0xFF808080","%zt,%yt,%xt",
+                        hex = &H6D008000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+                        hex = xyzt(ss(2), hex, 2)
+                    Case "vmone.p"
+                        '"vmone.p","0xF3870080","0xFFFFFF80","%zm",
+                        hex = &HF3870080
+                        hex = xyzpm(ss(0), hex, 0)
+                    Case "vmone.q"
+                        '"vmone.q","0xF3878080","0xFFFFFF80","%zo",
+                        hex = &HF3878080
+                        hex = xyzqo(ss(0), hex, 0)
+                    Case "vmone.t"
+                        '"vmone.t","0xF3878000","0xFFFFFF80","%zn",
+                        hex = &HF3878000
+                        hex = xyztn(ss(0), hex, 0)
+                    Case "vmov.p"
+                        '"vmov.p","0xD0000080","0xFFFF8080","%zp,%yp",
+                        hex = &HD0000080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                    Case "vmov.q"
+                        '"vmov.q","0xD0008080","0xFFFF8080","%zq,%yq",
+                        hex = &HD0008080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                    Case "vmov.s"
+                        '"vmov.s","0xD0000000","0xFFFF8080","%zs,%ys",
+                        hex = &HD0000000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                    Case "vmov.t"
+                        '"vmov.t","0xD0008000","0xFFFF8080","%zt,%yt",
+                        hex = &HD0008000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+                    Case "vmul.p"
+                        '"vmul.p","0x64000080","0xFF808080","%zp,%yp,%xp",
+                        hex = &H64000080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                        hex = xyzp(ss(2), hex, 2)
+                    Case "vmul.q"
+                        '"vmul.q","0x64008080","0xFF808080","%zq,%yq,%xq",
+                        hex = &H64008080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                        hex = xyzq(ss(2), hex, 2)
+                    Case "vmul.s"
+                        '"vmul.s","0x64000000","0xFF808080","%zs,%ys,%xs",
+                        hex = &H64000000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                        hex = xyzs(ss(2), hex, 2)
+                    Case "vmul.t"
+                        '"vmul.t","0x64008000","0xFF808080","%zt,%yt,%xt",
+                        hex = &H64008000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+                        hex = xyzt(ss(2), hex, 2)
+                    Case "vneg.p"
+                        '"vneg.p","0xD0020080","0xFFFF8080","%zp,%yp",
+                        hex = &HD0020080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                    Case "vneg.q"
+                        '"vneg.q","0xD0028080","0xFFFF8080","%zq,%yq",
+                        hex = &HD0028080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                    Case "vneg.s"
+                        '"vneg.s","0xD0020000","0xFFFF8080","%zs,%ys",
+                        hex = &HD0020000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                    Case "vneg.t"
+                        '"vneg.t","0xD0028000","0xFFFF8080","%zt,%yt",
+                        hex = &HD0028000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+                    Case "vnop"
+                        '"vnop","0xFFFF0000","0xFFFFFFFF","",
+                        hex = &HFFFF0000
+                    Case "vnrcp.p"
+                        '"vnrcp.p","0xD0180080","0xFFFF8080","%zp,%yp",
+                        hex = &HD0180080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                    Case "vnrcp.q"
+                        '"vnrcp.q","0xD0188080","0xFFFF8080","%zq,%yq",
+                        hex = &HD0188080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                    Case "vnrcp.s"
+                        '"vnrcp.s","0xD0180000","0xFFFF8080","%zs,%ys",
+                        hex = &HD0180000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                    Case "vnrcp.t"
+                        '"vnrcp.t","0xD0188000","0xFFFF8080","%zt,%yt",
+                        hex = &HD0188000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+                    Case "vnsin.p"
+                        '"vnsin.p","0xD01A0080","0xFFFF8080","%zp,%yp",
+                        hex = &HD01A0080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                    Case "vnsin.q"
+                        '"vnsin.q","0xD01A8080","0xFFFF8080","%zq,%yq",
+                        hex = &HD01A8080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                    Case "vnsin.s"
+                        '"vnsin.s","0xD01A0000","0xFFFF8080","%zs,%ys",
+                        hex = &HD01A0000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                    Case "vnsin.t"
+                        '"vnsin.t","0xD01A8000","0xFFFF8080","%zt,%yt",
+                        hex = &HD01A8000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+                    Case "vncos.p"
+                        '"vncos.p","0xD01b0080","0xFFFF8080","%zp,%yp",
+                        hex = &HD01B0080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                    Case "vncos.q"
+                        hex = &HD01B8080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                    Case "vncos.s"
+                        hex = &HD01B0000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                    Case "vncos.t"
+                        hex = &HD01B8000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+                    Case "vocp.p"
+                        '"vocp.p","0xD0440080","0xFFFF8080","%zp,%yp",
+                        hex = &HD0440080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                    Case "vocp.q"
+                        '"vocp.q","0xD0448080","0xFFFF8080","%zq,%yq",
+                        hex = &HD0448080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                    Case "vocp.s"
+                        '"vocp.s","0xD0440000","0xFFFF8080","%zs,%ys",
+                        hex = &HD0440000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                    Case "vocp.t"
+                        '"vocp.t","0xD0448000","0xFFFF8080","%zt,%yt",
+                        hex = &HD0448000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+                    Case "vone.p"
+                        '"vone.p","0xD0070080","0xFFFFFF80","%zp",
+                        hex = &HD0070080
+                        hex = xyzp(ss(0), hex, 0)
+                    Case "vone.q"
+                        '"vone.q","0xD0078080","0xFFFFFF80","%zq",
+                        hex = &HD0078080
+                        hex = xyzq(ss(0), hex, 0)
+                    Case "vone.s"
+                        '"vone.s","0xD0070000","0xFFFFFF80","%zs",
+                        hex = &HD0070000
+                        hex = xyzs(ss(0), hex, 0)
+                    Case "vone.t"
+                        '"vone.t","0xD0078000","0xFFFFFF80","%zt",
+                        hex = &HD0078000
+                        hex = xyzt(ss(0), hex, 0)
+                    Case "vqmul.q"
+                        '"vqmul.q","0xF2808080","0xFF808080","%zq,%yq,%xq",
+                        hex = &HF2808080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                        hex = xyzq(ss(2), hex, 2)
+                    Case "vrcp.p"
+                        '"vrcp.p","0xD0100080","0xFFFF8080","%zp,%yp",
+                        hex = &HD0100080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                    Case "vrcp.q"
+                        '"vrcp.q","0xD0108080","0xFFFF8080","%zq,%yq",
+                        hex = &HD0108080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                    Case "vrcp.s"
+                        '"vrcp.s","0xD0100000","0xFFFF8080","%zs,%ys",
+                        hex = &HD0100000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                    Case "vrcp.t"
+                        '"vrcp.t","0xD0108000","0xFFFF8080","%zt,%yt",
+                        hex = &HD0108000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+                    Case "vrexp2.p"
+                        '"vrexp2.p","0xD01C0080","0xFFFF8080","%zp,%yp",
+                        hex = &HD01C0080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                    Case "vrexp2.q"
+                        '"vrexp2.q","0xD01C8080","0xFFFF8080","%zq,%yq",
+                        hex = &HD01C8080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                    Case "vrexp2.s"
+                        '"vrexp2.s","0xD01C0000","0xFFFF8080","%zs,%ys",
+                        hex = &HD01C0000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                    Case "vrexp2.t"
+                        '"vrexp2.t","0xD01C8000","0xFFFF8080","%zt,%yt",
+                        hex = &HD01C8000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+                    Case "vrndf1.p"
+                        '"vrndf1.p","0xD0220080","0xFFFFFF80","%zp",
+                        hex = &HD0220080
+                        hex = xyzp(ss(0), hex, 0)
+                    Case "vrndf1.q"
+                        '"vrndf1.q","0xD0228080","0xFFFFFF80","%zq",
+                        hex = &HD0228080
+                        hex = xyzq(ss(0), hex, 0)
+                    Case "vrndf1.s"
+                        '"vrndf1.s","0xD0220000","0xFFFFFF80","%zs",
+                        hex = &HD0220000
+                        hex = xyzs(ss(0), hex, 0)
+                    Case "vrndf1.t"
+                        '"vrndf1.t","0xD0228000","0xFFFFFF80","%zt",
+                        hex = &HD0228000
+                        hex = xyzt(ss(0), hex, 0)
+                    Case "vrndf2.p"
+                        '"vrndf2.p","0xD0230080","0xFFFFFF80","%zp",
+                        hex = &HD0230080
+                        hex = xyzp(ss(0), hex, 0)
+                    Case "vrndf2.q"
+                        '"vrndf2.q","0xD0238080","0xFFFFFF80","%zq",
+                        hex = &HD0238080
+                        hex = xyzq(ss(0), hex, 0)
+                    Case "vrndf2.s"
+                        '"vrndf2.s","0xD0230000","0xFFFFFF80","%zs",
+                        hex = &HD0230000
+                        hex = xyzs(ss(0), hex, 0)
+                    Case "vrndf2.t"
+                        '"vrndf2.t","0xD0238000","0xFFFFFF80","%zt",
+                        hex = &HD0238000
+                        hex = xyzt(ss(0), hex, 0)
+                    Case "vrndi.p"
+                        '"vrndi.p","0xD0210080","0xFFFFFF80","%zp",
+                        hex = &HD0210080
+                        hex = xyzp(ss(0), hex, 0)
+                    Case "vrndi.q"
+                        '"vrndi.q","0xD0218080","0xFFFFFF80","%zq",
+                        hex = &HD0218080
+                        hex = xyzq(ss(0), hex, 0)
+                    Case "vrndi.s"
+                        '"vrndi.s","0xD0210000","0xFFFFFF80","%zs",
+                        hex = &HD0210000
+                        hex = xyzs(ss(0), hex, 0)
+                    Case "vrndi.t"
+                        '"vrndi.t","0xD0218000","0xFFFFFF80","%zt",
+                        hex = &HD0218000
+                        hex = xyzt(ss(0), hex, 0)
+                    Case "vrnds.s"
+                        '"vrnds.s","0xD0200000","0xFFFF80FF","%ys",
+                        hex = &HD0200000
+                        hex = xyzs(ss(0), hex, 1)
+                    Case "vrsq.p"
+                        '"vrsq.p","0xD0110080","0xFFFF8080","%zp,%yp",
+                        hex = &HD0110080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                    Case "vrsq.q"
+                        '"vrsq.q","0xD0118080","0xFFFF8080","%zq,%yq",
+                        hex = &HD0118080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                    Case "vrsq.s"
+                        '"vrsq.s","0xD0110000","0xFFFF8080","%zs,%ys",
+                        hex = &HD0110000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                    Case "vrsq.t"
+                        '"vrsq.t","0xD0118000","0xFFFF8080","%zt,%yt",
+                        hex = &HD0118000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+
+                    Case "vnrsq.p"
+                        '"vnrsq.p","0xD0190080","0xFFFF8080","%zp,%yp",
+                        hex = &HD0190080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                    Case "vnrsq.q"
+                        '"vnrsq.q","0xD0198080","0xFFFF8080","%zq,%yq",
+                        hex = &HD0198080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                    Case "vnrsq.s"
+                        '"vnrsq.s","0xD0190000","0xFFFF8080","%zs,%ys",
+                        hex = &HD0190000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                    Case "vnrsq.t"
+                        '"vnrsq.t","0xD0198000","0xFFFF8080","%zt,%yt",
+                        hex = &HD0198000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+
+                    Case "vs2i.p"
+                        '"vs2i.p","0xD03B0080","0xFFFF8080","%zq,%yp",
+                        hex = &HD03B0080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                    Case "vs2i.s"
+                        '"vs2i.s","0xD03B0000","0xFFFF8080","%zp,%ys",
+                        hex = &HD03B0000
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                    Case "vsat0.p"
+                        '"vsat0.p","0xD0040080","0xFFFF8080","%zp,%yp",
+                        hex = &HD0040080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                    Case "vsat0.q"
+                        '"vsat0.q","0xD0048080","0xFFFF8080","%zq,%yq",
+                        hex = &HD0048080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                    Case "vsat0.s"
+                        '"vsat0.s","0xD0040000","0xFFFF8080","%zs,%ys",
+                        hex = &HD0040000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                    Case "vsat0.t"
+                        '"vsat0.t","0xD0048000","0xFFFF8080","%zt,%yt",
+                        hex = &HD0048000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+                    Case "vsat1.p"
+                        '"vsat1.p","0xD0050080","0xFFFF8080","%zp,%yp",
+                        hex = &HD0050080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                    Case "vsat1.q"
+                        '"vsat1.q","0xD0058080","0xFFFF8080","%zq,%yq",
+                        hex = &HD0058080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                    Case "vsat1.s"
+                        '"vsat1.s","0xD0050000","0xFFFF8080","%zs,%ys",
+                        hex = &HD0050000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                    Case "vsat1.t"
+                        '"vsat1.t","0xD0058000","0xFFFF8080","%zt,%yt",
+                        hex = &HD0058000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+                    Case "vsbn.s"
+                        '"vsbn.s","0x61000000","0xFF808080","%zs,%ys,%xs",
+                        hex = &H61000000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                        hex = xyzs(ss(2), hex, 2)
+                    Case "vsbz.s"
+                        '"vsbz.s","0xD0360000","0xFFFF8080","%zs,%ys",
+                        hex = &HD0360000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                    Case "vscl.s"
+                        '"vscl.s","0x65000000","0xFF808080","%zs,%ys,%xs",
+                        hex = &H65000000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                        hex = xyzs(ss(2), hex, 2)
+                    Case "vscl.p"
+                        '"vscl.p","0x65000080","0xFF808080","%zp,%yp,%xs",
+                        hex = &H65000080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                        hex = xyzs(ss(2), hex, 2)
+                    Case "vscl.q"
+                        '"vscl.q","0x65008080","0xFF808080","%zq,%yq,%xs",
+                        hex = &H65008080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                        hex = xyzs(ss(2), hex, 2)
+                    Case "vscl.t"
+                        '"vscl.t","0x65008000","0xFF808080","%zt,%yt,%xs",
+                        hex = &H65008000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+                        hex = xyzs(ss(2), hex, 2)
+                    Case "vscmp.p"
+                        '"vscmp.p","0x6E800080","0xFF808080","%zp,%yp,%xp",
+                        hex = &H6E800080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                        hex = xyzp(ss(2), hex, 2)
+                    Case "vscmp.q"
+                        '"vscmp.q","0x6E808080","0xFF808080","%zq,%yq,%xq",
+                        hex = &H6E808080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                        hex = xyzq(ss(2), hex, 2)
+                    Case "vscmp.s"
+                        '"vscmp.s","0x6E800000","0xFF808080","%zs,%ys,%xs",
+                        hex = &H6E800000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                        hex = xyzs(ss(2), hex, 2)
+                    Case "vscmp.t"
+                        '"vscmp.t","0x6E808000","0xFF808080","%zt,%yt,%xt",
+                        hex = &H6E808000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+                        hex = xyzt(ss(2), hex, 2)
+                    Case "vsge.p"
+                        '"vsge.p","0x6F000080","0xFF808080","%zp,%yp,%xp",
+                        hex = &H6F000080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                        hex = xyzp(ss(2), hex, 2)
+                    Case "vsge.q"
+                        '"vsge.q","0x6F008080","0xFF808080","%zq,%yq,%xq",
+                        hex = &H6F008080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                        hex = xyzq(ss(2), hex, 2)
+                    Case "vsge.s"
+                        '"vsge.s","0x6F000000","0xFF808080","%zs,%ys,%xs",
+                        hex = &H6F000000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                        hex = xyzs(ss(2), hex, 2)
+                    Case "vsge.t"
+                        '"vsge.t","0x6F008000","0xFF808080","%zt,%yt,%xt",
+                        hex = &H6F008000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+                        hex = xyzt(ss(2), hex, 2)
+                    Case "vsgn.p"
+                        '"vsgn.p","0xD04A0080","0xFFFF8080","%zp,%yp",
+                        hex = &HD04A0080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                    Case "vsgn.q"
+                        '"vsgn.q","0xD04A8080","0xFFFF8080","%zq,%yq",
+                        hex = &HD04A8080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                    Case "vsgn.s"
+                        '"vsgn.s","0xD04A0000","0xFFFF8080","%zs,%ys",
+                        hex = &HD04A0000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                    Case "vsgn.t"
+                        '"vsgn.t","0xD04A8000","0xFFFF8080","%zt,%yt",
+                        hex = &HD04A8000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+                    Case "vsin.p"
+                        '"vsin.p","0xD0120080","0xFFFF8080","%zp,%yp",
+                        hex = &HD0120080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                    Case "vsin.q"
+                        '"vsin.q","0xD0128080","0xFFFF8080","%zq,%yq",
+                        hex = &HD0128080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                    Case "vsin.s"
+                        '"vsin.s","0xD0120000","0xFFFF8080","%zs,%ys",
+                        hex = &HD0120000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                    Case "vsin.t"
+                        '"vsin.t","0xD0128000","0xFFFF8080","%zt,%yt",
+                        hex = &HD0128000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+                    Case "vslt.p"
+                        '"vslt.p","0x6F800080","0xFF808080","%zp,%yp,%xp",
+                        hex = &H6F800080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                        hex = xyzp(ss(2), hex, 2)
+                    Case "vslt.q"
+                        '"vslt.q","0x6F808080","0xFF808080","%zq,%yq,%xq",
+                        hex = &H6F808080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                        hex = xyzq(ss(2), hex, 2)
+                    Case "vslt.s"
+                        '"vslt.s","0x6F800000","0xFF808080","%zs,%ys,%xs",
+                        hex = &H6F800000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                        hex = xyzs(ss(2), hex, 2)
+                    Case "vslt.t"
+                        '"vslt.t","0x6F808000","0xFF808080","%zt,%yt,%xt",
+                        hex = &H6F808000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+                        hex = xyzt(ss(2), hex, 2)
+                    Case "vsocp.p"
+                        '"vsocp.p","0xD0450080","0xFFFF8080","%zq,%yp",
+                        hex = &HD0450080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                    Case "vsocp.s"
+                        '"vsocp.s","0xD0450000","0xFFFF8080","%zp,%ys",
+                        hex = &HD0450000
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                    Case "vsqrt.p"
+                        '"vsqrt.p","0xD0160080","0xFFFF8080","%zp,%yp",
+                        hex = &HD0160080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                    Case "vsqrt.q"
+                        '"vsqrt.q","0xD0168080","0xFFFF8080","%zq,%yq",
+                        hex = &HD0168080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                    Case "vsqrt.s"
+                        '"vsqrt.s","0xD0160000","0xFFFF8080","%zs,%ys",
+                        hex = &HD0160000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                    Case "vsqrt.t"
+                        '"vsqrt.t","0xD0168000","0xFFFF8080","%zt,%yt",
+                        hex = &HD0168000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+                    Case "vnsqrt.p"
+                        '"vnsqrt.p","0xD01e0080","0xFFFF8080","%zp,%yp",
+                        hex = &HD01E0080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                    Case "vnsqrt.q"
+                        '"vnsqrt.q","0xD01e8080","0xFFFF8080","%zq,%yq",
+                        hex = &HD01E8080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                    Case "vnsqrt.s"
+                        '"vnsqrt.s","0xD01e0000","0xFFFF8080","%zs,%ys",
+                        hex = &HD01E0000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                    Case "vnsqrt.t"
+                        '"vsqrt.t","0xD01e8000","0xFFFF8080","%zt,%yt",
+                        hex = &HD01E8000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+                    Case "vsrt1.q"
+                        '"vsrt1.q","0xD0408080","0xFFFF8080","%zq,%yq",
+                        hex = &HD0408080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                    Case "vsrt2.q"
+                        '"vsrt2.q","0xD0418080","0xFFFF8080","%zq,%yq",
+                        hex = &HD0418080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                    Case "vsrt3.q"
+                        '"vsrt3.q","0xD0488080","0xFFFF8080","%zq,%yq",
+                        hex = &HD0488080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                    Case "vsrt4.q"
+                        '"vsrt4.q","0xD0498080","0xFFFF8080","%zq,%yq",
+                        hex = &HD0498080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                    Case "vsub.p"
+                        '"vsub.p","0x60800080","0xFF808080","%zp,%yp,%xp",
+                        hex = &H60800080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                        hex = xyzp(ss(2), hex, 2)
+                    Case "vsub.q"
+                        '"vsub.q","0x60808080","0xFF808080","%zq,%yq,%xq",
+                        hex = &H60808080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                        hex = xyzq(ss(2), hex, 2)
+                    Case "vsub.s"
+                        '"vsub.s","0x60800000","0xFF808080","%zs,%ys,%xs",
+                        hex = &H60800000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                        hex = xyzs(ss(2), hex, 2)
+                    Case "vsub.t"
+                        '"vsub.t","0x60808000","0xFF808080","%zt,%yt,%xt",
+                        hex = &H60808000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+                        hex = xyzt(ss(2), hex, 2)
+                    Case "vsync"
+                        '"vsync","0xFFFF0320","0xFFFFFFFF","",
+                        hex = &HFFFF0320
+                    Case "vt4444.q"
+                        '"vt4444.q","0xD0598080","0xFFFF8080","%zq,%yq",
+                        hex = &HD0598080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                    Case "vt5551.q"
+                        '"vt5551.q","0xD05A8080","0xFFFF8080","%zq,%yq",
+                        hex = &HD05A8080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                    Case "vt5650.q"
+                        '"vt5650.q","0xD05B8080","0xFFFF8080","%zq,%yq",
+                        hex = &HD05B8080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                    Case "vus2i.p"
+                        '"vus2i.p","0xD03A0080","0xFFFF8080","%zq,%yp",
+                        hex = &HD03A0080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                    Case "vus2i.s"
+                        '"vus2i.s","0xD03A0000","0xFFFF8080","%zp,%ys",
+                        hex = &HD03A0000
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                    Case "vzero.p"
+                        '"vzero.p","0xD0060080","0xFFFFFF80","%zp",
+                        hex = &HD0060080
+                        hex = xyzp(ss(0), hex, 0)
+                    Case "vzero.q"
+                        '"vzero.q","0xD0068080","0xFFFFFF80","%zq",
+                        hex = &HD0068080
+                        hex = xyzq(ss(0), hex, 0)
+                    Case "vzero.s"
+                        '"vzero.s","0xD0060000","0xFFFFFF80","%zs",
+                        hex = &HD0060000
+                        hex = xyzs(ss(0), hex, 0)
+                    Case "vzero.t"
+                        '"vzero.t","0xD0068000","0xFFFFFF80","%zt",
+                        hex = &HD0068000
+                        hex = xyzt(ss(0), hex, 0)
+
+                    Case "vcmovf.p"
+                        '"vcmovf.p","0xD2A80080","0xFFF88080","%zp,%yp,%v3",
+                        hex = &HD2A80080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                        hex = VI3(ss(2), hex)
+                    Case "vcmovf.q"
+                        '"vcmovf.q","0xD2A88080","0xFFF88080","%zq,%yq,%v3",
+                        hex = &HD2A88080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                        hex = VI3(ss(2), hex)
+                    Case "vcmovf.s"
+                        '"vcmovf.s","0xD2A80000","0xFFF88080","%zs,%ys,%v3",
+                        hex = &HD2A80000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                        hex = VI3(ss(2), hex)
+                    Case "vcmovf.t"
+                        '"vcmovf.t","0xD2A88000","0xFFF88080","%zt,%yt,%v3",
+                        hex = &HD2A88000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+                        hex = VI3(ss(2), hex)
+                    Case "vcmovt.p"
+                        '"vcmovt.p","0xD2A00080","0xFFF88080","%zp,%yp,%v3",
+                        hex = &HD2A00080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                        hex = VI3(ss(2), hex)
+                    Case "vcmovt.q"
+                        '"vcmovt.q","0xD2A08080","0xFFF88080","%zq,%yq,%v3",
+                        hex = &HD2A08080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                        hex = VI3(ss(2), hex)
+                    Case "vcmovt.s"
+                        '"vcmovt.s","0xD2A00000","0xFFF88080","%zs,%ys,%v3",
+                        hex = &HD2A00000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                        hex = VI3(ss(2), hex)
+                    Case "vcmovt.t"
+                        '"vcmovt.t","0xD2A08000","0xFFF88080","%zt,%yt,%v3",
+                        hex = &HD2A08000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+                        hex = VI3(ss(2), hex)
+                    Case "vcst.p"
+                        '"vcst.p","0xD0600080","0xFFE0FF80","%zp,%vk",
+                        hex = &HD0600080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = VK(ss(1), hex)
+                    Case "vcst.q"
+                        '"vcst.q","0xD0608080","0xFFE0FF80","%zq,%vk",
+                        hex = &HD0608080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = VK(ss(1), hex)
+                    Case "vcst.s"
+                        '"vcst.s","0xD0600000","0xFFE0FF80","%zs,%vk",
+                        hex = &HD0600000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = VK(ss(1), hex)
+                    Case "vcst.t"
+                        '"vcst.t","0xD0608000","0xFFE0FF80","%zt,%vk",
+                        hex = &HD0608000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = VK(ss(1), hex)
+                    Case "vf2id.p"
+                        '"vf2id.p","0xD2600080","0xFFE08080","%zp,%yp,%v5",
+                        hex = &HD2600080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                        hex = VI5(ss(2), hex)
+                    Case "vf2id.q"
+                        '"vf2id.q","0xD2608080","0xFFE08080","%zq,%yq,%v5",
+                        hex = &HD2608080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                        hex = VI5(ss(2), hex)
+                    Case "vf2id.s"
+                        '"vf2id.s","0xD2600000","0xFFE08080","%zs,%ys,%v5",
+                        hex = &HD2600000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                        hex = VI5(ss(2), hex)
+                    Case "vf2id.t"
+                        '"vf2id.t","0xD2608000","0xFFE08080","%zt,%yt,%v5",
+                        hex = &HD2608000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+                        hex = VI5(ss(2), hex)
+                    Case "vf2in.p"
+                        '"vf2in.p","0xD2000080","0xFFE08080","%zp,%yp,%v5",
+                        hex = &HD2000080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                        hex = VI5(ss(2), hex)
+                    Case "vf2in.q"
+                        '"vf2in.q","0xD2008080","0xFFE08080","%zq,%yq,%v5",
+                        hex = &HD2008080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                        hex = VI5(ss(2), hex)
+                    Case "vf2in.s"
+                        '"vf2in.s","0xD2000000","0xFFE08080","%zs,%ys,%v5",
+                        hex = &HD2000000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                        hex = VI5(ss(2), hex)
+                    Case "vf2in.t"
+                        '"vf2in.t","0xD2008000","0xFFE08080","%zt,%yt,%v5",
+                        hex = &HD2008000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+                        hex = VI5(ss(2), hex)
+                    Case "vf2iu.p"
+                        '"vf2iu.p","0xD2400080","0xFFE08080","%zp,%yp,%v5",
+                        hex = &HD2400080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                        hex = VI5(ss(2), hex)
+                    Case "vf2iu.q"
+                        '"vf2iu.q","0xD2408080","0xFFE08080","%zq,%yq,%v5",
+                        hex = &HD2408080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                        hex = VI5(ss(2), hex)
+                    Case "vf2iu.s"
+                        '"vf2iu.s","0xD2400000","0xFFE08080","%zs,%ys,%v5",
+                        hex = &HD2400000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                        hex = VI5(ss(2), hex)
+                    Case "vf2iu.t"
+                        '"vf2iu.t","0xD2408000","0xFFE08080","%zt,%yt,%v5",
+                        hex = &HD2408000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+                        hex = VI5(ss(2), hex)
+                    Case "vf2iz.p"
+                        '"vf2iz.p","0xD2200080","0xFFE08080","%zp,%yp,%v5",
+                        hex = &HD2200080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                        hex = VI5(ss(2), hex)
+                    Case "vf2iz.q"
+                        '"vf2iz.q","0xD2208080","0xFFE08080","%zq,%yq,%v5",
+                        hex = &HD2208080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                        hex = VI5(ss(2), hex)
+                    Case "vf2iz.s"
+                        '"vf2iz.s","0xD2200000","0xFFE08080","%zs,%ys,%v5",
+                        hex = &HD2200000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                        hex = VI5(ss(2), hex)
+                    Case "vf2iz.t"
+                        '"vf2iz.t","0xD2208000","0xFFE08080","%zt,%yt,%v5",
+                        hex = &HD2208000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+                        hex = VI5(ss(2), hex)
+                    Case "vi2f.p"
+                        '"vi2f.p","0xD2800080","0xFFE08080","%zp,%yp,%v5",
+                        hex = &HD2800080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzp(ss(1), hex, 1)
+                        hex = VI5(ss(2), hex)
+                    Case "vi2f.q"
+                        '"vi2f.q","0xD2808080","0xFFE08080","%zq,%yq,%v5",
+                        hex = &HD2808080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzq(ss(1), hex, 1)
+                        hex = VI5(ss(2), hex)
+                    Case "vi2f.s"
+                        '"vi2f.s","0xD2800000","0xFFE08080","%zs,%ys,%v5",
+                        hex = &HD2800000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                        hex = VI5(ss(2), hex)
+                    Case "vi2f.t"
+                        '"vi2f.t","0xD2808000","0xFFE08080","%zt,%yt,%v5",
+                        hex = &HD2808000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzt(ss(1), hex, 1)
+                        hex = VI5(ss(2), hex)
+
+                    Case "vhtfm2.p"
+                        '"vhtfm2.p","0xF0800000","0xFF808080","%zp,%ym,%xp",
+                        hex = &HF0800000
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzpm(ss(1), hex, 1)
+                        hex = xyzp(ss(2), hex, 2)
+                    Case "vhtfm3.t"
+                        '"vhtfm3.t","0xF1000080","0xFF808080","%zt,%yn,%xt",
+                        hex = &HF1000080
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyztn(ss(1), hex, 1)
+                        hex = xyzt(ss(2), hex, 2)
+                    Case "vhtfm4.q"
+                        '"vhtfm4.q","0xF1808000","0xFF808080","%zq,%yo,%xq",
+                        hex = &HF1808000
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzqo(ss(1), hex, 1)
+                        hex = xyzq(ss(2), hex, 2)
+                    Case "vmidt.p"
+                        '"vmidt.p","0xF3830080","0xFFFFFF80","%zm",
+                        hex = &HF3830080
+                        hex = xyzpm(ss(0), hex, 0)
+                    Case "vmidt.q"
+                        '"vmidt.q","0xF3838080","0xFFFFFF80","%zo",
+                        hex = &HF3838080
+                        hex = xyzqo(ss(0), hex, 0)
+                    Case "vmidt.t"
+                        '"vmidt.t","0xF3838000","0xFFFFFF80","%zn",
+                        hex = &HF3838000
+                        hex = xyztn(ss(0), hex, 0)
+                    Case "vmmov.p"
+                        '"vmmov.p","0xF3800080","0xFFFF8080","%zm,%ym",
+                        hex = &HF3800080
+                        hex = xyzpm(ss(0), hex, 0)
+                        hex = xyzpm(ss(1), hex, 1)
+                    Case "vmmov.q"
+                        '"vmmov.q","0xF3808080","0xFFFF8080","%zo,%yo",
+                        hex = &HF3808080
+                        hex = xyzqo(ss(0), hex, 0)
+                        hex = xyzqo(ss(1), hex, 1)
+                    Case "vmmov.t"
+                        '"vmmov.t","0xF3808000","0xFFFF8080","%zn,%yn",
+                        hex = &HF3808000
+                        hex = xyztn(ss(0), hex, 0)
+                        hex = xyztn(ss(1), hex, 1)
+                    Case "vmscl.p"
+                        '"vmscl.p","0xF2000080","0xFF808080","%zm,%ym,%xs",
+                        hex = &HF2000080
+                        hex = xyzpm(ss(0), hex, 0)
+                        hex = xyzpm(ss(1), hex, 1)
+                        hex = xyzs(ss(2), hex, 2)
+                    Case "vmscl.q"
+                        '"vmscl.q","0xF2008080","0xFF808080","%zo,%yo,%xs",
+                        hex = &HF2008080
+                        hex = xyzqo(ss(0), hex, 0)
+                        hex = xyzqo(ss(1), hex, 1)
+                        hex = xyzs(ss(2), hex, 2)
+                    Case "vmscl.t"
+                        '"vmscl.t","0xF2008000","0xFF808080","%zn,%yn,%xs",
+                        hex = &HF2008000
+                        hex = xyztn(ss(0), hex, 0)
+                        hex = xyztn(ss(1), hex, 1)
+                        hex = xyzs(ss(2), hex, 2)
+                    Case "vmzero.p"
+                        '"vmzero.p","0xF3860080","0xFFFFFF80","%zm",
+                        hex = &HF3860080
+                        hex = xyzpm(ss(0), hex, 0)
+                    Case "vmzero.q"
+                        '"vmzero.q","0xF3868080","0xFFFFFF80","%zo",
+                        hex = &HF3868080
+                        hex = xyzqo(ss(0), hex, 0)
+                    Case "vmzero.t"
+                        '"vmzero.t","0xF3868000","0xFFFFFF80","%zn",
+                        hex = &HF3868000
+                        hex = xyztn(ss(0), hex, 0)
+                    Case "vtfm2.p"
+                        '"vtfm2.p","0xF0800080","0xFF808080","%zp,%ym,%xp",
+                        hex = &HF0800080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzpm(ss(1), hex, 1)
+                        hex = xyzp(ss(2), hex, 2)
+                    Case "vtfm3.t"
+                        '"vtfm3.t","0xF1008000","0xFF808080","%zt,%yn,%xt",
+                        hex = &HF1008000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyztn(ss(1), hex, 1)
+                        hex = xyzt(ss(2), hex, 2)
+                    Case "vtfm4.q"
+                        '"vtfm4.q","0xF1808080","0xFF808080","%zq,%yo,%xq",
+                        hex = &HF1808080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzqo(ss(1), hex, 1)
+                        hex = xyzq(ss(2), hex, 2)
+
+                    Case "vmmul.p"
+                        '"vmmul.p","0xF0000080","0xFF808080","%?%zm,%ym,%xm",
+                        hex = &HF0000080
+                        hex = xyzpm(ss(0), hex, 0)
+                        Dim x As Integer = xyzpm(ss(1), 0, 0)
+                        If (x And &H20) <> 0 Then
+                            x = x And &H5F
+                        Else
+                            x = x Or &H20
+                        End If
+                        hex = hex Or (x << 8)
+                        hex = xyzpm(ss(2), hex, 2)
+                    Case "vmmul.q"
+                        '"vmmul.q","0xF0008080","0xFF808080","%?%zo,%yo,%xo",
+                        hex = &HF0008080
+                        hex = xyzqo(ss(0), hex, 0)
+                        Dim x As Integer = xyzqo(ss(1), 0, 0)
+                        If (x And &H20) <> 0 Then
+                            x = x And &H5F
+                        Else
+                            x = x Or &H20
+                        End If
+                        hex = hex Or (x << 8)
+                        hex = xyzqo(ss(2), hex, 2)
+                    Case "vmmul.t"
+                        '"vmmul.t","0xF0008000","0xFF808080","%?%zn,%yn,%xn",
+                        hex = &HF0008000
+                        hex = xyztn(ss(0), hex, 0)
+                        Dim x As Integer = xyztn(ss(1), 0, 0)
+                        If (x And &H20) <> 0 Then
+                            x = x And &H5F
+                        Else
+                            x = x Or &H20
+                        End If
+                        hex = hex Or (x << 8)
+                        hex = xyztn(ss(2), hex, 2)
+
+                    Case "vmfvc"
+                        '"vmfvc","0xD0500000","0xFFFF0080","%zs,%2s",
+                        hex = &HD0500000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = sd(ss(1), hex, 1)
+                    Case "vmtvc"
+                        '"vmtvc","0xD0510000","0xFFFF8000","%2d,%ys",
+                        hex = &HD0510000
+                        hex = sd(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                    Case "vsync"
+                        '"vsync","0xFFFF0000","0xFFFF0000","%I",
+                        hex = &HFFFF0000
+                        hex = Imm(ss(0), hex)
+                    Case "vwb.q"
+                        '"vwb.q","0xF8000002","0xFC000002","%Xq,%Y",
+                        hex = &HF8000002
+                        hex = Xq(ss(0), hex)
+                        hex = Y(" " & ss(1), hex)
+                    Case "vwbn.s", "vsbi.s"
+                        '"vwbn.s","0xD3000000","0xFF008080","%zs,%ys,%N",
+                        hex = &HD3000000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                        hex = hex Or ((Imm(ss(2), 0) And &HFF) << 16)
+                    Case "mfvme"
+                        '"mfvme","0x68000000","0xFC000000","%t,%i",
+                        hex = &H68000000
+                        hex = reg_boolean_para(ss(0), hex, 1)
+                        hex = Imm(ss(1), hex)
+                    Case "mtvme"
+                        '"mtvme","0xb0000000","0xFC000000","%t,%i",
+                        hex = &HB0000000
+                        hex = reg_boolean_para(ss(0), hex, 1)
+                        hex = Imm(ss(1), hex)
+                    Case "vrot.s", "vnrot.s"
+                        '"vrot.s","0xF3A00000","0xFFE08080","%zs,%ys,%vr",
+                        hex = &HF3A00000
+                        hex = xyzs(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                        hex = VR(str, hex, 1)
+                        hex = negationswap(hex, &H100000, mips(1) = "n")
+                    Case "vrot.p", "vnrot.p"
+                        '"vrot.p","0xF3A00080","0xFFE08080","%zp,%ys,%vr",
+                        hex = &HF3A00080
+                        hex = xyzp(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                        hex = VR(str, hex, 2)
+                        hex = negationswap(hex, &H100000, mips(1) = "n")
+                    Case "vrot.q", "vnrot.q"
+                        '"vrot.q","0xF3A08080","0xFFE08080","%zq,%ys,%vr",
+                        hex = &HF3A08080
+                        hex = xyzq(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                        hex = VR(str, hex, 4)
+                        hex = negationswap(hex, &H100000, mips(1) = "n")
+                    Case "vrot.t", "vnrot.t"
+                        '"vrot.t","0xF3A08000","0xFFE08080","%zt,%ys,%vr",
+                        hex = &HF3A08000
+                        hex = xyzt(ss(0), hex, 0)
+                        hex = xyzs(ss(1), hex, 1)
+                        hex = VR(str, hex, 3)
+                        hex = negationswap(hex, &H100000, mips(1) = "n")
+                    Case "vpfxd"
+                        '"vpfxd","0xDE000000","0xFF000000","[%vp4,%vp5,%vp6,%vp7]",
+                        hex = &HDE000000
+                        hex = vp4567(ss(0), hex, 4)
+                        hex = vp4567(ss(1), hex, 5)
+                        hex = vp4567(ss(2), hex, 6)
+                        hex = vp4567(ss(3), hex, 7)
+                    Case "vpfxs"
+                        '"vpfxs","0xDC000000","0xFF000000","[%vp0,%vp1,%vp2,%vp3]",
+                        hex = &HDC000000
+                        hex = vp0123(ss(0).Replace("[", ""), hex, 0)
+                        hex = vp0123(ss(1), hex, 1)
+                        hex = vp0123(ss(2), hex, 2)
+                        hex = vp0123(ss(3).Replace("]", ""), hex, 3)
+                    Case "vpfxt"
+                        '"vpfxt","0xDD000000","0xFF000000","[%vp0,%vp1,%vp2,%vp3]",
+                        hex = &HDD000000
+                        hex = vp0123(ss(0).Replace("[", ""), hex, 0)
+                        hex = vp0123(ss(1), hex, 1)
+                        hex = vp0123(ss(2), hex, 2)
+                        hex = vp0123(ss(3).Replace("]", ""), hex, 3)
+                    Case ".word"
+                        If RPN.Checked = True Then
+                            hex = valint(str.Replace(".word", "").Trim)
+                        Else
+                            hex = valword(str.Trim)
+                        End If
+                    Case ".float"
+                        hex = cvt_float(valfloat(str.Trim.Replace(".float", "")))
+                End Select
 
                 asm = "0x" & Convert.ToString(hex, 16).ToUpper.PadLeft(8, "0"c)
             End If
@@ -4560,6 +4646,13 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
             MessageBox.Show(ex.Message)
             Return ""
         End Try
+    End Function
+
+    Function negationswap(ByVal hex As Integer, ByVal sw As Integer, ByVal ok As Boolean) As Integer
+        If ok = True Then
+            hex = hex Xor sw
+        End If
+        Return hex
     End Function
 
     Function vp0123(ByVal str As String, ByVal hex As Integer, ByVal p As Integer) As Integer
@@ -5627,10 +5720,10 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
             End If
         Next
         Dim k As Double = 0
-        If USERPN.Checked Then
+        If RPN.Checked Then
             If CVTRPN.Checked = True Then
                 Dim p As New Polish
-                str = p.Main(str, LOOKSORDER.Checked)
+                str = p.Main(str, LOOKSORDER.Checked, False, False)
             End If
             k = rpndbl(str.Replace(".float", ""))
         Else
@@ -6049,6 +6142,190 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
 
     End Function
 
+
+    Private Function swapperint(ByVal dem As Integer()) As Integer()
+        Dim demt As Integer
+        demt = dem(1)
+        dem(1) = dem(0)
+        dem(0) = demt
+        Return dem
+    End Function
+
+    Private Function cvt_int(ByVal s As String) As Integer
+        Dim dem As Integer = 0
+        Dim frac As New Regex("-?0x[0-9A-fa-f]{1,8}")
+        Dim fracm As Match = frac.Match(s)
+        Dim int As New Regex("-?\d{1,10}")
+        Dim intm As Match = int.Match(s)
+        Dim bin As New Regex("bin[01]{1,32}")
+        Dim binm As Match = bin.Match(s)
+        Dim oct As New Regex("oct[0-3]?[0-7]{1,10}")
+        Dim octm As Match = oct.Match(s)
+        Dim minus As Int64 = 0
+        If binm.Success Then
+            s = binm.Value.Remove(0, 3)
+            For i = 0 To s.Length - 1
+                dem = dem Or (CInt(s.Substring(s.Length - 1 - i, 1)) << i)
+            Next
+        ElseIf octm.Success Then
+            s = octm.Value.Remove(0, 3)
+            For i = 0 To s.Length - 1
+                dem = dem Or (CInt(s.Substring(s.Length - 1 - i, 1)) << (3 * i))
+            Next
+        ElseIf fracm.Success Then
+            dem = Convert.ToInt32(fracm.Value, 16)
+        ElseIf intm.Success Then
+            dem = Convert.ToInt32(intm.Value)
+        End If
+
+        Return dem
+    End Function
+
+    Private Function overflow(ByVal dem As Integer(), ByVal s As String) As Integer()
+        Dim i As Long = CLng(dem(0))
+        Dim k As Long = CLng(dem(1))
+        Dim mask As Long = 4294967295
+        Select Case s
+            Case "+"
+                k = k + i
+            Case "-"
+                k = k - i
+            Case "*"
+                k = k * i
+            Case "/"
+                k = CLng(k / i)
+        End Select
+        k = k And mask
+        If k > 2147483647 Then
+            k = k - 4294967296
+        End If
+        dem(1) = Convert.ToInt32(k)
+        Return dem
+    End Function
+
+    Private Function rpnint(ByVal str As String) As Integer
+        Dim ss As String() = str.ToLower.Split(CChar(","))
+        Dim len As Integer = ss.Length - 1
+        Dim dem(len) As Integer
+        Dim k As Long = 0
+        Dim tr As Boolean = False
+        For i = 0 To len
+            Select Case ss(i).Trim
+                Case "chs", "+/-"
+                    dem(0) = -dem(0)
+                Case "abs", "|x|"
+                    If dem(0) = -2147483648 Then
+                        dem(0) = 0
+                    End If
+                    If (dem(0) < 0) Then
+                        dem(0) = dem(0) - dem(0) - dem(0)
+                    End If
+                Case "drop"
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "swap"
+                    dem = swapperint(dem)
+                Case "="
+                Case "+", "-", "*", "/"
+                    dem = overflow(dem, ss(i))
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case ">>", "sra"
+                    If dem(0) >= 32 Or dem(0) < 0 Then
+                        MessageBox.Show("シフトさせる範囲は1～31でなくてはなりません")
+                        Return 0
+                    Else
+                        dem(1) = dem(1) >> dem(0)
+                    End If
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case ">>>", "srl" '論理シフト
+                    tr = False
+                    If dem(0) >= 32 Or dem(0) < 1 Then
+                        MessageBox.Show("シフトさせる範囲は1～31でなくてはなりません")
+                        Return 0
+                    Else
+                        If (dem(1) And &H80000000) <> 0 Then
+                            dem(1) = dem(1) And &H7FFFFFFF
+                            tr = True
+                        End If
+                        dem(1) = dem(1) >> dem(0)
+                        If tr = True Then
+                            dem(1) = dem(1) Or ((1 << (31 - dem(0))))
+                        End If
+                    End If
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "<<", "sll"
+                    If dem(0) >= 32 Or dem(0) < 1 Then
+                        MessageBox.Show("シフトさせる範囲は1～31でなくてはなりません")
+                        Return 0
+                    Else
+                        dem(1) = dem(1) << dem(0)
+                    End If
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "ror"
+                    'ror(0x87654321,16)
+                    If dem(0) >= 32 Or dem(0) < 1 Then
+                        MessageBox.Show("シフトさせる範囲は1～31でなくてはなりません")
+                        Return 0
+                    Else
+                        Dim msk As Integer = (&HFFFFFFFF << dem(0))
+                        Dim tmp As Integer = (dem(1)) And Not msk
+                        dem(1) = (dem(1) >> dem(0)) And Not (&HFFFFFFFF << (32 - dem(0)))
+                        dem(1) = (dem(1) Or (tmp << (32 - dem(0))))
+                    End If
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "rol"
+                    'rol(0x87654321,16)
+                    If dem(0) >= 32 Or dem(0) < 1 Then
+                        MessageBox.Show("シフトさせる範囲は1～31でなくてはなりません")
+                        Return 0
+                    Else
+                        Dim msk As Integer = (&HFFFFFFFF << dem(0))
+                        Dim tmp As Integer = (dem(1) >> (32 - dem(0))) And (Not msk)
+                        dem(1) = (dem(1) << dem(0))
+                        dem(1) = (dem(1) Or tmp)
+                    End If
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "\", "mod"
+                    dem(1) = dem(1) Mod dem(0)
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "&", "and"
+                    dem(1) = dem(1) And dem(0)
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "|", "or"
+                    dem(1) = dem(1) Or dem(0)
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "^", "xor"
+                    dem(1) = dem(1) Xor dem(0)
+                    Array.Copy(dem, 1, dem, 0, len)
+                Case "~", "not"
+                    dem(0) = dem(0) Xor &HFFFFFFFF
+                Case Else
+                    If (ss(i)).Trim <> "" Then
+                        Array.Copy(dem, 0, dem, 1, len)
+                        dem(0) = cvt_int((ss(i)))
+                    End If
+            End Select
+        Next
+
+        Return dem(0)
+    End Function
+
+    Function valint(ByVal str As String) As Integer
+
+        Dim i As Integer = 0
+        Dim k As Integer = 0
+        If RPN.Checked Then
+            If CVTRPN.Checked Then
+                Dim p As New Polish
+                str = p.Main(str.Replace("~", "not"), LOOKSORDER.Checked, False, True)
+            End If
+            k = rpnint(str)
+        Else
+            k = valword(str)
+        End If
+        Return k
+
+    End Function
+
 #End Region
 
     'Function float_noma(ByVal str As String) As String
@@ -6072,9 +6349,9 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
     '    Return float
     'End Function
 
-    Private Sub RPNモードToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles USERPN.Click
-        USERPN.Checked = Not USERPN.Checked
-        My.Settings.RPNCALC = USERPN.Checked
+    Private Sub RPNモードToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles RPN.Click
+        RPN.Checked = Not RPN.Checked
+        My.Settings.RPNCALC = RPN.Checked
     End Sub
 
     Private Sub STACKORDER_Click(sender As System.Object, e As System.EventArgs) Handles STACKORDER.Click, LOOKSORDER.Click
