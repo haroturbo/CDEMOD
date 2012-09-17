@@ -151,9 +151,7 @@ Public Class datagrid
     End Sub
 
     'CellValidatingイベントハンドラ 
-    Private Sub DataGridView1_CellValidating(ByVal sender As Object, _
-        ByVal e As DataGridViewCellValidatingEventArgs) _
-        Handles DataGridView1.CellValidating
+    Private Sub DataGridView1_CellValidating(ByVal sender As Object, ByVal e As DataGridViewCellValidatingEventArgs) Handles DataGridView1.CellValidating
 
         Dim f As New MERGE
         f = CType(Me.Owner, MERGE)
@@ -261,8 +259,7 @@ Public Class datagrid
                 ElseIf check.Contains("BIN") Then
                     DirectCast(DataGridView1.Columns(3), DataGridViewTextBoxColumn).MaxInputLength = 11
                     Dim str As String = e.FormattedValue.ToString()
-                    Dim r As New System.Text.RegularExpressions.Regex("^[-|+]?\d+\.?\d*", _
-                                System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+                    Dim r As New System.Text.RegularExpressions.Regex("^[-+]?(\d+\.?\d*|inf|nan)", System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                     Dim m As System.Text.RegularExpressions.Match = r.Match(str)
                     If m.Success Then
                         Label1.Text = ""
@@ -368,8 +365,7 @@ Public Class datagrid
     End Sub
 
     'DataGridViewに表示されているテキストボックスのKeyPressイベントハンドラ
-    Private Sub dataGridViewTextBox_KeyPress(ByVal sender As Object, _
-            ByVal e As KeyPressEventArgs)
+    Private Sub dataGridViewTextBox_KeyPress(ByVal sender As Object, ByVal e As KeyPressEventArgs)
         '数字しか入力できないようにする
         Dim d As Integer = DataGridView1.CurrentCell.RowIndex
         Dim c As Integer = DataGridView1.CurrentCell.ColumnIndex
@@ -400,7 +396,8 @@ Public Class datagrid
                     e.KeyChar = Char.ToLower(e.KeyChar)
                     DirectCast(DataGridView1.Columns(3), DataGridViewTextBoxColumn).MaxInputLength = 40
                 Else
-                    If (e.KeyChar < "0"c Or e.KeyChar > "9"c) And e.KeyChar <> "."c And e.KeyChar <> "-"c And e.KeyChar <> "+"c And e.KeyChar <> vbBack Then
+                    If (e.KeyChar < "0"c Or e.KeyChar > "9"c) And e.KeyChar <> "."c And e.KeyChar <> "-"c And e.KeyChar <> "+"c And e.KeyChar <> vbBack And e.KeyChar <> "I"c And e.KeyChar <> "N"c _
+                        And e.KeyChar <> "F"c And e.KeyChar <> "A"c Then
                         e.Handled = True
                     End If
                     DirectCast(DataGridView1.Columns(3), DataGridViewTextBoxColumn).MaxInputLength = 11
@@ -520,11 +517,29 @@ Public Class datagrid
                     End If
                 End If
             Else 'BINARY32/16
-                Dim r As New System.Text.RegularExpressions.Regex("^[-+]?\d+\.?\d*", System.Text.RegularExpressions.RegexOptions.IgnoreCase)
-                Dim v As System.Text.RegularExpressions.Match = r.Match(str)
+                Dim r As New System.Text.RegularExpressions.Regex("^[-+]?(\d+\.?\d*|nan|inf)", System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+                Dim v As System.Text.RegularExpressions.Match = r.Match(str.ToLower)
                 If v.Success AndAlso v.Value.Length = str.Length Then
-                    Dim f As Single = Convert.ToSingle(v.Value)
-                    Dim bit() As Byte = BitConverter.GetBytes(f)
+                    Dim f As Single = 0
+                    Dim bit(3) As Byte
+
+                    If v.Value.Contains("inf") Then
+                        bit(3) = &H7F
+                        bit(2) = &H80
+                        If v.Value.Contains("-") Then
+                            bit(3) = &HFF
+                        End If
+                    ElseIf v.Value.Contains("nan") Then
+                        bit(3) = &H7F
+                        bit(2) = &HC0
+                        If v.Value.Contains("-") Then
+                            bit(3) = &HFF
+                        End If
+                    Else
+                        f = Convert.ToSingle(v.Value)
+                        bit = BitConverter.GetBytes(f)
+                    End If
+
                     Dim sb As New System.Text.StringBuilder()
                     Dim i As Integer = 3
                     While i >= 0
@@ -544,6 +559,9 @@ Public Class datagrid
                     ElseIf check = "BINARY16" Then
                         Dim hf As String = sb.ToString
                         hf = converthalffloat(hf)
+                        If v.Value.Contains("nan") Then
+                            hf = hf.Substring(0, 1) & "F80"
+                        End If
                         If m.PSX = True AndAlso g_value.Checked = True Then
                             DataGridView1.Rows(d).Cells(add_val).Value = hf
                         Else
@@ -556,10 +574,26 @@ Public Class datagrid
                 End If
             End If
         ElseIf Not DataGridView1.Rows(d).Cells(2).Value Is Nothing AndAlso Not DataGridView1.Rows(d).Cells(4).Value Is Nothing Then
+            Dim half As String = DataGridView1.Rows(d).Cells(add_val).Value.ToString.Substring(0, 6)
+            Dim str2 As String = DataGridView1.Rows(d).Cells(4).Value.ToString
             Dim check As String = DataGridView1.Rows(d).Cells(2).Value.ToString
             If check = "BINARY32" Then
-                Dim str2 As String = DataGridView1.Rows(d).Cells(4).Value.ToString
                 DataGridView1.Rows(d).Cells(add_val).Value = "0x" + cvt_float(valfloat(str2.Trim)).ToString("X8")
+            ElseIf check = "BIN32>>16" Then
+                If m.PSX = True AndAlso g_value.Checked = True Then
+                    DataGridView1.Rows(d).Cells(add_val).Value = "0x" + cvt_float(valfloat(str2.Trim)).ToString("X8").Substring(0, 4).ToUpper
+                Else
+                    DataGridView1.Rows(d).Cells(add_val).Value = half + cvt_float(valfloat(str2.Trim)).ToString("X8").Substring(0, 4).ToUpper
+                End If
+            ElseIf check = "BINARY16" Then
+                Dim hf As String = cvt_float(valfloat(str2.Trim)).ToString("X8").Substring(0, 4).ToUpper
+                hf = converthalffloat(hf)
+                If m.PSX = True AndAlso g_value.Checked = True Then
+                    DataGridView1.Rows(d).Cells(add_val).Value = hf
+                Else
+                    half = DataGridView1.Rows(d).Cells(add_val).Value.ToString.Substring(0, 6)
+                    DataGridView1.Rows(d).Cells(add_val).Value = half & hf
+                End If
             End If
         End If
         Dim gridtx As String = Nothing
@@ -1084,7 +1118,6 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
 
     Private Sub ComboBox1_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles ComboBox1.SelectedIndexChanged
         Try
-
             Dim add_val As Integer = 1
             If g_address.Checked = True Then
                 add_val = 0
@@ -1148,7 +1181,7 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
             Array.ConstrainedCopy(bytes, 2, bytes, 0, 2)
             Array.Resize(bytes, 2)
             If (bytes(1) And &H7F) < &H7C Then
-                Dim bytes2 As Byte() = str2bin(converthalffloat2(bytes))
+                Dim bytes2 As Byte() = str2bin(converthalffloat2(ss))
                 list(l).Cells(3).Value = BitConverter.ToSingle(bytes2, 0)
             End If
         ElseIf float = "ASM" Then
@@ -1205,13 +1238,21 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         '        unsigned int fraction = float16 & VFPU_MASK_FLOAT16_FRAC;
         '        float2int = (sign << 31) + ((exponent + 112) << 23) + (fraction << 13);
         exponent -= 112
+        If exponent > 30 Then
+            exponent = 31
+        ElseIf exponent < 0 Then
+            exponent = 0
+            fraction = 0
+        End If
+
         exponent <<= 10
         fraction >>= 13
         sign <<= 15
         hex = exponent + fraction
         hex = hex And (&H7FFF)
-        If hex > &H7C00 Then '無限
-            hex = &H7F80 '数字以外のなにか
+        If hex >= &H7C00 Then '無限
+            hex = &H7C00
+            'hex = &H7F80 '数字以外のなにか
         End If
         hex += sign
         hf = hex.ToString("X").PadLeft(4, "0"c)
@@ -1220,13 +1261,14 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
     End Function
 
     'IEE754単精度浮動小数点binary32を半精度浮動小数点binary16に変換の逆 Cから移植、VB.NET
-    Function converthalffloat2(ByVal b As Byte()) As String
-        Dim hex As Integer = BitConverter.ToInt16(b, 0)
+    Function converthalffloat2(ByVal s As String) As String
+        Dim hex As Integer = Convert.ToInt32(s, 16)
         Dim sign As Integer = (hex >> 15) And 1
         Dim exponent As Integer = (hex >> 10) And &H1F
         Dim fraction As Integer = (hex And &H3FF)
         Dim hf As String
-        '        WebSVN()
+
+        'WebSVN()
         'psp - Rev 2457
         '        Subversion(Repositories)
         'Rev:
@@ -1254,14 +1296,17 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         '        int exponent = (float16 >> VFPU_SH_FLOAT16_EXP) & VFPU_MASK_FLOAT16_EXP;
         '        unsigned int fraction = float16 & VFPU_MASK_FLOAT16_FRAC;
         '        float2int = (sign << 31) + ((exponent + 112) << 23) + (fraction << 13);
-        exponent += 112
+        If exponent = 0 AndAlso fraction = 0 Then
+        Else
+            exponent += 112
+        End If
         exponent <<= 23
         fraction <<= 13
         sign <<= 31
         hex = exponent + fraction
         hex = hex And &H7FFFFFFF
         hex += sign
-        hf = hex.ToString("X").PadLeft(8, "0"c)
+        hf = hex.ToString("X8")
 
         Return hf
     End Function
@@ -1936,17 +1981,14 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                                 str = str.Replace("%v" & ss(i + 1), minus)
                                 'output = print_int(IMM(opcode), output); i++; 
                             Case "h"
-                                Dim sss As String = ""
-                                Dim bytes As Byte() = str2bin(Convert.ToString(hex And &HFFFF, 16).PadRight(8, "0"c))
-                                Array.ConstrainedCopy(bytes, 2, bytes, 0, 2)
-                                Array.Resize(bytes, 2)
+                                Dim sss As String = (hex And &HFFFF).ToString("X4")
+                                Dim bytes As Byte() = str2bin("0000" & sss)
+
                                 If (bytes(1) And &H7F) < &H7C Then
-                                    Dim bytes2 As Byte() = str2bin(converthalffloat2(bytes))
-                                    If BitConverter.ToSingle(bytes2, 0) > 0.00009 Then
-                                        sss = BitConverter.ToSingle(bytes2, 0).ToString & "hf"
-                                    Else
-                                        sss = "0hf"
-                                    End If
+                                    sss = converthalffloat2(sss)
+                                    Dim bytes2 As Byte() = BitConverter.GetBytes(Convert.ToInt32(sss, 16))
+                                    sss = Convert.ToDecimal(BitConverter.ToSingle(bytes2, 0)).ToString
+
                                 ElseIf (bytes(1) And &H7F) < &H7F Then
                                     If (bytes(1) And &H80) = 0 Then
                                         sss = "+"
@@ -2263,7 +2305,6 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
 
     'ASM INSERT
 #Region "INSERT ASM"
-
     Function assembler(ByVal str As String, ByVal str2 As String) As String
         Try
             Dim hex As Integer = 0
@@ -2271,7 +2312,7 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
             Dim asm As String = ""
             Dim mips As String = ""
 
-            Dim psdis As New Regex("(\t|\x20|　)*?(#|;).+$")
+            Dim psdis As New Regex("(\t|\x20|　)?(#|;).+$")
             Dim psdism As Match = psdis.Match(str)
             If psdism.Success Then
                 str = str.Substring(0, psdism.Index)
@@ -3395,6 +3436,9 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                             hex = hex Or &H7FFF
                         ElseIf str.Contains("-nan") Then
                             hex = hex Or &HFFFF
+                        Else
+                            str = str.Remove(0, str.IndexOf(",")).Trim
+                            hex = hex Or Convert.ToInt32(converthalffloat(cvt_float(valfloat(str)).ToString("X8")), 16)
                         End If
                     Case "viim.s"
                         '"viim.s", "0xDF000000", "0xFF800000", "%xs,%vi", _
@@ -5796,17 +5840,17 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
 
     Private Function cvt_dbl(ByVal s As String) As Double
         Dim dem As Double = 0
-        Dim cnst As New Regex("-?(e|pi|goldenratio)")
+        Dim cnst As New Regex("-?(pi|goldenratio|e)")
         Dim cnstm As Match = cnst.Match(s)
         Dim frac As New Regex("-?\d+\.?\d*")
         Dim fracm As Match = frac.Match(s)
         If cnstm.Success Then
-            If cnstm.Value.Contains("e") Then
-                dem = (Math.E)
-            ElseIf cnstm.Value.Contains("pi") Then
+            If cnstm.Value.Contains("pi") Then
                 dem = (Math.PI)
-            ElseIf cnstm.Value.Contains("goldendratio") Then
+            ElseIf cnstm.Value.Contains("goldenratio") Then
                 dem = ((1 + Math.Sqrt(5)) / 2)
+            ElseIf cnstm.Value.Contains("e") Then
+                dem = (Math.E)
             End If
             If cnstm.Value.Contains("-") Then
                 dem = -dem
@@ -6142,7 +6186,6 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
 
     End Function
 
-
     Private Function swapperint(ByVal dem As Integer()) As Integer()
         Dim demt As Integer
         demt = dem(1)
@@ -6327,27 +6370,6 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
     End Function
 
 #End Region
-
-    'Function float_noma(ByVal str As String) As String
-    '    Dim hex As Integer = Convert.ToInt32(str, 16)
-    '    Dim sign As Integer = Hex >> 31
-    '    Dim exponent As Integer = (Hex >> 23) And &HFF
-    '    Dim fraction As Integer = Hex And &H7FFFFF
-    '    Dim z As Single = 0.0F
-    '    Dim t As Single = 1.0F
-    '    Dim float As String = ""
-    '    For i = 0 To 22
-    '        t /= 2.0F
-    '        If (((fraction >> (22 - i)) And 1) = 1) Then
-    '            z += t
-    '        End If
-    '    Next
-    '    If sign <> 0 Then
-    '        float = "-"
-    '    End If
-    '    float &= z.ToString
-    '    Return float
-    'End Function
 
     Private Sub RPNモードToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles RPN.Click
         RPN.Checked = Not RPN.Checked
