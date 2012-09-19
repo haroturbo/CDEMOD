@@ -2642,9 +2642,7 @@ Public Class MERGE
         Dim z As Integer = 0
         Dim truelist As Boolean = True
         Dim b3 As String = cl_tb.Text
-        Dim r As New System.Text.RegularExpressions.Regex( _
-    "LIST/.+\.txt\((A|V),([1-9]|[1-9][0-9]),[1-8],[1-8]\)", _
-    System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+        Dim r As New System.Text.RegularExpressions.Regex("LIST/.+\.txt\([AV]B?,([1-9]|[1-9][0-9]),[1-8],[1-8]\)", System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         Dim m As System.Text.RegularExpressions.Match = r.Match(backup)
         Dim len As Integer = 20
         If PSX = True Then
@@ -2664,6 +2662,9 @@ Public Class MERGE
                 Select Case i
                     Case 0
                         type = s.Substring(s.Length - 1, 1)
+                        If type = "B" Then
+                            type = s.Substring(s.Length - 2, 1)
+                        End If
                     Case 1
                         s = s.Replace(",", "")
                         line = CType(s, Integer)
