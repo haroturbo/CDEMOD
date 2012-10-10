@@ -266,7 +266,6 @@ Public Class load_db
                                             cmt.Clear()
                                             ' Store all collected codes in the nodes 'tag'
                                             skip = True ' If a new game or code is found, skip the initial read so it is processed
-
                                         End If
 
                                         If counts(1) >= 100 Then
@@ -292,21 +291,14 @@ Public Class load_db
                                 Else ' If what we found isn't a comment, ignore it
 
                                     counts(2) += 1
-
                                     If buffer(0).Trim = Nothing Then 'If the line is blank
                                         write_errors(counts(0), counts(2), "<空白しかない行です,H-EX>", gnode.Text, cnode.Text)
                                     Else
                                         write_errors(counts(0), counts(2), buffer(0) & " <追加されませんでした,H-EX>", gnode.Text, cnode.Text) ' Write the ignored line to the error list
                                     End If
-
-                                    buffer(0) = sr.ReadLine ' Read the next line after the error
-                                    counts(0) += 1
-                                    counts(1) += 1
-                                    skip = True ' Skip the intial read
+                                    skip = False
                                 End If
-
                         End Select
-
                     Else
                         buffer(0) = buffer(0).PadRight(2)
                         If NULLCODE = False AndAlso buffer(0).Substring(0, 1) = "#" Then
