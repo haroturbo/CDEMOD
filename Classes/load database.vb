@@ -1158,9 +1158,10 @@ Public Class load_db
             reset_toolbar()
         End If
 
-        m.progbar.Visible = False
-        file.Close()
-        memory.FlushMemory() ' Force a garbage collection after all the memory processing
+
+            m.progbar.Visible = False
+            file.Close()
+            memory.FlushMemory() ' Force a garbage collection after all the memory processing
 
     End Sub
 
@@ -1277,14 +1278,11 @@ Public Class load_db
         End If
         file.Close()
 
-        If My.Settings.checkcpstr = True Or My.Settings.autocp = True Then
+        If My.Settings.checkcpstr = True Then
             '5B 43 50 39 33 36 5D
             If My.Settings.checkcpstr = True AndAlso cp(0) = &H5B Then
                 str = Encoding.GetEncoding(0).GetString(cp)
 
-                If My.Settings.autocp = True Then
-                    My.Settings.MSCODEPAGE = GetCode(cp)
-                End If
 
                 Dim r As New Regex("^\[.+\]", RegexOptions.ECMAScript)
                 Dim m As Match = r.Match(str)

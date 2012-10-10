@@ -36,34 +36,22 @@ Public Class MERGE
 
         End If
 
-        If My.Settings.checkcpstr = True Then
-            cpstring.Checked = True
-        End If
-        If My.Settings.autocp = True Then
-            zenkakuwitherror.Checked = True
-        End If
 
-        If My.Settings.GBKOP = True Then
-            GBKOP.Checked = True
-        End If
+        cpstring.Checked = My.Settings.checkcpstr
+        GBKOP.Checked = My.Settings.GBKOP
+        CFEDIT.Checked = My.Settings.cfid
+        DBENCODE.Checked = My.Settings.saveencode
+        update_save_filepass.Checked = My.Settings.codepathwhensave
+        PBPHBHASH.Checked = My.Settings.hbhash
+        ARBINhanzen.Checked = My.Settings.arbinhanzen
 
-        If My.Settings.cfid = True Then
-            CFEDIT.Checked = True
-        End If
-
-        If My.Settings.saveencode = True Then
-            DBENCODE.Checked = True
-        End If
 
         If My.Settings.savetype = True Then
-            CPENC.Checked = True
+            CPENC.Checked = My.Settings.savetype
         Else
             ENCTRING.Checked = True
         End If
 
-        If My.Settings.codepathwhensave = True Then
-            update_save_filepass.Checked = True
-        End If
 
         If My.Settings.updater = True Then
             Dim check As New checkupdate
@@ -73,9 +61,6 @@ Public Class MERGE
             autoupdater.Checked = False
         End If
 
-        If My.Settings.hbhash = True Then
-            PBPHBHASH.Checked = True
-        End If
 
         If My.Settings.updatemode = False Then
             releasedate.Checked = True
@@ -170,6 +155,9 @@ Public Class MERGE
                 Application.DoEvents()
                 enc1 = 932
                 open.read_ar(database, 932)
+                If ARBINhanzen.Checked = True Then
+                    半角カナ全角ToolStripMenuItem_Click(sender, e)
+                End If
             ElseIf PSX = True Then
                 enc1 = open.check_enc(database)
                 reset_PSX()
@@ -380,31 +368,35 @@ Public Class MERGE
                 Application.DoEvents()
                 enc1 = 932
                 open.read_ar(database, 932)
-            ElseIf PSX = True Then
-                enc1 = open.check_enc(database)
-                reset_PSX()
-                Application.DoEvents()
-                open.read_PSX(database, enc1)
-            ElseIf open.no_db(database, enc1) = False Then
-                enc1 = open.check_enc(database)
-                reset_PSP()
-                Application.DoEvents()
-                open.read_PSP(database, enc1)
-            End If
-            If codetree.Nodes.Count >= 1 Then
-                codetree.Nodes(0).Expand()
-            End If
-            resets_level1()
-            codetree.EndUpdate()
-            reset_codepage()
-            error_window.list_load_error.EndUpdate()
-            loaded = True
-            file_saveas.Enabled = True
-            overwrite_db.Enabled = True
-            My.Settings.lastcodepath = database
-            overwrite_db.ToolTipText = "対象;" & database
+                If ARBINhanzen.Checked = True Then
+                    半角カナ全角ToolStripMenuItem_Click(sender, e)
+                End If
 
-        End If
+                ElseIf PSX = True Then
+                    enc1 = open.check_enc(database)
+                    reset_PSX()
+                    Application.DoEvents()
+                    open.read_PSX(database, enc1)
+                ElseIf open.no_db(database, enc1) = False Then
+                    enc1 = open.check_enc(database)
+                    reset_PSP()
+                    Application.DoEvents()
+                    open.read_PSP(database, enc1)
+                End If
+                If codetree.Nodes.Count >= 1 Then
+                    codetree.Nodes(0).Expand()
+                End If
+                resets_level1()
+                codetree.EndUpdate()
+                reset_codepage()
+                error_window.list_load_error.EndUpdate()
+                loaded = True
+                file_saveas.Enabled = True
+                overwrite_db.Enabled = True
+                My.Settings.lastcodepath = database
+                overwrite_db.ToolTipText = "対象;" & database
+
+            End If
     End Sub
 
     Private Sub overwrite_db_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles overwrite_db.Click
@@ -414,7 +406,21 @@ Public Class MERGE
             If CODEFREAK = True Then
                 s.save_cf(database, 1201)
             ElseIf DATEL = True Then
-                s.save_ar(database, 932)
+                If ARBINhanzen.Checked = True Then
+                    codetree.BeginUpdate()
+                    Dim n As TreeNode = CType(codetree.Nodes(0).Clone(), TreeNode)
+                    全角カナ半角カナToolStripMenuItem_Click(sender, e)
+                    s.save_ar(database, 932)
+                    codetree.Nodes.Clear()
+                    codetree.Nodes.Add(n)
+                    If codetree.Nodes.Count >= 1 Then
+                        codetree.Nodes(0).Expand()
+                    End If
+                    codetree.EndUpdate()
+                Else
+                    s.save_ar(database, 932)
+                End If
+
             ElseIf PSX = True Then
                 s.save_psx(database, enc1)
             Else
@@ -499,7 +505,7 @@ Public Class MERGE
         End If
     End Sub
 
-    Private Sub ACTONREPLAYToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles saveas_actionreplay.Click
+    Private Sub saveas_actionreplay_click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles saveas_actionreplay.Click
         Dim open As New load_db
         Dim s As New save_db
 
@@ -508,17 +514,30 @@ Public Class MERGE
         If save_file.ShowDialog = Windows.Forms.DialogResult.OK And save_file.FileName <> Nothing Then
 
             database = save_file.FileName
-            s.save_ar(database, 932)
+                If ARBINhanzen.Checked = True Then
+                    codetree.BeginUpdate()
+                    Dim n As TreeNode = CType(codetree.Nodes(0).Clone(), TreeNode)
+                    全角カナ半角カナToolStripMenuItem_Click(sender, e)
+                    s.save_ar(database, 932)
+                    codetree.Nodes.Clear()
+                    codetree.Nodes.Add(n)
+                    If codetree.Nodes.Count >= 1 Then
+                        codetree.Nodes(0).Expand()
+                    End If
+                    codetree.EndUpdate()
+                Else
+                    s.save_ar(database, 932)
+                End If
 
-            codetree.Nodes(0).Text = Path.GetFileNameWithoutExtension(database)
-            overwrite_db.ToolTipText = "対象;" & database
+                codetree.Nodes(0).Text = Path.GetFileNameWithoutExtension(database)
+                overwrite_db.ToolTipText = "対象;" & database
 
-            DATEL = True
-            CODEFREAK = False
-            If My.Settings.codepathwhensave = True Then
-                My.Settings.lastcodepath = database
+                DATEL = True
+                CODEFREAK = False
+                If My.Settings.codepathwhensave = True Then
+                    My.Settings.lastcodepath = database
+                End If
             End If
-        End If
     End Sub
 
     Private Sub file_exit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles file_exit.Click
@@ -1371,7 +1390,6 @@ Public Class MERGE
         codetree.ExpandAll()
     End Sub
 
-
     Private Sub 半角カナ全角ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles str_wide.Click, hankaku.Click
 
         codetree.BeginUpdate() ' This will stop the tree view from constantly drawing the changes while we sort the nodes
@@ -1397,15 +1415,123 @@ Public Class MERGE
 
     End Sub
 
+    Private Sub 全角カナ半角カナToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles str_narrow.Click
+
+        codetree.BeginUpdate() ' This will stop the tree view from constantly drawing the changes while we sort the nodes
+
+        Dim z As Integer = 0
+        Dim i As Integer = 0
+        Dim b1 As String = Nothing
+        Dim b2 As String = Nothing
+        For Each n As TreeNode In codetree.Nodes(0).Nodes
+            b1 = n.Text
+            b1 = ConvANK2(b1)
+            codetree.Nodes(0).Nodes(i).Text = b1
+            For Each m As TreeNode In n.Nodes
+                b2 = m.Text
+                b2 = ConvANK2(b2)
+                codetree.Nodes(0).Nodes(i).Nodes(z).Text = b2
+                z += 1
+            Next
+            i += 1
+            z = 0
+        Next
+        codetree.EndUpdate()
+    End Sub
+
+    Private Sub 簡体繁体ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles kan2han.Click
+
+        codetree.BeginUpdate() ' This will stop the tree view from constantly drawing the changes while we sort the nodes
+
+        Dim z As Integer = 0
+        Dim i As Integer = 0
+        Dim b1 As String = Nothing
+        Dim b2 As String = Nothing
+        For Each n As TreeNode In codetree.Nodes(0).Nodes
+            b1 = n.Text
+            b1 = ConvANK3(b1)
+            codetree.Nodes(0).Nodes(i).Text = b1
+            For Each m As TreeNode In n.Nodes
+                b2 = m.Text
+                b2 = ConvANK3(b2)
+                codetree.Nodes(0).Nodes(i).Nodes(z).Text = b2
+                z += 1
+            Next
+            i += 1
+            z = 0
+        Next
+        codetree.EndUpdate()
+
+
+    End Sub
+
+    Private Sub 繁体簡体ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles han2kan.Click
+
+        codetree.BeginUpdate() ' This will stop the tree view from constantly drawing the changes while we sort the nodes
+
+        Dim z As Integer = 0
+        Dim i As Integer = 0
+        Dim b1 As String = Nothing
+        Dim b2 As String = Nothing
+        For Each n As TreeNode In codetree.Nodes(0).Nodes
+            b1 = n.Text
+            b1 = ConvANK4(b1)
+            codetree.Nodes(0).Nodes(i).Text = b1
+            For Each m As TreeNode In n.Nodes
+                b2 = m.Text
+                b2 = ConvANK4(b2)
+                codetree.Nodes(0).Nodes(i).Nodes(z).Text = b2
+                z += 1
+            Next
+            i += 1
+            z = 0
+        Next
+        codetree.EndUpdate()
+
+    End Sub
+
     Public Function ConvANK(ByVal moto As String) As String
-        '-- 半角カタカナ(Unicodeで\uFF61-\uFF9Fが範囲)を全角に --
         Dim re2 As Regex = New Regex("[\uFF61-\uFF9F]+")
         Dim output2 As String = re2.Replace(moto, AddressOf myReplacer2)
         Return output2
     End Function
 
+    Public Function ConvANK2(ByVal moto As String) As String
+        Dim re2 As Regex = New Regex("[\u3000-\u30FF]+")
+        Dim output2 As String = re2.Replace(moto, AddressOf myReplacer1)
+        Return output2
+    End Function
+
+    Public Function ConvANK3(ByVal moto As String) As String
+        Dim re2 As Regex = New Regex("[\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF]+")
+        Dim output2 As String = re2.Replace(moto, AddressOf myReplacer4)
+        Return output2
+    End Function
+
+    Public Function ConvANK4(ByVal moto As String) As String
+        Dim re2 As Regex = New Regex("[[\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF]+")
+        Dim output2 As String = re2.Replace(moto, AddressOf myReplacer3)
+        Return output2
+    End Function
+
+    Shared Function myReplacer1(ByVal m As Match) As String
+        Dim s As String = m.Value
+        s = Microsoft.VisualBasic.Strings.StrConv(s, Microsoft.VisualBasic.VbStrConv.Katakana, &H411)
+        Return Strings.StrConv(s, Microsoft.VisualBasic.VbStrConv.Narrow, &H411)
+    End Function
+
+
     Shared Function myReplacer2(ByVal m As Match) As String
-        Return Strings.StrConv(m.Value, VbStrConv.Wide, 0)
+        Return Strings.StrConv(m.Value, VbStrConv.Wide, &H411)
+    End Function
+
+    Shared Function myReplacer3(ByVal m As Match) As String
+        Return Strings.StrConv(m.Value, VbStrConv.SimplifiedChinese)
+    End Function
+
+
+    Shared Function myReplacer4(ByVal m As Match) As String
+        Return Strings.StrConv(m.Value, VbStrConv.TraditionalChinese)
     End Function
 
     Private Sub 中国語文字化け対策ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles str_gbk.Click, CNchar.Click
@@ -2366,6 +2492,10 @@ Public Class MERGE
                 Application.DoEvents()
                 enc1 = 932
                 open.read_ar(database, 932)
+
+                If ARBINhanzen.Checked = True Then
+                    半角カナ全角ToolStripMenuItem_Click(sender, e)
+                End If
                 saveas_actionreplay.Enabled = True
             ElseIf PSX = True Then
                 enc1 = open.check_enc(database)
@@ -3102,19 +3232,15 @@ Public Class MERGE
         End If
     End Sub
 
-    Private Sub zenkakuwitherror_Click(sender As System.Object, e As System.EventArgs) Handles zenkakuwitherror.Click
-
-        If My.Settings.autocp = False Then
-            zenkakuwitherror.Checked = True
-            My.Settings.autocp = True
-        Else
-            zenkakuwitherror.Checked = False
-            My.Settings.autocp = False
-        End If
-    End Sub
-
     Private Sub CFEDIT_Click(sender As System.Object, e As System.EventArgs) Handles CFEDIT.Click
         CFEDIT.Checked = Not CFEDIT.Checked
         My.Settings.cfid = CFEDIT.Checked
     End Sub
+
+    Private Sub ARBINhanzen_Click(sender As Object, e As EventArgs) Handles ARBINhanzen.Click
+        ARBINhanzen.Checked = Not ARBINhanzen.Checked
+        My.Settings.arbinhanzen = ARBINhanzen.Checked
+
+    End Sub
+
 End Class

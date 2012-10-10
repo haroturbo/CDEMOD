@@ -62,7 +62,6 @@ Partial Class MERGE
         Me.ToolStripSeparator13 = New System.Windows.Forms.ToolStripSeparator()
         Me.checkencode = New System.Windows.Forms.ToolStripMenuItem()
         Me.cpstring = New System.Windows.Forms.ToolStripMenuItem()
-        Me.zenkakuwitherror = New System.Windows.Forms.ToolStripMenuItem()
         Me.codetreeview = New System.Windows.Forms.ToolStripMenuItem()
         Me.paserToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator7 = New System.Windows.Forms.ToolStripSeparator()
@@ -70,8 +69,13 @@ Partial Class MERGE
         Me.tree_expand = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.str_wide = New System.Windows.Forms.ToolStripMenuItem()
+        Me.str_narrow = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator14 = New System.Windows.Forms.ToolStripSeparator()
         Me.str_gbk = New System.Windows.Forms.ToolStripMenuItem()
         Me.GBKOP = New System.Windows.Forms.ToolStripMenuItem()
+        Me.han2kan = New System.Windows.Forms.ToolStripMenuItem()
+        Me.kan2han = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator15 = New System.Windows.Forms.ToolStripSeparator()
         Me.MECAB半角カナToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MECABでローマ字ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.browsecodesite = New System.Windows.Forms.ToolStripMenuItem()
@@ -132,6 +136,7 @@ Partial Class MERGE
         Me.ENCTRING = New System.Windows.Forms.ToolStripMenuItem()
         Me.CPENC = New System.Windows.Forms.ToolStripMenuItem()
         Me.CFEDIT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ARBINhanzen = New System.Windows.Forms.ToolStripMenuItem()
         Me.ヘルプHToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.オンラインヘルプToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.バージョン情報ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -495,7 +500,7 @@ Partial Class MERGE
         '
         'checkencode
         '
-        Me.checkencode.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cpstring, Me.zenkakuwitherror})
+        Me.checkencode.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cpstring})
         Me.checkencode.Name = "checkencode"
         Me.checkencode.Size = New System.Drawing.Size(193, 22)
         Me.checkencode.Text = "文字コード判定"
@@ -507,17 +512,9 @@ Partial Class MERGE
         Me.cpstring.Text = "CP判定文字を使う"
         Me.cpstring.ToolTipText = "先頭の[]囲み文字で判断します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "オプションのDB判定文字をオンにすると保存時に追加されます" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "常に指定したエンコードでDBを読みたい場合は外して下さい" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
-        'zenkakuwitherror
-        '
-        Me.zenkakuwitherror.Name = "zenkakuwitherror"
-        Me.zenkakuwitherror.Size = New System.Drawing.Size(175, 22)
-        Me.zenkakuwitherror.Text = "最小文字化け数"
-        Me.zenkakuwitherror.ToolTipText = "SJIS/EUC/GBK/BIG5/UHCの文字化けエラー数？・□で判断します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "カスタムCPは対応してません" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "常に指定したエンコードでDBを読みたい場合は外し" & _
-    "て下さい" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
-        '
         'codetreeview
         '
-        Me.codetreeview.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.paserToolStripMenuItem, Me.ToolStripSeparator7, Me.tree_collapse, Me.tree_expand, Me.ToolStripSeparator3, Me.str_wide, Me.str_gbk, Me.MECAB半角カナToolStripMenuItem, Me.MECABでローマ字ToolStripMenuItem})
+        Me.codetreeview.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.paserToolStripMenuItem, Me.ToolStripSeparator7, Me.tree_collapse, Me.tree_expand, Me.ToolStripSeparator3, Me.str_wide, Me.str_narrow, Me.ToolStripSeparator14, Me.str_gbk, Me.han2kan, Me.kan2han, Me.ToolStripSeparator15, Me.MECAB半角カナToolStripMenuItem, Me.MECABでローマ字ToolStripMenuItem})
         Me.codetreeview.Name = "codetreeview"
         Me.codetreeview.Size = New System.Drawing.Size(74, 22)
         Me.codetreeview.Text = "ツリー(&T)"
@@ -526,44 +523,56 @@ Partial Class MERGE
         'paserToolStripMenuItem
         '
         Me.paserToolStripMenuItem.Name = "paserToolStripMenuItem"
-        Me.paserToolStripMenuItem.Size = New System.Drawing.Size(208, 22)
+        Me.paserToolStripMenuItem.Size = New System.Drawing.Size(237, 22)
         Me.paserToolStripMenuItem.Text = "コードパーサー"
         Me.paserToolStripMenuItem.ToolTipText = "チートコードをまとめて追加してツリーに反映します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ツリーの一番上ファイル名を選択時；_S_G追加が有効になります" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ゲームタイトル名選択時；ゲームの末尾に追加" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "コード名選択時；選択箇所の次に挿入"
         '
         'ToolStripSeparator7
         '
         Me.ToolStripSeparator7.Name = "ToolStripSeparator7"
-        Me.ToolStripSeparator7.Size = New System.Drawing.Size(205, 6)
+        Me.ToolStripSeparator7.Size = New System.Drawing.Size(234, 6)
         '
         'tree_collapse
         '
         Me.tree_collapse.Name = "tree_collapse"
-        Me.tree_collapse.Size = New System.Drawing.Size(208, 22)
+        Me.tree_collapse.Size = New System.Drawing.Size(237, 22)
         Me.tree_collapse.Text = "全て折りたたむ"
         '
         'tree_expand
         '
         Me.tree_expand.Name = "tree_expand"
-        Me.tree_expand.Size = New System.Drawing.Size(208, 22)
+        Me.tree_expand.Size = New System.Drawing.Size(237, 22)
         Me.tree_expand.Text = "全て展開する"
         '
         'ToolStripSeparator3
         '
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(205, 6)
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(234, 6)
         '
         'str_wide
         '
         Me.str_wide.Name = "str_wide"
-        Me.str_wide.Size = New System.Drawing.Size(208, 22)
+        Me.str_wide.Size = New System.Drawing.Size(237, 22)
         Me.str_wide.Text = "半角カナ→全角カタカナ"
         Me.str_wide.ToolTipText = "半角カナを全角カタカナに変換します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "中国語GBKには半角カナが存在しないため半角のまま保存すると文字化けが発生します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
+        '
+        'str_narrow
+        '
+        Me.str_narrow.Name = "str_narrow"
+        Me.str_narrow.Size = New System.Drawing.Size(237, 22)
+        Me.str_narrow.Text = "全角カナ/ひらがな→半角カナ"
+        Me.str_narrow.ToolTipText = "全角カナ/ひらがなを半角カタカナに変換します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ARBINでは半角カナしか表示できません"
+        '
+        'ToolStripSeparator14
+        '
+        Me.ToolStripSeparator14.Name = "ToolStripSeparator14"
+        Me.ToolStripSeparator14.Size = New System.Drawing.Size(234, 6)
         '
         'str_gbk
         '
         Me.str_gbk.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GBKOP})
         Me.str_gbk.Name = "str_gbk"
-        Me.str_gbk.Size = New System.Drawing.Size(208, 22)
+        Me.str_gbk.Size = New System.Drawing.Size(237, 22)
         Me.str_gbk.Text = "中国語文字化け対策"
         Me.str_gbk.ToolTipText = "FREECHEAT/CMFUSIONで半角カナ以外の表示できない文字を代替文字かスペースで置換します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "対象；" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "・∋⊆⊇⊂⊃￢⇒⇔∀∃∂∇≪≫∬Å♯♭♪†‡¶⑪" & _
     "⑫⑬⑭⑮⑯⑰⑱⑲⑳㍉㌔㌢㍍㌘㌧㌃㌶㍑㍗㌍㌦㌣㌫㍊㌻㍻〝〟㏍㊤㊥㊦㊧㊨㍾㍽㍼"
@@ -574,17 +583,34 @@ Partial Class MERGE
         Me.GBKOP.Size = New System.Drawing.Size(196, 22)
         Me.GBKOP.Text = "半角カナも全角にする"
         '
+        'han2kan
+        '
+        Me.han2kan.Name = "han2kan"
+        Me.han2kan.Size = New System.Drawing.Size(237, 22)
+        Me.han2kan.Text = "繁体→簡体"
+        '
+        'kan2han
+        '
+        Me.kan2han.Name = "kan2han"
+        Me.kan2han.Size = New System.Drawing.Size(237, 22)
+        Me.kan2han.Text = "簡体→繁体"
+        '
+        'ToolStripSeparator15
+        '
+        Me.ToolStripSeparator15.Name = "ToolStripSeparator15"
+        Me.ToolStripSeparator15.Size = New System.Drawing.Size(234, 6)
+        '
         'MECAB半角カナToolStripMenuItem
         '
         Me.MECAB半角カナToolStripMenuItem.Name = "MECAB半角カナToolStripMenuItem"
-        Me.MECAB半角カナToolStripMenuItem.Size = New System.Drawing.Size(208, 22)
+        Me.MECAB半角カナToolStripMenuItem.Size = New System.Drawing.Size(237, 22)
         Me.MECAB半角カナToolStripMenuItem.Text = "MECABで半角カナ"
         Me.MECAB半角カナToolStripMenuItem.Visible = False
         '
         'MECABでローマ字ToolStripMenuItem
         '
         Me.MECABでローマ字ToolStripMenuItem.Name = "MECABでローマ字ToolStripMenuItem"
-        Me.MECABでローマ字ToolStripMenuItem.Size = New System.Drawing.Size(208, 22)
+        Me.MECABでローマ字ToolStripMenuItem.Size = New System.Drawing.Size(237, 22)
         Me.MECABでローマ字ToolStripMenuItem.Text = "MECABでローマ字"
         Me.MECABでローマ字ToolStripMenuItem.Visible = False
         '
@@ -733,7 +759,7 @@ Partial Class MERGE
         '
         'menu_options
         '
-        Me.menu_options.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.options_ontop, Me.options_error, Me.ブラウザ変更ToolStripMenuItem, Me.menu_font, Me.ToolStripMenuItem1, Me.grided_use, Me.fixedform, Me.FTPDsetting, Me.PBPHBHASH, Me.update_save_filepass, Me.autoupdater, Me.DBENCODE, Me.CFEDIT})
+        Me.menu_options.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.options_ontop, Me.options_error, Me.ブラウザ変更ToolStripMenuItem, Me.menu_font, Me.ToolStripMenuItem1, Me.grided_use, Me.fixedform, Me.FTPDsetting, Me.PBPHBHASH, Me.update_save_filepass, Me.autoupdater, Me.DBENCODE, Me.CFEDIT, Me.ARBINhanzen})
         Me.menu_options.Name = "menu_options"
         Me.menu_options.Size = New System.Drawing.Size(99, 22)
         Me.menu_options.Text = "オプション(&O)"
@@ -974,6 +1000,13 @@ Partial Class MERGE
         Me.CFEDIT.Text = "CFDATを(M)付きで変換する"
         Me.CFEDIT.ToolTipText = "読み込み時マスターコード(M)がゲームの一番初めのコードに表示されるようになります。" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "(M)がある場合、保存時にマスターコードとして優先して出力します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "(M)" & _
     "なしの場合,ゲームIDフォームのULJM-00000XXXを変換して出力します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "XXXがない場合は820,CWCモードとして出力します。"
+        '
+        'ARBINhanzen
+        '
+        Me.ARBINhanzen.Name = "ARBINhanzen"
+        Me.ARBINhanzen.Size = New System.Drawing.Size(297, 22)
+        Me.ARBINhanzen.Text = "ARBIN半角カナを全角に変換する"
+        Me.ARBINhanzen.ToolTipText = "アクションリプレイのバイナリファイルを" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "入力時;半角カナ→全角カナ" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "出力時;全角カナ/ひらがな→半角カナ" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "に変換して処理します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
         'ヘルプHToolStripMenuItem
         '
@@ -1925,7 +1958,6 @@ Partial Class MERGE
     Friend WithEvents CPENC As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator13 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents checkencode As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents zenkakuwitherror As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents cpstring As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents UHC As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents CCP As System.Windows.Forms.ToolStripMenuItem
@@ -1933,5 +1965,11 @@ Partial Class MERGE
     Friend WithEvents GITHUB As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents tt As System.Windows.Forms.Label
     Friend WithEvents CFEDIT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ARBINhanzen As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents str_narrow As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator14 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents han2kan As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents kan2han As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator15 As System.Windows.Forms.ToolStripSeparator
 
 End Class

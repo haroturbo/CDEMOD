@@ -598,18 +598,6 @@ Namespace My
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
-        Public Property autocp() As Boolean
-            Get
-                Return CType(Me("autocp"),Boolean)
-            End Get
-            Set
-                Me("autocp") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
         Public Property checkcpstr() As Boolean
             Get
                 Return CType(Me("checkcpstr"),Boolean)
@@ -760,6 +748,18 @@ Namespace My
             End Get
             Set
                 Me("zebra") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property arbinhanzen() As Boolean
+            Get
+                Return CType(Me("arbinhanzen"),Boolean)
+            End Get
+            Set
+                Me("arbinhanzen") = value
             End Set
         End Property
     End Class
