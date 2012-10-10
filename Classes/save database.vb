@@ -703,7 +703,7 @@ Public Class save_db
 
                             For Each s As String In buffer
 
-                                If s.Contains("0x") Then
+                                If s.Contains("0x") AndAlso Not s.Contains("#") Then
                                     nullcode = False
                                     If cfmax = 100 Then
                                         bs(i) = &H44 'D コード名
@@ -877,7 +877,7 @@ Public Class save_db
 
                         For Each s As String In buf
 
-                            If s.Contains("0x") Then
+                            If s.Contains("0x") AndAlso Not s.Contains("#") Then
 
                                 nullcode = False
                                 s = s.Replace("0x", "")

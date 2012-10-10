@@ -197,8 +197,7 @@ Public Class load_db
                                 '_L 0x12345678 0x12345678 24文字
                                 buffer(0) = buffer(0).PadRight(24, "0"c)
                                 If buffer(0).Substring(3, 2) = "0x" And buffer(0).Substring(14, 2) = "0x" Then 'If it is a correctly formed code record it
-                                    buffer(0) = System.Text.RegularExpressions.Regex.Replace( _
-                            buffer(0), "[g-zG-Z]", "A")
+                                    buffer(0) = System.Text.RegularExpressions.Regex.Replace(buffer(0), "[g-zG-Z]", "A")
                                     buffer(0) = buffer(0).ToUpper
                                     buffer(0) = buffer(0).Replace(" 0A", " 0x")
                                     code.AppendLine(buffer(0).Substring(3, 21).Trim)
