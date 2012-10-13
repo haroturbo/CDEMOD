@@ -46,8 +46,11 @@ Public Class save_db
     Public Sub save_cwcheat(ByVal filename As String, ByVal enc1 As Integer)
 
         Dim m As MERGE = MERGE
-        Dim i As Integer = 0 ' Error count
+        Dim errorct As Integer = 0
         Dim buffer As String()
+        Dim errors As Boolean = False
+        Dim ew As error_window = error_window
+        reset_errors() ' Clear prior save errors if any
 
         If enc1 = 512132004 Or enc1 = 2132004 Or enc1 = 951 Or enc1 = 21220932 Then
             Dim sel As Integer = 0
@@ -66,7 +69,6 @@ Public Class save_db
                 Dim cwcar As String = "_L "
                 Dim GID As String = ""
                 Dim bs As Byte()
-                Dim errors As Boolean = False
                 Dim tfs As New FileStream(unitable(sel), FileMode.Open, FileAccess.Read)
                 Dim tbl(CInt(tfs.Length - 1)) As Byte
                 tfs.Read(tbl, 0, tbl.Length)
@@ -110,9 +112,12 @@ Public Class save_db
                                 End If
                             Else
 
-                                buffer = n1.Tag.ToString.Split(CChar(vbCrLf))
+                                buffer = n1.Tag.ToString.Split(CChar(vbLf))
 
                                 For Each s As String In buffer
+
+                                    s = s.Trim()
+
                                     If s.Length = 1 Then
                                         If s = "0" Or s = "2" Or s = "4" Then
                                             If s = "0" Then
@@ -148,18 +153,17 @@ Public Class save_db
 
                                         Else
                                             '0x00000000 0x00000000
-                                            If s.Contains("0x") Then
-
-                                                str = cwcar & s.Trim & vbCrLf
-                                                bs = ctbl.unicode2custom(str, tbl, sel)
-                                                tw.Write(bs, 0, bs.Length)
-
-                                            Else
+                                            If Regex.IsMatch(s, "^0x[0-9A-Fa-f]{8} 0x[0-9A-Fa-f]{8}", RegexOptions.ECMAScript) = False AndAlso s.Trim <> "" Then
                                                 ' Error, code length was incorrect
-                                                i += 1
-                                                write_errors(i, n.Text.Trim, n1.Text.Trim, "不正なコード形式です: " & s.Trim)
+                                                errorct += 1
+                                                write_errors(errorct, n.Text.Trim, n1.Text.Trim, "不正なコード形式です: " & s.Trim)
                                                 errors = True
                                             End If
+
+                                            str = cwcar & s.Trim & vbCrLf
+                                            bs = ctbl.unicode2custom(str, tbl, sel)
+                                            tw.Write(bs, 0, bs.Length)
+
 
                                         End If
 
@@ -185,10 +189,7 @@ Public Class save_db
         Else
 
 
-            Dim tw As New StreamWriter(filename, False, _
-                                       System.Text.Encoding.GetEncoding(enc1))
-            Dim ew As error_window = error_window
-            Dim errors As Boolean = False
+            Dim tw As New StreamWriter(filename, False, System.Text.Encoding.GetEncoding(enc1))
             Dim cwcar As String = "_L "
             Dim b1 As String = Nothing
             Dim GID As String = ""
@@ -241,9 +242,11 @@ Public Class save_db
 
                         Else
 
-                            buffer = n1.Tag.ToString.Split(CChar(vbCrLf))
+                            buffer = n1.Tag.ToString.Split(CChar(vbLf))
 
                             For Each s As String In buffer
+                                s = s.Trim()
+
                                 If s.Length = 1 Then
                                     If s = "0" Or s = "2" Or s = "4" Then
                                         If s = "0" Then
@@ -265,25 +268,21 @@ Public Class save_db
                                         tw.Write("_C1 " & n1.Text.Trim & vbCrLf)
                                     End If
                                 ElseIf s.Length > 1 Then
-
                                     If s.Contains("#") Then
 
-                                        If s.Length > 2 Then
-                                            tw.Write(s.Trim & vbCrLf)
-                                        End If
+                                        tw.Write(s & vbCrLf)
 
                                     Else
                                         '0x00000000 0x00000000
-                                        If s.Contains("0x") Then
-
-                                            tw.Write(cwcar & s.Trim & vbCrLf)
-
-                                        Else
+                                        If Regex.IsMatch(s, "^0x[0-9A-Fa-f]{8} 0x[0-9A-Fa-f]{8}", RegexOptions.ECMAScript) = False AndAlso s.Trim <> "" Then
                                             ' Error, code length was incorrect
-                                            i += 1
-                                            write_errors(i, n.Text.Trim, n1.Text.Trim, "不正なコード形式です: " & s.Trim)
+                                            errorct += 1
+                                            write_errors(errorct, n.Text.Trim, n1.Text.Trim, "不正なコード形式です: " & s.Trim)
                                             errors = True
                                         End If
+
+                                        tw.Write(cwcar & s & vbCrLf)
+
 
                                     End If
 
@@ -304,13 +303,25 @@ Public Class save_db
             tw.Close()
         End If
 
+
+
+        If errorct > 0 Then
+            ew.Show()
+            ew.tab_error.SelectedIndex = 1
+            m.Focus()
+            reset_toolbar()
+        End If
+
     End Sub
 
     Public Sub save_psx(ByVal filename As String, ByVal enc1 As Integer)
 
         Dim m As MERGE = MERGE
-        Dim i As Integer = 0 ' Error count
         Dim buffer As String()
+        Dim errors As Boolean = False
+        Dim ew As error_window = error_window
+        Dim errorct As Integer = 0
+        reset_errors() ' Clear prior save errors if any
 
 
         If enc1 = 512132004 Or enc1 = 2132004 Or enc1 = 951 Or enc1 = 21220932 Then
@@ -329,7 +340,6 @@ Public Class save_db
                 Dim cwcar As String = "_L "
                 Dim tw As New FileStream(filename, FileMode.Create, FileAccess.Write)
                 Dim bs As Byte()
-                Dim errors As Boolean = False
                 Dim tfs As New FileStream(unitable(sel), FileMode.Open, FileAccess.Read)
                 Dim tbl(CInt(tfs.Length - 1)) As Byte
                 tfs.Read(tbl, 0, tbl.Length)
@@ -339,8 +349,6 @@ Public Class save_db
                     bs = ctbl.unicode2custom(str, tbl, sel)
                     tw.Write(bs, 0, bs.Length)
                 End If
-
-                Dim ew As error_window = error_window
                 Dim code As String = Nothing
                 reset_errors() ' Clear prior save errors if any
 
@@ -409,7 +417,7 @@ Public Class save_db
                             End If
 
 
-                            buffer = n1.Tag.ToString.Split(CChar(vbCrLf))
+                            buffer = n1.Tag.ToString.Split(CChar(vbLf))
 
                             For Each s As String In buffer
                                 s = s.Trim
@@ -425,19 +433,17 @@ Public Class save_db
                                         End If
 
                                     Else
-                                        If System.Text.RegularExpressions.Regex.IsMatch(s, "[0-9A-Fa-f]{8} [0-9A-Fa-f?]{4}", System.Text.RegularExpressions.RegexOptions.ECMAScript) Then
-
-                                            'tw.Write("_L " & s & vbCrLf)
-                                            str = "_L " & s & vbCrLf
-                                            bs = ctbl.unicode2custom(str, tbl, sel)
-                                            tw.Write(bs, 0, bs.Length)
-
-                                        Else
+                                        If Regex.IsMatch(s, "^[0-9A-Fa-f]{8} [0-9A-Fa-f?]{4}", RegexOptions.ECMAScript) = False AndAlso s <> "" Then
                                             ' Error, code length was incorrect
-                                            i += 1
-                                            write_errors(i, n.Text.Trim, n1.Text.Trim, "Incorrectly formatted code: " & s.Trim)
+                                            errorct += 1
+                                            write_errors(errorct, n.Text.Trim, n1.Text.Trim, "不正なコード形式です: " & s)
                                             errors = True
                                         End If
+
+                                        'tw.Write("_L " & s & vbCrLf)
+                                        str = "_L " & s & vbCrLf
+                                        bs = ctbl.unicode2custom(str, tbl, sel)
+                                        tw.Write(bs, 0, bs.Length)
 
                                     End If
 
@@ -460,8 +466,6 @@ Public Class save_db
         Else
 
             Dim tw As New StreamWriter(filename, False, Encoding.GetEncoding(enc1))
-            Dim ew As error_window = error_window
-            Dim errors As Boolean = False
             Dim code As String = Nothing
             
 
@@ -512,27 +516,29 @@ Public Class save_db
                         End If
 
 
-                        buffer = n1.Tag.ToString.Split(CChar(vbCrLf))
+                        buffer = n1.Tag.ToString.Split(CChar(vbLf))
 
                         For Each s As String In buffer
+
                             s = s.Trim
+
                             If s.Length > 1 Then
+
 
                                 If s.Contains("#") Then
 
                                     tw.Write(s & vbCrLf)
 
                                 Else
-                                    If System.Text.RegularExpressions.Regex.IsMatch(s, "[0-9A-Fa-f]{8} [0-9A-Fa-f?]{4}", System.Text.RegularExpressions.RegexOptions.ECMAScript) Then
-
-                                        tw.Write("_L " & s & vbCrLf)
-
-                                    Else
+                                    If Regex.IsMatch(s, "^[0-9A-Fa-f]{8} [0-9A-Fa-f?]{4}", RegexOptions.ECMAScript) = False AndAlso s <> "" Then
                                         ' Error, code length was incorrect
-                                        i += 1
-                                        write_errors(i, n.Text.Trim, n1.Text.Trim, "Incorrectly formatted code: " & s.Trim)
+                                        errorct += 1
+                                        write_errors(errorct, n.Text.Trim, n1.Text.Trim, "不正なコード形式です: " & s)
                                         errors = True
                                     End If
+
+                                    tw.Write("_L " & s & vbCrLf)
+
 
                                 End If
 
@@ -547,6 +553,13 @@ Public Class save_db
             Next
 
             tw.Close()
+        End If
+
+        If errorct > 0 Then
+            ew.Show()
+            ew.tab_error.SelectedIndex = 1
+            m.Focus()
+            reset_toolbar()
         End If
 
     End Sub
@@ -564,6 +577,8 @@ Public Class save_db
         Dim nullcode As Boolean = False
         Dim dummy As Byte() = Encoding.GetEncoding(1201).GetBytes("0000000000000000")
         Dim z As Integer = 0
+        Dim notcfname As Byte() = Encoding.GetEncoding(1201).GetBytes("(PSPAR/TEMP)")
+        Dim notcflen As Integer = notcfname.Length
 
         Dim gname As String = ""
         Dim ccname As String = ""
@@ -580,6 +595,11 @@ Public Class save_db
         Dim cfids As Regex = New Regex("0x[0-9A-Fa-f]{8} 0x[0-9A-Fa-f]{8}")
         Dim cfim As Match
         Dim s1 As String = ""
+        Dim notcf As Boolean = False
+        Dim errors As Boolean = False
+        Dim errorct As Integer = 0
+        Dim ew As error_window = error_window
+        reset_errors() ' Clear prior save errors if any
 
         Try
             If m.codetree.Nodes(0).Nodes.Count = 0 Then
@@ -609,6 +629,8 @@ Public Class save_db
                 z += 1
                 gname = n.Text
                 gidst = n.Tag.ToString
+
+
                 If gidst.Length < 10 Then
                     gidst = gidst.PadRight(10, CChar("0"))
                 End If
@@ -622,17 +644,33 @@ Public Class save_db
                     gid &= gidst.Remove(0, 5) & "820" 'CWC生コードモード
                 End If
 
-                    If nullcode = True Then
-                        bs(i) = &H43 'C コード内容
-                        bs(i + 1) = &H20
-                        i += 2
-                        Array.ConstrainedCopy(dummy, 0, bs, i, 32)
-                        i += 32
+                If nullcode = True Then
+
+                    If notcf = True Then
+                        i -= 2
+                        Array.ConstrainedCopy(notcfname, 0, bs, i, notcflen)
+                        i += notcflen
                         bs(i) = 10
                         bs(i + 1) = 10
                         i += 2
-                        nullcode = False
+                        notcf = False
+                    Else
+                        errorct += 1
+                        write_errors(errorct, n.Text.Trim, ccname, "コード内容が空なので代替ダミーが追加されます")
                     End If
+                    errors = True
+
+                    bs(i) = &H43 'C コード内容
+                    bs(i + 1) = &H20
+                    i += 2
+                    Array.ConstrainedCopy(dummy, 0, bs, i, 32)
+                    i += 32
+                    bs(i) = 10
+                    bs(i + 1) = 10
+                    i += 2
+                    nullcode = False
+
+                End If
 
                     bs(i) = &H47 'G ゲームタイトル
                     bs(i + 1) = &H20
@@ -659,15 +697,31 @@ Public Class save_db
 
                     For Each n1 As TreeNode In n.Nodes
 
-                        If nullcode = True Then
-                            bs(i) = &H43 'C コード内容
-                            bs(i + 1) = &H20
-                            i += 2
-                            Array.ConstrainedCopy(dummy, 0, bs, i, 32)
-                            i += 32
+                    If nullcode = True Then
+                        
+                        If notcf = True Then
+                            i -= 2
+                            Array.ConstrainedCopy(notcfname, 0, bs, i, notcflen)
+                            i += notcflen
                             bs(i) = 10
                             bs(i + 1) = 10
                             i += 2
+                            notcf = False
+                        Else
+                            errorct += 1
+                            write_errors(errorct, n.Text.Trim, ccname, "コード内容が空なので代替ダミーが追加されます")
+                        End If
+
+                        bs(i) = &H43 'C コード内容
+                        bs(i + 1) = &H20
+                        i += 2
+                        Array.ConstrainedCopy(dummy, 0, bs, i, 32)
+                        i += 32
+                        bs(i) = 10
+                        bs(i + 1) = 10
+                        i += 2
+
+                        nullcode = False
                     End If
 
                     If n1.Index = 0 AndAlso n1.Text = "(M)" Then
@@ -699,39 +753,61 @@ Public Class save_db
                         cfmax = 0
 
                         If mode = "0" Or mode = "1" Then
-                            buffer = n1.Tag.ToString.Split(CChar(vbCrLf))
+                            buffer = n1.Tag.ToString.Split(CChar(vbLf))
 
                             For Each s As String In buffer
 
-                                If s.Contains("0x") AndAlso Not s.Contains("#") Then
-                                    nullcode = False
-                                    If cfmax = 100 Then
-                                        bs(i) = &H44 'D コード名
+                                If s.Length > 2 Then
+                                    s = s.Trim
+                                    If s.Contains("#") = True Then
+                                    ElseIf Regex.IsMatch(s, "^0x[0-9A-Fa-f]{8} 0x[0-9A-Fa-f]{8}", RegexOptions.ECMAScript) = True Then
+
+                                        nullcode = False
+                                        If cfmax = 100 Then
+
+                                            errorct += 1
+                                            write_errors(errorct, n.Text.Trim, ccname, "CODEFREAKの100行制限を超えてるため分割されます")
+                                            errors = True
+
+
+                                            bs(i) = &H44 'D コード名
+                                            bs(i + 1) = &H20
+                                            i += 2
+                                            Array.ConstrainedCopy(cname, 0, bs, i, namebak)
+                                            i += namebak
+                                            bs(i) = 10
+                                            bs(i + 1) = 10
+                                            i += 2
+                                            cfmax = 0
+                                        End If
+                                        cfmax += 1
+                                        bs(i) = &H43 'C コード内容
                                         bs(i + 1) = &H20
                                         i += 2
-                                        Array.ConstrainedCopy(cname, 0, bs, i, namebak)
-                                        i += namebak
+                                        s = s.Replace("0x", "")
+                                        s = s.Replace(" ", "")
+                                        cp1201len = s.Length * 2
+                                        cfutf16be = Encoding.GetEncoding(1201).GetBytes(s)
+                                        Array.ConstrainedCopy(cfutf16be, 0, bs, i, cp1201len)
+                                        i += cp1201len
                                         bs(i) = 10
                                         bs(i + 1) = 10
                                         i += 2
-                                        cfmax = 0
+                                    Else
+
+                                        ' Error, code length was incorrect
+                                        errorct += 1
+                                        write_errors(errorct, n.Text.Trim, n1.Text.Trim, "不正なコード形式です: " & s)
+                                        errors = True
                                     End If
-                                    cfmax += 1
-                                    bs(i) = &H43 'C コード内容
-                                    bs(i + 1) = &H20
-                                    i += 2
-                                    s = s.Replace("0x", "")
-                                    s = s.Replace(" ", "")
-                                    s = s.Remove(0, 1)
-                                    cp1201len = s.Length * 2
-                                    cfutf16be = Encoding.GetEncoding(1201).GetBytes(s)
-                                    Array.ConstrainedCopy(cfutf16be, 0, bs, i, cp1201len)
-                                    i += cp1201len
-                                    bs(i) = 10
-                                    bs(i + 1) = 10
-                                    i += 2
                                 End If
                             Next
+                        Else
+                            notcf = True
+                            ' Error, code length was incorrect
+                            errorct += 1
+                            write_errors(errorct, n.Text.Trim, n1.Text.Trim, "CWC用コード形式ではありません")
+                            errors = True
                         End If
                     End If
                 Next
@@ -756,6 +832,15 @@ Public Class save_db
             MessageBox.Show(ex.Message)
             fs.Close()
         End Try
+
+
+
+        If errorct > 0 Then
+            ew.Show()
+            ew.tab_error.SelectedIndex = 1
+            m.Focus()
+            reset_toolbar()
+        End If
 
 
     End Sub
@@ -789,6 +874,7 @@ Public Class save_db
         Dim l As Integer = 0
         Dim k As Integer = 0
         Dim t As UInteger = 0
+        Dim u As UInteger = 0
         Dim tmp As Integer = 0
 
         Dim header() As Byte = Encoding.GetEncoding(932).GetBytes("PSPARC01")
@@ -811,6 +897,13 @@ Public Class save_db
         Dim cname() As Byte = Nothing
         Dim code(3) As Byte
         Dim mode As String = ""
+        Dim errors As Boolean = False
+        Dim overflow As Boolean = False
+        Dim ew As error_window = error_window
+        Dim errorct As Integer = 0
+        Dim arcmt As Integer = 0
+
+        reset_errors() ' Clear prior save errors if any
         Array.Resize(header, &H1C)
 
         Try
@@ -825,6 +918,14 @@ Public Class save_db
                     gid = gid.PadRight(10, CChar("0"))
                 End If
                 gname = n.Text
+                
+
+                If Regex.IsMatch(gname, "[^\u0020-\u007f\uFF61-\uFF9F]", RegexOptions.ECMAScript) = True Then
+                    errorct += 1
+                    write_errors(errorct, gname, "", "ゲーム名にアルファベット半角カナ以外が含まれてます")
+                    errors = True
+                End If
+
                 ggid = Encoding.GetEncoding(932).GetBytes(gid)
                 Array.Resize(ggname, gname.Length)
                 ggname = Encoding.GetEncoding(932).GetBytes(gname)
@@ -843,7 +944,9 @@ Public Class save_db
                 i += l
                 cend = 0
                 cendplus = 0
+                arcmt = 0
                 binend += 1
+                overflow = False
 
                 For Each n1 As TreeNode In n.Nodes
 
@@ -854,6 +957,13 @@ Public Class save_db
                     Else
                         ccname = n1.Text.Trim & "(CWC/TEMP)"
                     End If
+
+                    If Regex.IsMatch(ccname, "[^\u0020-\u007f\uFF61-\uFF9F]", RegexOptions.ECMAScript) = True Then
+                        errorct += 1
+                        write_errors(errorct, gname, ccname, "コード名にアルファベット半角カナ以外が含まれてます")
+                        errors = True
+                    End If
+
                     l = ccname.Length
                     Array.Resize(cname, l)
                     cname = Encoding.GetEncoding(932).GetBytes(ccname)
@@ -871,47 +981,79 @@ Public Class save_db
                     cend += 1
                     z = 0
                     nullcode = True
+                    overflow = False
 
-                    If mode = "2" Or mode = "3" Then
-                        buf = n1.Tag.ToString.Split(CChar(vbCrLf))
 
-                        For Each s As String In buf
+                        If arcmt > 0 Then
+                        arcmt -= 1
 
-                            If s.Contains("0x") AndAlso Not s.Contains("#") Then
+                        ElseIf mode = "2" Or mode = "3" Then
+                            buf = n1.Tag.ToString.Split(CChar(vbLf))
 
-                                nullcode = False
-                                s = s.Replace("0x", "")
-                                s = s.Replace(" ", "")
-                                s = s.Remove(0, 1)
-                                t = Convert.ToUInt32(s.Substring(0, 8), 16)
-                                code = BitConverter.GetBytes(t)
-                                Array.ConstrainedCopy(code, 0, bs, i + l + 8 * z, 4)
-                                t = Convert.ToUInt32(s.Substring(8, 8), 16)
-                                code = BitConverter.GetBytes(t)
-                                Array.ConstrainedCopy(code, 0, bs, i + l + 4 + 8 * z, 4)
-                                z += 1
-                                If z = 118 Then
-                                    lline = BitConverter.GetBytes(z)
-                                    Array.ConstrainedCopy(lline, 0, bs, i, 1)
-                                    k = (z * 8 + l) >> 2
-                                    nextcode = BitConverter.GetBytes(k)
-                                    Array.ConstrainedCopy(nextcode, 0, bs, i + 3, 1)
-                                    tmp = i
-                                    i += (z * 8) + l
+                            For Each s As String In buf
 
-                                    Array.ConstrainedCopy(clen, 0, bs, i + 1, 1)
-                                    Array.ConstrainedCopy(cname, 0, bs, i + 4, ccname.Length)
-                                    Array.ConstrainedCopy(tocheat, 0, bs, i + 2, 1)
-                                    cendplus += 1
-                                    z = 0
+                                If s.Length > 2 Then
+                                    If s.Contains("#") = True Then
+                                    ElseIf Regex.IsMatch(s, "^0x[0-9A-Fa-f]{8} 0x[0-9A-Fa-f]{8}", RegexOptions.ECMAScript) = True Then
+
+
+
+                                        nullcode = False
+                                        s = s.Replace("0x", "")
+                                        s = s.Replace(" ", "")
+                                        t = Convert.ToUInt32(s.Substring(0, 8), 16)
+                                        code = BitConverter.GetBytes(t)
+                                        Array.ConstrainedCopy(code, 0, bs, i + l + 8 * z, 4)
+                                        u = Convert.ToUInt32(s.Substring(8, 8), 16)
+                                        code = BitConverter.GetBytes(u)
+                                    Array.ConstrainedCopy(code, 0, bs, i + l + 4 + 8 * z, 4)
+                                    If overflow = True Then
+                                        errorct += 1
+                                        write_errors(errorct, n.Text.Trim, ccname, "PSPARの行数限界を超える可能性があるので118行ずつ分割しました")
+                                        overflow = False
+                                    End If
+                                        z += 1
+
+                                    If t = 3472883713 Then
+                                        arcmt = CInt(u And 255)
+                                    End If
+
+                                    If z = 118 Then
+
+                                        overflow = True
+
+                                        lline = BitConverter.GetBytes(z)
+                                        Array.ConstrainedCopy(lline, 0, bs, i, 1)
+                                        k = (z * 8 + l) >> 2
+                                        nextcode = BitConverter.GetBytes(k)
+                                        Array.ConstrainedCopy(nextcode, 0, bs, i + 3, 1)
+                                        tmp = i
+                                        i += (z * 8) + l
+
+                                        Array.ConstrainedCopy(clen, 0, bs, i + 1, 1)
+                                        Array.ConstrainedCopy(cname, 0, bs, i + 4, ccname.Length)
+                                        Array.ConstrainedCopy(tocheat, 0, bs, i + 2, 1)
+                                        cendplus += 1
+                                        z = 0
+                                    End If
+                                    Else
+                                        ' Error, code length was incorrect
+                                        errorct += 1
+                                        write_errors(errorct, n.Text.Trim, n1.Text.Trim, "不正なコード形式です " & s)
+                                        errors = True
+                                    End If
                                 End If
-                            End If
 
-                        Next
+                            Next
 
                         If nullcode = True Then
+                            If arcmt = 0 Then
+                                errorct += 1
+                                write_errors(errorct, n.Text.Trim, ccname, "コード内容が空なので代替ダミーが追加されます")
+                            End If
                             z = 1
                             Array.ConstrainedCopy(dummy, 0, bs, i + l, 8)
+
                         End If
 
                         If z > 0 Then
@@ -931,7 +1073,14 @@ Public Class save_db
                             End If
                             Array.ConstrainedCopy(null, 0, bs, i, null.Length)
                         End If
-                    Else
+                        Else
+
+                        ' Error, code length was incorrect
+                        If arcmt = 0 Then
+                            errorct += 1
+                            write_errors(errorct, n.Text.Trim, n1.Text.Trim, "PSPAR用コード形式ではありません,代替ダミーが追加されます")
+                            errors = True
+                        End If
 
                         z = 1
                         Array.ConstrainedCopy(dummy, 0, bs, i + l, 8)
@@ -945,7 +1094,7 @@ Public Class save_db
                         End If
                         i += (z * 8) + l
 
-                    End If
+                        End If
                 Next
                 codenum = BitConverter.GetBytes(cend + cendplus)
                 Array.ConstrainedCopy(codenum, 0, bs, back + 5, 2)
@@ -978,6 +1127,14 @@ Public Class save_db
         fs.Write(header, 0, header.Length)
         fs.Write(bs, 0, bs.Length)
         fs.Close()
+
+
+        If errorct > 0 Then
+            ew.Show()
+            ew.tab_error.SelectedIndex = 1
+            m.Focus()
+            reset_toolbar()
+        End If
 
     End Sub
 
@@ -1046,9 +1203,20 @@ Public Class save_db
         Dim m As MERGE = MERGE
 
         ew.Hide()
-        m.options_error.Text = "エラー画面を隠す"
+        m.options_error.Text = "エラーログを見る"
         m.options_error.Checked = False
         ew.list_save_error.Items.Clear()
+
+    End Sub
+
+    Private Sub reset_toolbar()
+
+        Dim m As MERGE = MERGE
+
+        If m.options_error.Checked = False Then
+            m.options_error.Checked = True
+            m.options_error.Text = "エラーログを隠す"
+        End If
 
     End Sub
 

@@ -82,10 +82,25 @@ Public Class load_db
 
                             If buffer(0).Substring(0, 3) = "_L " Or buffer(0).Substring(0, 3) = "_M " Or buffer(0).Substring(0, 3) = "_N " Then
                                 NULLCODE = False
+                                cwcar = buffer(0).Substring(0, 3)
+                                If cwcar = "_M " Then
+                                    z = Integer.Parse(code.ToString.Substring(0, 1))
+                                    code.Remove(0, 1)
+                                    z = z And 1
+                                    z = 2 Or z
+                                    code.Insert(0, z.ToString())
+
+                                ElseIf cwcar = "_N " Then
+                                    z = Integer.Parse(code.ToString.Substring(0, 1))
+                                    code.Remove(0, 1)
+
+                                    z = z And 1
+                                    z = 4 Or z
+                                    code.Insert(0, z.ToString())
+                                End If
                                 cwcar = buffer(0).Substring(0, 2)
                                 '_L 0x12345678 0x12345678 24文字
-                                buffer(0) = System.Text.RegularExpressions.Regex.Replace( _
-                        buffer(0), "[g-zG-Z]", "A")
+                                buffer(0) = System.Text.RegularExpressions.Regex.Replace(buffer(0), "[g-zG-Z]", "A")
                                 buffer(0) = buffer(0).ToUpper
                                 buffer(0) = buffer(0).Replace(" 0A", " 0x")
                                 buffer(0) = buffer(0).PadRight(24, "0"c)
@@ -590,11 +605,8 @@ Public Class load_db
                                         Else
                                             write_errors(counts(0), counts(2), buffer(0) & " <追加されませんでした,H-EX>", gnode.Text, cnode.Text) ' Write the ignored line to the error list
                                         End If
-
-                                        buffer(0) = sr.ReadLine
-                                        counts(0) += 1
-                                        counts(1) += 1
-                                        skip = True
+                                        
+                                        skip = False
 
                                     End If
                                 End If

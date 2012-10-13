@@ -1775,16 +1775,25 @@ Public Class MERGE
         Try
 
             Dim newgame As New TreeNode
+            Dim newname As String = "新規ゲーム"
+
+            If DATEL = True Then
+                newname = "ｼﾝｷｹﾞｰﾑ"
+                If ARBINhanzen.Checked Then
+                    newname = "シンキゲーム"
+                End If
+            End If
+
             With newgame
-                .Name = "新規ゲーム"
-                .Text = "新規ゲーム"
+                .Name = newname
+                .Text = newname
                 .ImageIndex = 1
                 .Tag = "0000-00000"
             End With
             codetree.Nodes(0).Nodes.Insert(0, newgame)
             codetree.SelectedNode = newgame
             GT_tb.Enabled = True
-            GT_tb.Text = "新規ゲーム"
+            GT_tb.Text = newname
 
             file_saveas.Enabled = True
             overwrite_db.Enabled = True
@@ -1825,13 +1834,26 @@ Public Class MERGE
 
         Try
             Dim newcode As New TreeNode
+            Dim newname As String = "新規コード"
+
+            If DATEL = True Then
+                newname = "ｼﾝｷｺｰﾄﾞ"
+                If ARBINhanzen.Checked Then
+                    newname = "シンキコード"
+                End If
+            End If
+
 
             With newcode
                 .ImageIndex = 2
                 .SelectedImageIndex = 3
-                .Name = "新規コード"
-                .Text = "新規コード"
-                .Tag = "0"
+                .Name = newname
+                .Text = newname
+                If DATEL = True Then
+                    .Tag = "2"
+                Else
+                    .Tag = "0"
+                End If
             End With
 
             Select Case codetree.SelectedNode.Level
@@ -1840,7 +1862,7 @@ Public Class MERGE
 
                     off_rd.Checked = True
                     CT_tb.Enabled = True
-                    CT_tb.Text = "新規コード"
+                    CT_tb.Text = newname
                     cmt_tb.Enabled = True
                     cl_tb.Enabled = True
                     codetree.SelectedNode.Nodes.Insert(0, newcode)
@@ -1849,7 +1871,7 @@ Public Class MERGE
 
                     off_rd.Checked = True
                     CT_tb.Enabled = True
-                    CT_tb.Text = "新規コード"
+                    CT_tb.Text = newname
                     cmt_tb.Enabled = True
                     cl_tb.Enabled = True
                     codetree.SelectedNode.Parent.Nodes.Insert(codetree.SelectedNode.Index + 1, newcode)
