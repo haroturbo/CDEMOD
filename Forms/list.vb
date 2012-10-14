@@ -273,7 +273,9 @@
             l = l.NextMatch()
         End While
 
-        ListView1.TopItem = ListView1.SelectedItems(0)
+        If ListView1.SelectedItems.Count > 0 Then
+            ListView1.TopItem = ListView1.SelectedItems(0)
+        End If
         ListView1.Focus()
         ListView1.EndUpdate()
         matchno = z
