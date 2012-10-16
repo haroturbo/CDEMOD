@@ -762,6 +762,18 @@ Namespace My
                 Me("arbinhanzen") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property arbincut() As Boolean
+            Get
+                Return CType(Me("arbincut"),Boolean)
+            End Get
+            Set
+                Me("arbincut") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

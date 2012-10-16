@@ -899,9 +899,14 @@ Public Class save_db
         Dim mode As String = ""
         Dim errors As Boolean = False
         Dim overflow As Boolean = False
+        Dim arcut As Boolean = My.Settings.arbincut
         Dim ew As error_window = error_window
         Dim errorct As Integer = 0
         Dim arcmt As Integer = 0
+        Dim arcutmsg As Boolean = False
+
+        Dim codetlen As Integer = 0
+        Dim nodect As Integer = 0
 
         reset_errors() ' Clear prior save errors if any
         Array.Resize(header, &H1C)
@@ -912,6 +917,7 @@ Public Class save_db
 
                 back2 = i - back
                 back = i
+                arcutmsg = False
 
                 gid = n.Tag.ToString
                 If gid.Length < 10 Then
@@ -922,7 +928,7 @@ Public Class save_db
 
                 If Regex.IsMatch(gname, "[^\u0020-\u007f\uFF61-\uFF9F]", RegexOptions.ECMAScript) = True Then
                     errorct += 1
-                    write_errors(errorct, gname, "", "ゲーム名にアルファベット半角カナ以外が含まれてます")
+                    write_errors(errorct, gname, "NULL", "ゲーム名にアルファベット半角カナ以外が含まれてます")
                     errors = True
                 End If
 
@@ -930,11 +936,21 @@ Public Class save_db
                 Array.Resize(ggname, gname.Length)
                 ggname = Encoding.GetEncoding(932).GetBytes(gname)
 
-                l = 18 + gname.Length
-                If (l Mod 4) = 0 Then
+                l = gname.Length
+                If l > 58 Then
+                    errorct += 1
+                    write_errors(errorct, gname, "NULL", "ゲーム名が59文字以上あります")
+                    errors = True
+
+                    l = 58
+                    gname = gname.Substring(0, 58)
+                End If
+
+                l += 18
+                If (l And 3) = 0 Then
                     l += 4
                 Else
-                    l += 4 - (l Mod 4)
+                    l += 4 - (l And 3)
                 End If
 
                 tocodehead = BitConverter.GetBytes(l)
@@ -947,8 +963,12 @@ Public Class save_db
                 arcmt = 0
                 binend += 1
                 overflow = False
+                nodect = 0
+                codetlen = n.Nodes.Count
 
                 For Each n1 As TreeNode In n.Nodes
+
+                    nodect += 1
 
                     mode = n1.Tag.ToString.Substring(0, 1)
 
@@ -965,16 +985,24 @@ Public Class save_db
                     End If
 
                     l = ccname.Length
+                    If l > 58 Then
+                        errorct += 1
+                        write_errors(errorct, gname, ccname, "コード名が59文字以上あります")
+
+                        l = 58
+                        ccname = ccname.Substring(0, 58)
+                    End If
                     Array.Resize(cname, l)
                     cname = Encoding.GetEncoding(932).GetBytes(ccname)
+
                     clen = BitConverter.GetBytes(l + 1)
                     Array.ConstrainedCopy(clen, 0, bs, i + 1, 1)
                     Array.ConstrainedCopy(cname, 0, bs, i + 4, l)
                     l += 4
-                    If (l Mod 4) = 0 Then
+                    If (l And 3) = 0 Then
                         l += 4
                     Else
-                        l += 4 - (l Mod 4)
+                        l += 4 - (l And 3)
                     End If
                     tocheat = BitConverter.GetBytes(l >> 2)
                     Array.ConstrainedCopy(tocheat, 0, bs, i + 2, 1)
@@ -984,41 +1012,51 @@ Public Class save_db
                     overflow = False
 
 
-                        If arcmt > 0 Then
+                    If arcmt > 0 Then
                         arcmt -= 1
 
-                        ElseIf mode = "2" Or mode = "3" Then
-                            buf = n1.Tag.ToString.Split(CChar(vbLf))
+                    ElseIf mode = "2" Or mode = "3" Then
+                        buf = n1.Tag.ToString.Split(CChar(vbLf))
 
-                            For Each s As String In buf
+                        For Each s As String In buf
 
-                                If s.Length > 2 Then
-                                    If s.Contains("#") = True Then
-                                    ElseIf Regex.IsMatch(s, "^0x[0-9A-Fa-f]{8} 0x[0-9A-Fa-f]{8}", RegexOptions.ECMAScript) = True Then
+                            s = s.Trim
 
+                            If s.Length > 2 Then
+                                If s.Contains("#") = True Then
+                                ElseIf Regex.IsMatch(s, "^0x[0-9A-Fa-f]{8} 0x[0-9A-Fa-f]{8}", RegexOptions.ECMAScript) = True Then
 
-
-                                        nullcode = False
-                                        s = s.Replace("0x", "")
-                                        s = s.Replace(" ", "")
-                                        t = Convert.ToUInt32(s.Substring(0, 8), 16)
-                                        code = BitConverter.GetBytes(t)
-                                        Array.ConstrainedCopy(code, 0, bs, i + l + 8 * z, 4)
-                                        u = Convert.ToUInt32(s.Substring(8, 8), 16)
-                                        code = BitConverter.GetBytes(u)
+                                    nullcode = False
+                                    s = s.Replace("0x", "")
+                                    s = s.Replace(" ", "")
+                                    t = Convert.ToUInt32(s.Substring(0, 8), 16)
+                                    code = BitConverter.GetBytes(t)
+                                    Array.ConstrainedCopy(code, 0, bs, i + l + 8 * z, 4)
+                                    u = Convert.ToUInt32(s.Substring(8, 8), 16)
+                                    code = BitConverter.GetBytes(u)
                                     Array.ConstrainedCopy(code, 0, bs, i + l + 4 + 8 * z, 4)
                                     If overflow = True Then
                                         errorct += 1
-                                        write_errors(errorct, n.Text.Trim, ccname, "PSPARの行数限界を超える可能性があるので118行ずつ分割しました")
+                                        If arcut = True AndAlso arcutmsg = True AndAlso nodect = codetlen AndAlso z >= 255 Then
+                                            write_errors(errorct, n.Text.Trim, ccname, "最後のコードで255行を超えてます,適用行数÷256の余りXになってしまいます")
+                                        Else
+                                            write_errors(errorct, n.Text.Trim, ccname, "PSPARの行数限界を超える可能性があるので118行ずつ分割しました")
+                                        End If
                                         overflow = False
                                     End If
-                                        z += 1
+                                    z += 1
 
                                     If t = 3472883713 Then
                                         arcmt = CInt(u And 255)
                                     End If
 
-                                    If z = 118 Then
+                                    If arcut = True AndAlso nodect = codetlen AndAlso (z >= 118 AndAlso z < 255) Then
+                                        arcutmsg = True
+
+                                    ElseIf arcut = True AndAlso nodect = codetlen AndAlso z >= 255 Then
+                                        overflow = True
+
+                                    ElseIf z = 118 Then
 
                                         overflow = True
 
@@ -1036,44 +1074,50 @@ Public Class save_db
                                         cendplus += 1
                                         z = 0
                                     End If
-                                    Else
-                                        ' Error, code length was incorrect
-                                        errorct += 1
-                                        write_errors(errorct, n.Text.Trim, n1.Text.Trim, "不正なコード形式です " & s)
-                                        errors = True
-                                    End If
+                                Else
+                                    ' Error, code length was incorrect
+                                    errorct += 1
+                                    write_errors(errorct, n.Text.Trim, n1.Text.Trim, "不正なコード形式です; " & s)
+                                    errors = True
                                 End If
-
-                            Next
-
-                        If nullcode = True Then
-                            If arcmt = 0 Then
-                                errorct += 1
-                                write_errors(errorct, n.Text.Trim, ccname, "コード内容が空なので代替ダミーが追加されます")
                             End If
-                            z = 1
-                            Array.ConstrainedCopy(dummy, 0, bs, i + l, 8)
 
+                        Next
+
+                        If arcut = True AndAlso arcutmsg = True AndAlso nodect = codetlen Then
+                            errorct += 1
+                            write_errors(errorct, n.Text.Trim, ccname, "最後のコードで118行を超えています,PSPでは編集/新規追加ができない可能性があります")
                         End If
 
-                        If z > 0 Then
-                            lline = BitConverter.GetBytes(z)
-                            Array.ConstrainedCopy(lline, 0, bs, i, 1)
-                            k = (z * 8 + l) >> 2
-                            If n.Nodes.Count <> cend Then
-                                nextcode = BitConverter.GetBytes(k)
-                                Array.ConstrainedCopy(nextcode, 0, bs, i + 3, 1)
-                            End If
-                            i += (z * 8) + l
-                        Else
-                            cendplus -= 1
-                            Array.Resize(null, ccname.Length + 8)
-                            If n.Nodes.Count = cend Then
-                                Array.ConstrainedCopy(null, 0, bs, tmp + 3, 1)
-                            End If
-                            Array.ConstrainedCopy(null, 0, bs, i, null.Length)
+
+                    If nullcode = True Then
+                        If arcmt = 0 Then
+                            errorct += 1
+                            write_errors(errorct, n.Text.Trim, ccname, "コード内容が空なので代替ダミーが追加されます")
                         End If
-                        Else
+                        z = 1
+                        Array.ConstrainedCopy(dummy, 0, bs, i + l, 8)
+
+                    End If
+
+                    If z > 0 Then
+                        lline = BitConverter.GetBytes(z)
+                        Array.ConstrainedCopy(lline, 0, bs, i, 1)
+                        k = (z * 8 + l) >> 2
+                        If n.Nodes.Count <> cend Then
+                            nextcode = BitConverter.GetBytes(k)
+                            Array.ConstrainedCopy(nextcode, 0, bs, i + 3, 1)
+                        End If
+                        i += (z * 8) + l
+                    Else
+                        cendplus -= 1
+                        Array.Resize(null, ccname.Length + 8)
+                        If n.Nodes.Count = cend Then
+                            Array.ConstrainedCopy(null, 0, bs, tmp + 3, 1)
+                        End If
+                        Array.ConstrainedCopy(null, 0, bs, i, null.Length)
+                    End If
+                    Else
 
                         ' Error, code length was incorrect
                         If arcmt = 0 Then
@@ -1094,7 +1138,8 @@ Public Class save_db
                         End If
                         i += (z * 8) + l
 
-                        End If
+                    End If
+
                 Next
                 codenum = BitConverter.GetBytes(cend + cendplus)
                 Array.ConstrainedCopy(codenum, 0, bs, back + 5, 2)

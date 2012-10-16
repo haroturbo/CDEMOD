@@ -26,16 +26,13 @@ Public Class MERGE
         'TreeView1へのドラッグを受け入れる
         codetree.AllowDrop = True
 
-
         If My.Settings.fixedform = True Then
             Me.AutoSize = True
             fixedform.Checked = True
         Else
             Me.Width = My.Settings.mainyoko
             Me.Height = My.Settings.maintate
-
         End If
-
 
         cpstring.Checked = My.Settings.checkcpstr
         GBKOP.Checked = My.Settings.GBKOP
@@ -44,6 +41,7 @@ Public Class MERGE
         update_save_filepass.Checked = My.Settings.codepathwhensave
         PBPHBHASH.Checked = My.Settings.hbhash
         ARBINhanzen.Checked = My.Settings.arbinhanzen
+        ARCUT.Checked = My.Settings.arbincut
 
 
         If My.Settings.savetype = True Then
@@ -432,7 +430,6 @@ Public Class MERGE
                 My.Settings.lastcodepath = database
             End If
 
-            DATEL = False
         End If
     End Sub
 
@@ -3221,7 +3218,7 @@ Public Class MERGE
         curr_line.Text = temp.ToString & "行目"
     End Sub
 
-    Private Sub DBENCODE_Click(sender As System.Object, e As System.EventArgs) Handles DBENCODE.Click
+    Private Sub DBENCODE_Click(sender As System.Object, e As System.EventArgs)
         If My.Settings.saveencode = False Then
             DBENCODE.Checked = True
             My.Settings.saveencode = True
@@ -3232,7 +3229,7 @@ Public Class MERGE
 
     End Sub
 
-    Private Sub ENCTRING_Click(sender As System.Object, e As System.EventArgs) Handles ENCTRING.Click, CPENC.Click
+    Private Sub ENCTRING_Click(sender As System.Object, e As System.EventArgs)
         If My.Settings.savetype = False Then
             ENCTRING.Checked = False
             CPENC.Checked = True
@@ -3265,4 +3262,9 @@ Public Class MERGE
 
     End Sub
 
+    Private Sub ARCUT_Click(sender As Object, e As EventArgs) Handles ARCUT.Click
+
+        ARCUT.Checked = Not ARCUT.Checked
+        My.Settings.arbincut = ARCUT.Checked
+    End Sub
 End Class
