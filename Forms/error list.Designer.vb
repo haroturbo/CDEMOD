@@ -22,6 +22,7 @@ Partial Class error_window
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(error_window))
         Me.list_load_error = New System.Windows.Forms.ListView()
         Me.col_error = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
@@ -29,6 +30,9 @@ Partial Class error_window
         Me.col_game = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.col_title = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.col_linetext = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.コピーToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.全て選択ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.tab_error = New System.Windows.Forms.TabControl()
         Me.tab_load = New System.Windows.Forms.TabPage()
         Me.tab_save = New System.Windows.Forms.TabPage()
@@ -45,6 +49,8 @@ Partial Class error_window
         Me.ColumnHeader3 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader4 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader5 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.HTML = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ContextMenuStrip1.SuspendLayout()
         Me.tab_error.SuspendLayout()
         Me.tab_load.SuspendLayout()
         Me.tab_save.SuspendLayout()
@@ -54,14 +60,14 @@ Partial Class error_window
         'list_load_error
         '
         Me.list_load_error.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.col_error, Me.col_line, Me.col_game, Me.col_title, Me.col_linetext})
+        Me.list_load_error.ContextMenuStrip = Me.ContextMenuStrip1
         Me.list_load_error.Dock = System.Windows.Forms.DockStyle.Fill
         Me.list_load_error.FullRowSelect = True
         Me.list_load_error.GridLines = True
         Me.list_load_error.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable
         Me.list_load_error.Location = New System.Drawing.Point(3, 3)
-        Me.list_load_error.MultiSelect = False
         Me.list_load_error.Name = "list_load_error"
-        Me.list_load_error.Size = New System.Drawing.Size(630, 183)
+        Me.list_load_error.Size = New System.Drawing.Size(604, 140)
         Me.list_load_error.TabIndex = 0
         Me.list_load_error.UseCompatibleStateImageBehavior = False
         Me.list_load_error.View = System.Windows.Forms.View.Details
@@ -91,6 +97,25 @@ Partial Class error_window
         Me.col_linetext.Text = "テキスト内容"
         Me.col_linetext.Width = 300
         '
+        'ContextMenuStrip1
+        '
+        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.コピーToolStripMenuItem, Me.全て選択ToolStripMenuItem})
+        Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(173, 70)
+        '
+        'コピーToolStripMenuItem
+        '
+        Me.コピーToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HTML})
+        Me.コピーToolStripMenuItem.Name = "コピーToolStripMenuItem"
+        Me.コピーToolStripMenuItem.Size = New System.Drawing.Size(172, 22)
+        Me.コピーToolStripMenuItem.Text = "選択箇所のコピー"
+        '
+        '全て選択ToolStripMenuItem
+        '
+        Me.全て選択ToolStripMenuItem.Name = "全て選択ToolStripMenuItem"
+        Me.全て選択ToolStripMenuItem.Size = New System.Drawing.Size(172, 22)
+        Me.全て選択ToolStripMenuItem.Text = "全て選択"
+        '
         'tab_error
         '
         Me.tab_error.Controls.Add(Me.tab_load)
@@ -109,7 +134,7 @@ Partial Class error_window
         Me.tab_load.Location = New System.Drawing.Point(4, 22)
         Me.tab_load.Name = "tab_load"
         Me.tab_load.Padding = New System.Windows.Forms.Padding(3)
-        Me.tab_load.Size = New System.Drawing.Size(636, 189)
+        Me.tab_load.Size = New System.Drawing.Size(610, 146)
         Me.tab_load.TabIndex = 0
         Me.tab_load.Text = "読み込み時エラー"
         Me.tab_load.UseVisualStyleBackColor = True
@@ -120,7 +145,7 @@ Partial Class error_window
         Me.tab_save.Location = New System.Drawing.Point(4, 22)
         Me.tab_save.Name = "tab_save"
         Me.tab_save.Padding = New System.Windows.Forms.Padding(3)
-        Me.tab_save.Size = New System.Drawing.Size(636, 189)
+        Me.tab_save.Size = New System.Drawing.Size(610, 146)
         Me.tab_save.TabIndex = 1
         Me.tab_save.Text = "保存時エラー"
         Me.tab_save.UseVisualStyleBackColor = True
@@ -128,14 +153,14 @@ Partial Class error_window
         'list_save_error
         '
         Me.list_save_error.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.scol_error, Me.scol_game, Me.scol_codetitle, Me.scol_reason})
+        Me.list_save_error.ContextMenuStrip = Me.ContextMenuStrip1
         Me.list_save_error.Dock = System.Windows.Forms.DockStyle.Fill
         Me.list_save_error.FullRowSelect = True
         Me.list_save_error.GridLines = True
         Me.list_save_error.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable
         Me.list_save_error.Location = New System.Drawing.Point(3, 3)
-        Me.list_save_error.MultiSelect = False
         Me.list_save_error.Name = "list_save_error"
-        Me.list_save_error.Size = New System.Drawing.Size(630, 183)
+        Me.list_save_error.Size = New System.Drawing.Size(604, 140)
         Me.list_save_error.TabIndex = 0
         Me.list_save_error.UseCompatibleStateImageBehavior = False
         Me.list_save_error.View = System.Windows.Forms.View.Details
@@ -174,12 +199,12 @@ Partial Class error_window
         'list_parse_error
         '
         Me.list_parse_error.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2, Me.ColumnHeader6, Me.ColumnHeader3, Me.ColumnHeader4, Me.ColumnHeader5})
+        Me.list_parse_error.ContextMenuStrip = Me.ContextMenuStrip1
         Me.list_parse_error.Dock = System.Windows.Forms.DockStyle.Fill
         Me.list_parse_error.FullRowSelect = True
         Me.list_parse_error.GridLines = True
         Me.list_parse_error.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable
         Me.list_parse_error.Location = New System.Drawing.Point(3, 3)
-        Me.list_parse_error.MultiSelect = False
         Me.list_parse_error.Name = "list_parse_error"
         Me.list_parse_error.Size = New System.Drawing.Size(604, 140)
         Me.list_parse_error.TabIndex = 1
@@ -215,6 +240,12 @@ Partial Class error_window
         Me.ColumnHeader5.Text = "テキスト内容"
         Me.ColumnHeader5.Width = 300
         '
+        'HTML
+        '
+        Me.HTML.Name = "HTML"
+        Me.HTML.Size = New System.Drawing.Size(152, 22)
+        Me.HTML.Text = "HTMLに変換"
+        '
         'error_window
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
@@ -230,6 +261,7 @@ Partial Class error_window
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.Manual
         Me.Text = "エラーリスト"
+        Me.ContextMenuStrip1.ResumeLayout(False)
         Me.tab_error.ResumeLayout(False)
         Me.tab_load.ResumeLayout(False)
         Me.tab_save.ResumeLayout(False)
@@ -259,5 +291,9 @@ Partial Class error_window
     Friend WithEvents ColumnHeader4 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader5 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader6 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ContextMenuStrip1 As System.Windows.Forms.ContextMenuStrip
+    Friend WithEvents コピーToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents 全て選択ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents HTML As System.Windows.Forms.ToolStripMenuItem
 
 End Class

@@ -21,13 +21,13 @@ Public Class checkupdate
                 tblbase = "http://mkijiro.googlecode.com/svn/trunk/CODEDITOR/CDEMOD/bin/Release/"
             End If
 
-            If Directory.Exists("table") = False Then
-                Directory.CreateDirectory("table")
+            If Directory.Exists(Application.StartupPath & "\table") = False Then
+                Directory.CreateDirectory(Application.StartupPath & "\table")
             End If
 
             For i = 0 To 7
                 If File.Exists(extable(i)) = False Then
-                    getweb(extable(i), tblbase & extable(i), 1)
+                    getweb(extable(i), Application.StartupPath & "\" & tblbase & extable(i), 1)
                 End If
             Next
 
@@ -92,8 +92,7 @@ Public Class checkupdate
                             If My.Computer.FileSystem.DirectoryExists(Application.StartupPath & "\APP") = False Then
                                 System.IO.Directory.CreateDirectory(Application.StartupPath & "\APP")
                             End If
-                            Dim tw As New StreamWriter(txt, False, _
-                                                       System.Text.Encoding.GetEncoding(65001))
+                            Dim tw As New StreamWriter(txt, False, System.Text.Encoding.GetEncoding(65001))
                             tw.Write(Application.ExecutablePath)
                             tw.Close()
                             check.getweb(boot, up, 1)
