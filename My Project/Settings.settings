@@ -42,28 +42,22 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="download" Type="System.String" Scope="User">
-      <Value Profile="(Default)">http://unzu127xp.pa.land.to/mogura/writelog.php?dl=http://unzu127xp.pa.land.to/data/IJIRO/CDEMOD/bin/Release/CDE_CP932_FM4.exe</Value>
+      <Value Profile="(Default)">http://ijiro.daiwa-hotcom.com/mogura/writelog.php?dl=http://ijiro.daiwa-hotcom.com/data/IJIRO/CDEMOD/bin/Release/CDE_CP932_FM4.exe</Value>
     </Setting>
-    <Setting Name="nichbrowser" Type="System.String" Scope="User">
-      <Value Profile="(Default)">C:\Program Files\Jane Style\Jane2ch.exe</Value>
+    <Setting Name="apps" Type="System.String" Scope="User">
+      <Value Profile="(Default)">KAKASI	APP\kakasi.bat
+MECAB	APP\kanahenkan.bat
+PMETAN変換	APP\pme.bat
+TEMPAR鶴	APP\temp.bat
+Wget	APP\wget.bat
+2CH	C:\Program Files (x86)\Jane Style\Jane2ch.exe
+PSPへコードコピー	APP\cp.bat</Value>
     </Setting>
-    <Setting Name="app8" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="app9" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="app10" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="url8" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="url9" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="url10" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="urls" Type="System.String" Scope="User">
+      <Value Profile="(Default)">CWCWIKI	http://www21.atwiki.jp/cwcwiki/
+CWC公式	http://www.myconsole.it/143-cwcheat-official-support-forum/98-english-support-board/
+OHG	http://www.onehitgamer.com/forum/
+GOOGLE	http://www.google.co.jp/</Value>
     </Setting>
     <Setting Name="fixedform" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>

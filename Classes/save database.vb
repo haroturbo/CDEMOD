@@ -1553,26 +1553,26 @@ Public Class save_db
                 End If
                 scm = scm.Insert(scm.Length - 2, "}")
 
+                Dim enc1 = My.Settings.MSCODEPAGE
+
                 If MODE = "CLIP" Then
                     Clipboard.SetText(b1)
                 ElseIf MODE = "TXT" Then
                     filename &= ".txt"
-                    Dim tw As New StreamWriter(filename, False, System.Text.Encoding.GetEncoding(936))
-                    tw.Write(fctxt)
-                    tw.Close()
-                ElseIf MODE = "CMF" Then
-                    filename &= ".cmf"
-                    Dim tw As New StreamWriter(filename, False, System.Text.Encoding.GetEncoding(936))
-                    tw.Write(cmf)
-                    tw.Close()
-                ElseIf MODE = "SCM" Then
-                    filename &= ".scm"
-                    Dim tw As New StreamWriter(filename, False, System.Text.Encoding.GetEncoding(936))
-                    tw.Write(scm)
-                    tw.Close()
-                End If
 
-            End If
+                    writers(enc1, fctxt, filename)
+
+                    ElseIf MODE = "CMF" Then
+                        filename &= ".cmf"
+                    writers(enc1, cmf, filename)
+
+                    ElseIf MODE = "SCM" Then
+                        filename &= ".scm"
+                    writers(enc1, scm, filename)
+
+                    End If
+
+                End If
 
         Catch ex As Exception
             MessageBox.Show(ex.Message)
@@ -1709,5 +1709,41 @@ Public Class save_db
         End Try
 
     End Sub
+
+    Private Function writers(ByVal enc1 As Integer, ByVal basetxt As String, ByVal filename As String) As Boolean
+
+        If enc1 = 512132004 Or enc1 = 2132004 Or enc1 = 951 Or enc1 = 21220932 Then
+            Dim sel As Integer = 0
+            If enc1 = 512132004 Then
+                sel = 1
+            ElseIf enc1 = 951 Then
+                sel = 2
+            ElseIf enc1 = 21220932 Then
+                sel = 3
+            End If
+            If File.Exists(unitable(sel)) = True Then
+                Dim ctbl As New customtable
+                Dim str As String = ""
+
+                Dim tw As New FileStream(filename, FileMode.Create, FileAccess.Write)
+                Dim bs As Byte()
+                Dim tfs As New FileStream(unitable(sel), FileMode.Open, FileAccess.Read)
+                Dim tbl(CInt(tfs.Length - 1)) As Byte
+                tfs.Read(tbl, 0, tbl.Length)
+                tfs.Close()
+                bs = ctbl.unicode2custom(basetxt, tbl, sel)
+                tw.Write(bs, 0, bs.Length)
+                tw.Close()
+            End If
+
+        Else
+
+            Dim tw As New StreamWriter(filename, False, System.Text.Encoding.GetEncoding(My.Settings.MSCODEPAGE))
+            tw.Write(basetxt)
+            tw.Close()
+        End If
+
+        Return True
+    End Function
 
 End Class

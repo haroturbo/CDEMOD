@@ -210,100 +210,44 @@ Namespace My
             End Set
         End Property
         
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("http://unzu127xp.pa.land.to/mogura/writelog.php?dl=http://unzu127xp.pa.land.to/da"& _ 
-            "ta/IJIRO/CDEMOD/bin/Release/CDE_CP932_FM4.exe")>  _
+        <Global.System.Configuration.UserScopedSettingAttribute(), _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
+         Global.System.Configuration.DefaultSettingValueAttribute("http://ijiro.daiwa-hotcom.com/mogura/writelog.php?dl=http://ijiro.daiwa-hotcom.co" & _
+            "m/data/IJIRO/CDEMOD/bin/Release/CDE_CP932_FM4.exe")> _
         Public Property download() As String
             Get
-                Return CType(Me("download"),String)
+                Return CType(Me("download"), String)
             End Get
-            Set
+            Set(value As String)
                 Me("download") = value
             End Set
         End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("C:\Program Files\Jane Style\Jane2ch.exe")>  _
-        Public Property nichbrowser() As String
+
+        <Global.System.Configuration.UserScopedSettingAttribute(), _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
+         Global.System.Configuration.DefaultSettingValueAttribute("KAKASI" & Global.Microsoft.VisualBasic.ChrW(9) & "APP\kakasi.bat" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "MECAB" & Global.Microsoft.VisualBasic.ChrW(9) & "APP\kanahenkan.bat" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "PMETAN変換" & Global.Microsoft.VisualBasic.ChrW(9) & "APP\pme.bat" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "TEMPAR鶴" & Global.Microsoft.VisualBasic.ChrW(9) & "AP" & _
+            "P\temp.bat" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Wget" & Global.Microsoft.VisualBasic.ChrW(9) & "APP\wget.bat" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "2CH" & Global.Microsoft.VisualBasic.ChrW(9) & "C:\Program Files (x86)\Jane Style\Jane2ch.exe" & _
+            "" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "PSPへコードコピー" & Global.Microsoft.VisualBasic.ChrW(9) & "APP\cp.bat")> _
+        Public Property apps() As String
             Get
-                Return CType(Me("nichbrowser"),String)
+                Return CType(Me("apps"), String)
             End Get
-            Set
-                Me("nichbrowser") = value
+            Set(value As String)
+                Me("apps") = Value
             End Set
         End Property
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-        Public Property app8() As String
+         Global.System.Configuration.DefaultSettingValueAttribute("CWCWIKI"&Global.Microsoft.VisualBasic.ChrW(9)&"http://www21.atwiki.jp/cwcwiki/"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"CWC公式"&Global.Microsoft.VisualBasic.ChrW(9)&"http://www.myconsole.it/143-cwchea"& _ 
+            "t-official-support-forum/98-english-support-board/"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"OHG"&Global.Microsoft.VisualBasic.ChrW(9)&"http://www.onehitgamer.c"& _ 
+            "om/forum/"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"GOOGLE"&Global.Microsoft.VisualBasic.ChrW(9)&"http://www.google.co.jp/")>  _
+        Public Property urls() As String
             Get
-                Return CType(Me("app8"),String)
+                Return CType(Me("urls"),String)
             End Get
             Set
-                Me("app8") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-        Public Property app9() As String
-            Get
-                Return CType(Me("app9"),String)
-            End Get
-            Set
-                Me("app9") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-        Public Property app10() As String
-            Get
-                Return CType(Me("app10"),String)
-            End Get
-            Set
-                Me("app10") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-        Public Property url8() As String
-            Get
-                Return CType(Me("url8"),String)
-            End Get
-            Set
-                Me("url8") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-        Public Property url9() As String
-            Get
-                Return CType(Me("url9"),String)
-            End Get
-            Set
-                Me("url9") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-        Public Property url10() As String
-            Get
-                Return CType(Me("url10"),String)
-            End Get
-            Set
-                Me("url10") = value
+                Me("urls") = value
             End Set
         End Property
         

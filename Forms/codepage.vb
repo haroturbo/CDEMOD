@@ -5,6 +5,10 @@ Imports System.Text.RegularExpressions
 Public Class codepage
 
     Private Sub ini(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
+        If My.Settings.TOP = True Then
+            Me.TopMost = True
+        End If
+
         ComboBox1.SelectedIndex = My.Settings.usercpsel
     End Sub
 

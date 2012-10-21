@@ -144,6 +144,12 @@
     <Compile Include="Forms\codepage.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\url_list.Designer.vb">
+      <DependentUpon>url_list.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\url_list.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\txrp.Designer.vb">
       <DependentUpon>txrp.vb</DependentUpon>
     </Compile>
@@ -230,6 +236,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Forms\codepage.resx">
       <DependentUpon>codepage.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\url_list.resx">
+      <DependentUpon>url_list.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\txrp.resx">
       <DependentUpon>txrp.vb</DependentUpon>

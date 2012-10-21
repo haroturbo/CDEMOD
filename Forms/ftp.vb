@@ -10,6 +10,10 @@ Public Class ftp
 
 
     Private Sub form4load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        If My.Settings.TOP = True Then
+            Me.TopMost = True
+        End If
+
         If My.Settings.ftpdaemon = True Then
             daemonfinder.Checked = True
         Else
