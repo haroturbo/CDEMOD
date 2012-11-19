@@ -49,6 +49,9 @@ Public Class save_db
         Dim errorct As Integer = 0
         Dim buffer As String()
         Dim errors As Boolean = False
+        Dim enc As Boolean = My.Settings.cfid
+        Dim encok As Boolean = False
+
         Dim ew As error_window = error_window
         reset_errors() ' Clear prior save errors if any
 
@@ -84,6 +87,8 @@ Public Class save_db
                     For Each n As TreeNode In m.codetree.Nodes(0).Nodes
 
                         GID = n.Tag.ToString.Trim
+                        encok = False
+
                         If GID.Length < 10 Then
                             GID = GID.PadRight(10, CChar("0"))
                         End If
@@ -91,89 +96,114 @@ Public Class save_db
                         bs = ctbl.unicode2custom(str, tbl, sel)
                         tw.Write(bs, 0, bs.Length)
                         str = "_G " & n.Text.Trim & vbCrLf
+
                         If GID.Length = 13 Then
-                            str &= "#CFMODE" & GID.Substring(10, 3) & vbCrLf & str
-                        End If
-                        bs = ctbl.unicode2custom(str, tbl, sel)
-                        tw.Write(bs, 0, bs.Length)
-
-                        For Each n1 As TreeNode In n.Nodes
-
-                            If n1.Tag Is Nothing Then
-
-                                If n1.Tag.ToString.Substring(0, 1) = "0" Then
-                                    str = "_C0 " & n1.Text.Trim & vbCrLf
-                                    bs = ctbl.unicode2custom(str, tbl, sel)
-                                    tw.Write(bs, 0, bs.Length)
+                            'str &= "#CFMODE" & GID.Substring(10, 3) & vbCrLf
+                            If Regex.IsMatch(GID, "^[a-zA-Z\-]{5}[0-9A-Fa-f]{8}", RegexOptions.ECMAScript) Then
+                                If enc = False AndAlso (Convert.ToInt32(GID.Substring(10, 3), 16) And &H800) = 0 Then
+                                    encok = True
+                                    str &= ("#CFMODE" & GID.Substring(10, 3) & "->CWCMODE8" & GID.Substring(11, 2) & vbCrLf)
                                 Else
-                                    str = "_C0 " & n1.Text.Trim & vbCrLf
-                                    bs = ctbl.unicode2custom(str, tbl, sel)
+                                    str &= ("#CWCMODE" & GID.Substring(10, 3) & vbCrLf)
+                                End If
+                            End If
+                        End If
+
+            bs = ctbl.unicode2custom(Str, tbl, sel)
+            tw.Write(bs, 0, bs.Length)
+
+            For Each n1 As TreeNode In n.Nodes
+
+                If n1.Tag Is Nothing Then
+
+                    If n1.Tag.ToString.Substring(0, 1) = "0" Then
+                        Str = "_C0 " & n1.Text.Trim & vbCrLf
+                        bs = ctbl.unicode2custom(Str, tbl, sel)
+                        tw.Write(bs, 0, bs.Length)
+                    Else
+                        Str = "_C0 " & n1.Text.Trim & vbCrLf
+                        bs = ctbl.unicode2custom(Str, tbl, sel)
+                        tw.Write(bs, 0, bs.Length)
+                    End If
+                ElseIf enc = True AndAlso n1.Index = 0 AndAlso n1.Text = "(M)" Then
+                    Dim hex As Regex = New Regex("^0x[0-9A-Fa-f]{8} 0x[0-9A-Fa-f]{8}", RegexOptions.ECMAScript)
+                    Dim mh As Match = hex.Match(n1.Tag.ToString)
+                    If mh.Success AndAlso (Convert.ToInt32(mh.Value.Remove(0, 13), 16) And &H800) = 0 Then
+                        Str = "_E " & mh.Value & vbCrLf
+                        bs = ctbl.unicode2custom(Str, tbl, sel)
+                        tw.Write(bs, 0, bs.Length)
+                    End If
+
+                Else
+
+                    buffer = n1.Tag.ToString.Split(CChar(vbLf))
+
+                    For Each s As String In buffer
+
+                        s = s.Trim()
+
+
+                        If s.Length = 1 Then
+                            If s = "0" Or s = "2" Or s = "4" Then
+                                If s = "0" Then
+                                    cwcar = "_L "
+                                ElseIf s = "2" Then
+                                    cwcar = "_M "
+                                ElseIf s = "4" Then
+                                    cwcar = "_N "
+                                End If
+                                Str = "_C0 " & n1.Text.Trim & vbCrLf
+                                bs = ctbl.unicode2custom(Str, tbl, sel)
+                                tw.Write(bs, 0, bs.Length)
+                            ElseIf s = "1" Or s = "3" Or s = "5" Then
+                                If s = "1" Then
+                                    cwcar = "_L "
+                                ElseIf s = "3" Then
+                                    cwcar = "_M "
+                                ElseIf s = "5" Then
+                                    cwcar = "_N "
+                                End If
+
+                                Str = "_C1 " & n1.Text.Trim & vbCrLf
+                                bs = ctbl.unicode2custom(Str, tbl, sel)
+                                tw.Write(bs, 0, bs.Length)
+                            End If
+                        ElseIf s.Length > 2 Then
+
+                            If s.Contains("#") Then
+                                Str = s.Trim & vbCrLf
+                                bs = ctbl.unicode2custom(Str, tbl, sel)
+                                If bs.Length > 2 Then
                                     tw.Write(bs, 0, bs.Length)
                                 End If
+
                             Else
+                                '0x00000000 0x00000000
+                                If Regex.IsMatch(s, "^0x[0-9A-Fa-f]{8} 0x[0-9A-Fa-f]{8}", RegexOptions.ECMAScript) = False AndAlso s.Trim <> "" Then
+                                    ' Error, code length was incorrect
+                                    errorct += 1
+                                    write_errors(errorct, n.Text.Trim, n1.Text.Trim, "不正なコード形式です: " & s.Trim)
+                                    errors = True
+                                End If
 
-                                buffer = n1.Tag.ToString.Split(CChar(vbLf))
+                                If encok = True Then
+                                    s = cfdecript(s)
+                                End If
 
-                                For Each s As String In buffer
+                                Str = cwcar & s.Trim & vbCrLf
+                                bs = ctbl.unicode2custom(Str, tbl, sel)
+                                tw.Write(bs, 0, bs.Length)
 
-                                    s = s.Trim()
-
-                                    If s.Length = 1 Then
-                                        If s = "0" Or s = "2" Or s = "4" Then
-                                            If s = "0" Then
-                                                cwcar = "_L "
-                                            ElseIf s = "2" Then
-                                                cwcar = "_M "
-                                            ElseIf s = "4" Then
-                                                cwcar = "_N "
-                                            End If
-                                            str = "_C0 " & n1.Text.Trim & vbCrLf
-                                            bs = ctbl.unicode2custom(str, tbl, sel)
-                                            tw.Write(bs, 0, bs.Length)
-                                        ElseIf s = "1" Or s = "3" Or s = "5" Then
-                                            If s = "1" Then
-                                                cwcar = "_L "
-                                            ElseIf s = "3" Then
-                                                cwcar = "_M "
-                                            ElseIf s = "5" Then
-                                                cwcar = "_N "
-                                            End If
-                                            str = "_C1 " & n1.Text.Trim & vbCrLf
-                                            bs = ctbl.unicode2custom(str, tbl, sel)
-                                            tw.Write(bs, 0, bs.Length)
-                                        End If
-                                    ElseIf s.Length > 1 Then
-
-                                        If s.Contains("#") Then
-                                            str = s.Trim & vbCrLf
-                                            bs = ctbl.unicode2custom(str, tbl, sel)
-                                            If bs.Length > 2 Then
-                                                tw.Write(bs, 0, bs.Length)
-                                            End If
-
-                                        Else
-                                            '0x00000000 0x00000000
-                                            If Regex.IsMatch(s, "^0x[0-9A-Fa-f]{8} 0x[0-9A-Fa-f]{8}", RegexOptions.ECMAScript) = False AndAlso s.Trim <> "" Then
-                                                ' Error, code length was incorrect
-                                                errorct += 1
-                                                write_errors(errorct, n.Text.Trim, n1.Text.Trim, "不正なコード形式です: " & s.Trim)
-                                                errors = True
-                                            End If
-
-                                            str = cwcar & s.Trim & vbCrLf
-                                            bs = ctbl.unicode2custom(str, tbl, sel)
-                                            tw.Write(bs, 0, bs.Length)
-
-
-                                        End If
-
-                                    End If
-
-                                Next
 
                             End If
 
-                        Next
+                        End If
+
+                    Next
+
+                End If
+
+            Next
 
                     Next
 
@@ -205,13 +235,22 @@ Public Class save_db
                 For Each n As TreeNode In m.codetree.Nodes(0).Nodes
 
                     GID = n.Tag.ToString.Trim
+                    encok = False
                     If GID.Length < 10 Then
                         GID = GID.PadRight(10, CChar("0"))
                     End If
                     tw.Write("_S " & GID.Substring(0, 10) & vbCrLf)
                     tw.Write("_G " & n.Text.Trim & vbCrLf)
+
                     If GID.Length = 13 Then
-                        tw.Write("#CFMODE" & GID.Substring(10, 3) & vbCrLf)
+                        If Regex.IsMatch(GID, "^[a-zA-Z\-]{5}[0-9A-Fa-f]{8}", RegexOptions.ECMAScript) Then
+                            If enc = False AndAlso (Convert.ToInt32(GID.Substring(10, 3), 16) And &H800) = 0 Then
+                                encok = True
+                                tw.Write("#CFMODE" & GID.Substring(10, 3) & "->CWCMODE8" & GID.Substring(11, 2) & vbCrLf)
+                            Else
+                                tw.Write("#CWCMODE" & GID.Substring(10, 3) & vbCrLf)
+                            End If
+                        End If
                     End If
 
                     For Each n1 As TreeNode In n.Nodes
@@ -239,7 +278,12 @@ Public Class save_db
                             '    'i += 1
                             '    'write_errors(i, n.Text.Trim, n1.Text.Trim, "Error:  Code title contained no codes, not saved.")
                             '    'errors = True
-
+                        ElseIf enc = True AndAlso n1.Index = 0 AndAlso n1.Text = "(M)" Then
+                            Dim hex As Regex = New Regex("0x[0-9A-Fa-f]{8} 0x[0-9A-Fa-f]{8}", RegexOptions.ECMAScript)
+                            Dim mh As Match = hex.Match(n1.Tag.ToString)
+                            If mh.Success AndAlso (Convert.ToInt32(mh.Value.Remove(0, 13), 16) And &H800) = 0 Then
+                                tw.Write("_E " & mh.Value & vbCrLf)
+                            End If
                         Else
 
                             buffer = n1.Tag.ToString.Split(CChar(vbLf))
@@ -267,7 +311,7 @@ Public Class save_db
                                         End If
                                         tw.Write("_C1 " & n1.Text.Trim & vbCrLf)
                                     End If
-                                ElseIf s.Length > 1 Then
+                                ElseIf s.Length > 2 Then
                                     If s.Contains("#") Then
 
                                         tw.Write(s & vbCrLf)
@@ -279,6 +323,10 @@ Public Class save_db
                                             errorct += 1
                                             write_errors(errorct, n.Text.Trim, n1.Text.Trim, "不正なコード形式です: " & s.Trim)
                                             errors = True
+                                        End If
+
+                                        If encok = True Then
+                                            s = cfdecript(s)
                                         End If
 
                                         tw.Write(cwcar & s & vbCrLf)
@@ -855,6 +903,18 @@ Public Class save_db
         Return sb.ToString
 
     End Function
+
+
+    Public Function cfdecript(ByVal s As String) As String
+        Dim iu As Long = Convert.ToInt64(s.Substring(2, 8), 16)
+        iu = iu Xor &HD6F73BEE
+        iu = iu And 4294967295
+
+        s = "0x" & iu.ToString("X8") & s.Remove(0, 10)
+        Return s
+
+    End Function
+
 
     Public Sub save_ar(ByVal filename As String, ByVal enc1 As Integer)
 

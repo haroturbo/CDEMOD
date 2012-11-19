@@ -1836,6 +1836,7 @@ Public Class MERGE
             GID_tb.Text = System.Text.RegularExpressions.Regex.Replace(GID_tb.Text, "[^\-0-9A-Za-z]", "0").ToUpper
             Select Case codetree.SelectedNode.Level
 
+
                 Case Is = 1
                     With codetree.SelectedNode
                         .Name = GT_tb.Text
@@ -1849,6 +1850,7 @@ Public Class MERGE
                         .Text = GT_tb.Text
                         .Tag = GID_tb.Text
                     End With
+
             End Select
 
         Catch ex As Exception
@@ -1945,6 +1947,17 @@ Public Class MERGE
 
                 buffer &= "#" & dgtext.Text.Trim & vbCrLf
                 buffer &= "#" & dmtext.Text.Trim & vbCrLf
+
+
+                If codetree.SelectedNode.Index = 0 AndAlso codetree.SelectedNode.Text = "(M)" Then
+                    '0\r\n
+                    '0x12345678 0x12345000
+                    Dim tag As String = codetree.SelectedNode.Parent.Tag.ToString.PadRight(10, CChar("0")).Substring(0, 10)
+                    codetree.SelectedNode.Parent.Tag = tag & buffer.Substring(22, 3)
+                    GID_tb.Text = tag & buffer.Substring(22, 3)
+
+                End If
+
 
                 codetree.SelectedNode.Tag = buffer
                 codetree.EndUpdate()
@@ -2966,8 +2979,6 @@ Public Class MERGE
                 changed.Text = "UMDVIDEOイメージなので取得しませんでした"
             ElseIf str = "DAX" Then
                 changed.Text = "Deflate圧縮イメージDAXは対応してません"
-                'ElseIf str = "CSO" Then
-                '    'changed.Text = "Deflate圧縮イメージCSOは対応してません"
             ElseIf str = "JSO" Then
                 changed.Text = "LZ0圧縮イメージJSOは対応してません"
             Else
@@ -3117,5 +3128,6 @@ Public Class MERGE
         My.Settings.arbincut = ARCUT.Checked
     End Sub
 #End Region
+
 
 End Class
