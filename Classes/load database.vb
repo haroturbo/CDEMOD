@@ -80,6 +80,21 @@ Public Class load_db
                                 Exit Do
                             End If
 
+                            If buffer(0).Substring(0, 3) = "_E " Then
+                                Dim r As New Regex("0x[A-Fa-f0-9]{8} 0x[A-Fa-f0-9]{8}", RegexOptions.IgnoreCase)
+                                Dim mt As System.Text.RegularExpressions.Match = r.Match(buffer(0))
+
+                                If mt.Success Then
+                                    Dim st As String = mt.Value.Replace("0x", "").Replace(" ", "")
+                                    Dim b As Byte() = Encoding.GetEncoding(1201).GetBytes(St)
+                                    st = cf2sceid(b, st)
+                                    If (gnode.Tag.ToString = st.Remove(0, 10)) Then
+                                        gnode.Tag = st
+                                    End If
+                                End If
+
+                            End If
+
                             If buffer(0).Substring(0, 3) = "_L " Or buffer(0).Substring(0, 3) = "_M " Or buffer(0).Substring(0, 3) = "_N " Then
                                 NULLCODE = False
                                 cwcar = buffer(0).Substring(0, 3)
@@ -166,6 +181,21 @@ Public Class load_db
                                     .ImageIndex = 1
                                 End With
                                 m.codetree.Nodes(0).Nodes.Add(gnode)
+
+                            Case Is = "_E "
+                                Dim r As New Regex("0x[A-Fa-f0-9]{8} 0x[A-Fa-f0-9]{8}", RegexOptions.IgnoreCase)
+                                Dim mt As System.Text.RegularExpressions.Match = r.Match(buffer(0))
+
+                                If mt.Success Then
+                                    Dim st As String = mt.Value.Replace("0x", "").Replace(" ", "")
+                                    Dim cfid(4) As Byte
+                                    cfid(4) = &H2D
+                                    st = cf2sceid(cfid, st)
+                                    If (gnode.Tag.ToString = st.Substring(0, 10)) Then
+                                        gnode.Tag = st
+                                    End If
+                                End If
+
 
                             Case Is = "_C0", "_C1", "_C2", "_CO"
                                 skip = False
@@ -972,6 +1002,185 @@ Public Class load_db
         memory.FlushMemory() ' Force a garbage collection after all the memory processing
 
         m.tt.Text = t1.ToString
+    End Sub
+
+    Public Sub code_parser(ByVal b1 As String)
+
+        Dim m As MERGE = MERGE
+        Dim b2 As String() = b1.Split(CChar(vbLf))
+        Dim gid As String = Nothing
+        Dim gname As String = "(NULL)"
+        Dim cname As String = "(NULL)"
+        Dim code As String = Nothing
+        Dim cname2 As String = Nothing
+        Dim code2 As String = Nothing
+        Dim coment As String = Nothing
+        Dim add As Boolean = False
+        Dim havegame As Boolean = False
+        Dim nullcode As Boolean = False
+        Dim i As Integer = 0
+        Dim k As Integer = 0
+        Dim z As Integer = 0
+        Dim level2insert As Integer = 1
+        Dim pos As Integer
+        Dim parent As Integer
+        Dim line As Integer = 0
+        Dim erct As Integer = 0
+        Dim gnode = New TreeNode(gname)
+
+        If m.codetree.Nodes.Count >= 1 And b1 <> Nothing Then
+            m.codetree.BeginUpdate()
+
+            Dim selnode1stlv As Integer = m.codetree.SelectedNode.Level
+            If selnode1stlv = 2 Then
+                pos = m.codetree.SelectedNode.Index
+                parent = m.codetree.SelectedNode.Parent.Index
+            End If
+
+            For Each s As String In b2
+
+                line += 1
+
+                If s.Length >= 2 Then
+                    If selnode1stlv = 0 AndAlso s.Substring(0, 2) = "_S" Then
+                        If havegame = True AndAlso nullcode = False Then
+                            add = True
+                            i = 0
+                        End If
+                        s = s.PadRight(4)
+                        gid = s.Substring(3, s.Length - 3).Trim
+
+                    ElseIf selnode1stlv = 0 AndAlso s.Substring(0, 2) = "_G" Then
+                        s = s.PadRight(4)
+                        gname = s.Substring(3, s.Length - 3).Trim
+                        gnode = New TreeNode(gname)
+                        With gnode
+                            .Name = gname
+                            .Tag = gid
+                            .ImageIndex = 1
+                        End With
+                        m.codetree.Nodes(0).Nodes.Insert(k, gnode)
+                        k += 1
+                        m.codetree.SelectedNode = gnode
+                        havegame = True
+                        nullcode = True
+
+                    ElseIf selnode1stlv = 0 AndAlso s.Substring(0, 2) = "_E" Then
+
+                        Dim r As New Regex("0x[A-Fa-f0-9]{8} 0x[A-Fa-f0-9]{8}", RegexOptions.IgnoreCase)
+                        Dim mt As System.Text.RegularExpressions.Match = r.Match(s)
+                        If mt.Success Then
+                            Dim st As String = mt.Value.Replace("0x", "").Replace(" ", "")
+                            Dim b As Byte() = {0, 0, 0, 0, &H2D}
+                            st = cf2sceid(b, st)
+                            If (gnode.Tag.ToString.Contains(st.Substring(0, 10))) = True Then
+                                gnode.Tag = st
+                            End If
+                        End If
+
+
+                        ElseIf s.Substring(0, 2) = "_C" Then
+                            nullcode = True
+                            s = s.PadRight(3, "0"c)
+                            If i = 0 Then
+                                If s.Substring(2, 1) = "0" Then
+                                    code = "0" & vbCrLf
+                                Else
+                                    code = "1" & vbCrLf
+                                End If
+                                cname = s.Substring(3, s.Length - 3).Trim
+                            Else
+                                add = True
+                                If nullcode = True Then
+                                    code2 &= "0" & vbCrLf
+                                End If
+                                code = code & coment
+                                If s.Substring(2, 1) = "0" Then
+                                    code2 = "0" & vbCrLf
+                                Else
+                                    code2 = "1" & vbCrLf
+                                End If
+                                cname2 = s.Substring(3, s.Length - 3).Trim
+                            End If
+                            i += 1
+
+                        ElseIf s.Substring(0, 2) = "_L" Or s.Substring(0, 2) = "_M" Or s.Substring(0, 2) = "_N" Then
+                            nullcode = False
+                            s = s.Replace(vbCr, "")
+                            If m.PSX = True Then
+                                s = s.PadRight(17, "0"c)
+                                '_L 12345678 1234
+                                If s.Substring(2, 1) = " " And s.Substring(11, 1) = " " Then
+                                    code &= s.Substring(3, 13).Trim & vbCrLf
+                                End If
+                            Else
+                                s = s.PadRight(24, "0"c)
+                                '_L 0x12345678 0x12345678
+                                If s.Substring(3, 2) = "0x" And s.Substring(14, 2) = "0x" Then
+                                    If s.Substring(0, 2) = "_M" Then
+                                        z = Integer.Parse(code.Substring(0, 1))
+                                        code = code.Remove(0, 1)
+                                        z = 2 Or z
+                                        code = code.Insert(0, z.ToString())
+                                    ElseIf s.Substring(0, 2) = "_N" Then
+                                        z = Integer.Parse(code.Substring(0, 1))
+                                        code = code.Remove(0, 1)
+                                        z = 4 Or z
+                                        code = code.Insert(0, z.ToString())
+                                    End If
+                                    code &= s.Substring(3, 21).Trim & vbCrLf
+                                End If
+
+                            End If
+
+                        ElseIf s.Substring(0, 1) = "#" Then
+
+                            s = s.Replace("#", "")
+                            coment &= "#" & s.Trim & vbCrLf
+
+                        End If
+                    End If
+
+
+                If add = True Then
+                    Try
+                        Dim newcode As New TreeNode
+
+                        With newcode
+                            .ImageIndex = 2
+                            .SelectedImageIndex = 3
+                            .Name = cname
+                            .Text = cname
+                            .Tag = code
+                        End With
+
+                        Select Case m.codetree.SelectedNode.Level
+
+                            Case Is = 1
+                                m.codetree.SelectedNode.Nodes.Add(newcode)
+                            Case Is = 2
+                                m.codetree.Nodes(0).Nodes(parent).Nodes.Insert(pos + level2insert, newcode)
+                                level2insert += 1
+                        End Select
+
+                    Catch ex As Exception
+
+                    End Try
+
+                    code = code2
+                    cname = cname2
+                    coment = Nothing
+                    add = False
+                End If
+            Next
+            m.codetree.EndUpdate()
+
+            m.file_saveas.Enabled = True
+            m.overwrite_db.Enabled = True
+
+        End If
+
+
     End Sub
 
     Dim pattern As String() = {"<(C)>", "<(R)>", "<(TM)>", "<肉>", "<どくろ>", "<顔白>", "<かえる>"}

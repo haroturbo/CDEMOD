@@ -1353,6 +1353,7 @@ Public Class save_db
         Dim cwcar As String = "_L "
         Dim b1 As String = Nothing
         Dim gid As String = ""
+        Dim enc As String = ""
         Dim scm As String = ""
         Dim cmf As String = ""
         Dim fctxt As String = ""
@@ -1384,16 +1385,48 @@ Public Class save_db
                     n = n.Parent
                 End If
                 gid = n.Tag.ToString.Trim
+
+                If gid.Length = 13 Then
+                    'str &= "#CFMODE" & GID.Substring(10, 3) & vbCrLf
+                    If Regex.IsMatch(gid, "^[a-zA-Z\-]{5}[0-9A-Fa-f]{8}", RegexOptions.ECMAScript) Then
+                        If (Convert.ToInt32(gid.Substring(10, 3), 16) And &H800) = 0 Then
+                            enc = ("#CFMODE" & gid.Substring(10, 3) & vbCrLf)
+                        Else
+                            enc = ("#CWCMODE" & gid.Substring(10, 3) & vbCrLf)
+                        End If
+                    End If
+                    If n.Nodes.Count > 0 AndAlso n.Nodes(0).Text = "(M)" Then
+                        Dim hexs As Regex = New Regex("0x[0-9A-Fa-f]{8} 0x[0-9A-Fa-f]{8}", RegexOptions.ECMAScript)
+                        Dim mh As Match = hexs.Match(n.Nodes(0).Tag.ToString)
+                        If mh.Success AndAlso (Convert.ToInt32(mh.Value.Remove(0, 13), 16) And &H800) = 0 Then
+                            enc &= "_E " & mh.Value & vbCrLf
+                        End If
+                    Else
+                        Dim bytesData As Byte() = Encoding.GetEncoding(1252).GetBytes(gid.Remove(4, 1))
+                        Dim gidst = ""
+                        gidst = cvtsceid2cf(bytesData)
+                        gidst &= gid.Remove(0, 5) 'CFID
+                        enc &= "_E 0x" & gidst.Insert(8, " 0x") & vbCrLf
+                    End If
+
+                    gid = gid.Substring(0, 10)
+                End If
+
                 b1 = "_S " & gid & vbCrLf
                 scm = "ID:" & gid & vbCrLf
                 b1 &= "_G " & n.Text.Trim & vbCrLf
+                If enc <> "" Then
+                    b1 &= enc
+                End If
+
+
                 scm &= "NAME:" & n.Text.Trim & vbCrLf
                 scm &= "$START" & vbCrLf
                 cmf = b1
                 fctxt = b1
 
                 If m.codetree.SelectedNode.Level = 2 Then
-                        b1 = ""
+                    b1 = ""
                 End If
 
                 For Each n1 As TreeNode In n.Nodes
@@ -1412,6 +1445,9 @@ Public Class save_db
                         cmf &= "_C0 " & n1.Text.Trim & vbCrLf
                         fctxt &= "_C0 " & n1.Text.Trim & vbCrLf
                         line = 0
+                    ElseIf n1.Index = 0 AndAlso n1.Text = "(M)" Then
+
+
                     Else
 
                         buffer = n1.Tag.ToString.Split(CChar(vbCrLf))
@@ -1594,7 +1630,7 @@ Public Class save_db
                         fcc = ""
                         fcode = ""
 
-                        End If
+                    End If
 
                     If m.codetree.SelectedNode.Level = 2 Then
                         If n1.Index = m.codetree.SelectedNode.Index Then
@@ -1622,17 +1658,17 @@ Public Class save_db
 
                     writers(enc1, fctxt, filename)
 
-                    ElseIf MODE = "CMF" Then
-                        filename &= ".cmf"
+                ElseIf MODE = "CMF" Then
+                    filename &= ".cmf"
                     writers(enc1, cmf, filename)
 
-                    ElseIf MODE = "SCM" Then
-                        filename &= ".scm"
+                ElseIf MODE = "SCM" Then
+                    filename &= ".scm"
                     writers(enc1, scm, filename)
 
-                    End If
-
                 End If
+
+            End If
 
         Catch ex As Exception
             MessageBox.Show(ex.Message)

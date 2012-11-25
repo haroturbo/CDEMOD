@@ -171,7 +171,7 @@ Public Class parser
                                 sb.AppendLine(s.Substring(0, 16))
                                 code = 1
                             End If
-                        ElseIf rmmode = 1 Or b3 = "_S" Or b3 = "_G" Then
+                        ElseIf rmmode = 1 Or b3 = "_S" Or b3 = "_G" Or b3 = "_E" Then
                             s = s.Replace("#", "")
                             sb.AppendLine(s.Trim)
                         ElseIf code = 1 Then
@@ -221,7 +221,7 @@ Public Class parser
 
                 bc2 = s.Substring(0, 2)
                 s = s.Trim
-                If mc.Success And bc2 <> "_M" And bc2 <> "_N" Then
+                If mc.Success AndAlso bc2 <> "_M" AndAlso bc2 <> "_N" AndAlso bc2 <> "_E" Then
                     s = mc.Value
                     s = s.Replace("_L ", "")
                     s = s.Insert(0, "0x")
@@ -231,7 +231,7 @@ Public Class parser
                     s = mp.Value
                     s = s.Replace("_L ", "")
                     s = "_L " & s & vbCrLf
-                ElseIf ma.Success And bc2 <> "_L" And bc2 <> "_N" Then
+                ElseIf ma.Success AndAlso bc2 <> "_L" AndAlso bc2 <> "_N" AndAlso bc2 <> "_E" Then
                     s = ma.Value
                     s = s.Replace("_M ", "")
                     s = "_M " & s & vbCrLf
@@ -286,7 +286,7 @@ Public Class parser
                 ElseIf rmmode = 1 Then
                     s = s.Replace("_C0 ", "")
                     s = s.Replace("_C1 ", "")
-                ElseIf bc3 = "_C0" Or bc3 = "_C1" Or bc2 = "_S" Or bc2 = "_G" Then
+                ElseIf bc3 = "_C0" Or bc3 = "_C1" Or bc2 = "_S" Or bc2 = "_G" Or bc2 = "_E" Then
                 Else
                     s = s.Replace("_C0", "")
                     s = s.Replace("_C1 ", "")

@@ -1108,166 +1108,10 @@ Public Class MERGE
     Private Sub paserToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cntparser.Click, paserToolStripMenuItem.Click
         Dim backup As String = cmt_tb.Text
         Dim f As parser = parser
+        Dim open As New load_db
         cmt_tb.Text = Nothing
         f.ShowDialog(Me)
-        Dim b1 As String = cmt_tb.Text
-        Dim b2 As String() = b1.Split(CChar(vbLf))
-        Dim gid As String = Nothing
-        Dim gname As String = "(NULL)"
-        Dim cname As String = "(NULL)"
-        Dim code As String = Nothing
-        Dim cname2 As String = Nothing
-        Dim code2 As String = Nothing
-        Dim coment As String = Nothing
-        Dim add As Boolean = False
-        Dim havegame As Boolean = False
-        Dim nullcode As Boolean = False
-        Dim i As Integer = 0
-        Dim k As Integer = 0
-        Dim z As Integer = 0
-        Dim level2insert As Integer = 1
-        Dim pos As Integer
-        Dim parent As Integer
-        Dim line As Integer = 0
-        Dim erct As Integer = 0
-
-        If codetree.Nodes.Count >= 1 And b1 <> Nothing Then
-            codetree.BeginUpdate()
-
-            Dim selnode1stlv As Integer = codetree.SelectedNode.Level
-            If selnode1stlv = 2 Then
-                pos = codetree.SelectedNode.Index
-                parent = codetree.SelectedNode.Parent.Index
-            End If
-
-            For Each s As String In b2
-
-                line += 1
-
-                If s.Length >= 2 Then
-                    If selnode1stlv = 0 AndAlso s.Substring(0, 2) = "_S" Then
-                        If havegame = True AndAlso nullcode = False Then
-                            add = True
-                            i = 0
-                        End If
-                        s = s.PadRight(4)
-                        gid = s.Substring(3, s.Length - 3).Trim
-                    ElseIf selnode1stlv = 0 AndAlso s.Substring(0, 2) = "_G" Then
-                        s = s.PadRight(4)
-                        gname = s.Substring(3, s.Length - 3).Trim
-                        Dim gnode = New TreeNode(gname)
-                        With gnode
-                            .Name = gname
-                            .Tag = gid
-                            .ImageIndex = 1
-                        End With
-                        codetree.Nodes(0).Nodes.Insert(k, gnode)
-                        k += 1
-                        codetree.SelectedNode = gnode
-                        havegame = True
-                        nullcode = True
-
-                    ElseIf s.Substring(0, 2) = "_C" Then
-                        nullcode = True
-                        s = s.PadRight(3, "0"c)
-                        If i = 0 Then
-                            If s.Substring(2, 1) = "0" Then
-                                code = "0" & vbCrLf
-                            Else
-                                code = "1" & vbCrLf
-                            End If
-                            cname = s.Substring(3, s.Length - 3).Trim
-                        Else
-                            add = True
-                            If nullcode = True Then
-                                code2 &= "0" & vbCrLf
-                            End If
-                            code = code & coment
-                            If s.Substring(2, 1) = "0" Then
-                                code2 = "0" & vbCrLf
-                            Else
-                                code2 = "1" & vbCrLf
-                            End If
-                            cname2 = s.Substring(3, s.Length - 3).Trim
-                        End If
-                        i += 1
-
-                    ElseIf s.Substring(0, 2) = "_L" Or s.Substring(0, 2) = "_M" Or s.Substring(0, 2) = "_N" Then
-                        nullcode = False
-                        s = s.Replace(vbCr, "")
-                        If PSX = True Then
-                            s = s.PadRight(17, "0"c)
-                            '_L 12345678 1234
-                            If s.Substring(2, 1) = " " And s.Substring(11, 1) = " " Then
-                                code &= s.Substring(3, 13).Trim & vbCrLf
-                            End If
-                        Else
-                            s = s.PadRight(24, "0"c)
-                            '_L 0x12345678 0x12345678
-                            If s.Substring(3, 2) = "0x" And s.Substring(14, 2) = "0x" Then
-                                If s.Substring(0, 2) = "_M" Then
-                                    z = Integer.Parse(code.Substring(0, 1))
-                                    code = code.Remove(0, 1)
-                                    z = 2 Or z
-                                    code = code.Insert(0, z.ToString())
-                                ElseIf s.Substring(0, 2) = "_N" Then
-                                    z = Integer.Parse(code.Substring(0, 1))
-                                    code = code.Remove(0, 1)
-                                    z = 4 Or z
-                                    code = code.Insert(0, z.ToString())
-                                End If
-                                code &= s.Substring(3, 21).Trim & vbCrLf
-                            End If
-
-                        End If
-
-                    ElseIf s.Substring(0, 1) = "#" Then
-
-                        s = s.Replace("#", "")
-                        coment &= "#" & s.Trim & vbCrLf
-
-                    End If
-                End If
-
-
-                If add = True Then
-                    Try
-                        Dim newcode As New TreeNode
-
-                        With newcode
-                            .ImageIndex = 2
-                            .SelectedImageIndex = 3
-                            .Name = cname
-                            .Text = cname
-                            .Tag = code
-                        End With
-
-                        Select Case codetree.SelectedNode.Level
-
-                            Case Is = 1
-                                codetree.SelectedNode.Nodes.Add(newcode)
-                            Case Is = 2
-                                codetree.Nodes(0).Nodes(parent).Nodes.Insert(pos + level2insert, newcode)
-                                level2insert += 1
-                        End Select
-
-                    Catch ex As Exception
-
-                    End Try
-
-                    code = code2
-                    cname = cname2
-                    coment = Nothing
-                    add = False
-                End If
-            Next
-            codetree.EndUpdate()
-
-            file_saveas.Enabled = True
-            overwrite_db.Enabled = True
-
-        End If
-
+        open.code_parser(cmt_tb.Text)
         f.Dispose()
         cmt_tb.Text = backup
 
@@ -1833,25 +1677,30 @@ Public Class MERGE
 
         changed.Text = ""
         Try
-            GID_tb.Text = System.Text.RegularExpressions.Regex.Replace(GID_tb.Text, "[^\-0-9A-Za-z]", "0").ToUpper
-            Select Case codetree.SelectedNode.Level
+            GID_tb.Text = Regex.Replace(GID_tb.Text, "[^\-0-9A-Za-z]", "0").ToUpper
+            Dim tv As TreeNode = codetree.SelectedNode
 
+            If tv.Level > 0 Then
+                If tv.Level = 2 Then
+                    tv = tv.Parent
+                End If
 
-                Case Is = 1
-                    With codetree.SelectedNode
-                        .Name = GT_tb.Text
-                        .Text = GT_tb.Text
-                        .Tag = GID_tb.Text
-                    End With
+                With tv
+                    .Name = GT_tb.Text
+                    .Text = GT_tb.Text
+                    .Tag = GID_tb.Text
+                End With
+                If GID_tb.Text.Length = 13 AndAlso tv.Nodes.Count > 0 AndAlso tv.Nodes(0).Text = "(M)" Then
+                    Dim save As New save_db
+                    Dim bytesData As Byte() = Encoding.GetEncoding(1252).GetBytes(GID_tb.Text.Remove(4, 1))
+                    Dim gidst = ""
+                    gidst = save.cvtsceid2cf(bytesData)
+                    gidst &= GID_tb.Text.Remove(0, 5) 'CFID
 
-                Case Is = 2
-                    With codetree.SelectedNode.Parent
-                        .Name = GT_tb.Text
-                        .Text = GT_tb.Text
-                        .Tag = GID_tb.Text
-                    End With
+                    tv.Nodes(0).Tag = "0" & vbCrLf & "0x" & gidst.Insert(8, " 0x") & vbCrLf
 
-            End Select
+                End If
+            End If
 
         Catch ex As Exception
 
@@ -3129,5 +2978,36 @@ Public Class MERGE
     End Sub
 #End Region
 
+    '入力マスク
+#Region "inputmask"
+    Private Sub TextBox1_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles GID_tb.KeyPress
+        Dim mask As New Regex("[0-9A-Z\-\u0008]", RegexOptions.IgnoreCase)
+        Dim ok As Match = mask.Match(e.KeyChar)
+        If ok.Success = False Then
+            e.Handled = True
+        ElseIf GID_tb.SelectionStart <> 4 AndAlso e.KeyChar = "-"c Then
+            e.Handled = True
+        ElseIf GID_tb.SelectionStart >= 10 AndAlso (e.KeyChar < "0"c Or e.KeyChar > "9"c) AndAlso e.KeyChar <> vbBack Then
+            e.Handled = True
+        End If
+    End Sub
+
+    Private Sub TextBox2_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles cl_tb.KeyPress
+        Dim mk As String = "[0-9A-Fa-fx \u000D\u0008]"
+        If PSX = True Then
+            mk = "[0-9A-Fa-f \u000D\u0008]"
+        End If
+        Dim i As Integer = CInt(AscW(e.KeyChar))
+
+        Dim mask As New Regex(mk, RegexOptions.ECMAScript)
+        Dim ok As Match = mask.Match(e.KeyChar)
+
+        If ok.Success = False Then
+            e.Handled = True
+        ElseIf e.KeyChar <> "x"c Then
+            e.KeyChar = Char.ToUpper(e.KeyChar)
+        End If
+    End Sub
+#End Region
 
 End Class

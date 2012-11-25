@@ -152,7 +152,6 @@ Partial Class MERGE
         Me.ftpcmf = New System.Windows.Forms.ToolStripMenuItem()
         Me.ftpscm = New System.Windows.Forms.ToolStripMenuItem()
         Me.ftptab = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator18 = New System.Windows.Forms.ToolStripSeparator()
         Me.CODEFREAKToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.復号ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.暗号化ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -944,9 +943,9 @@ Partial Class MERGE
         '
         'ContextMenus
         '
-        Me.ContextMenus.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cntparser, Me.dgedit, Me.ToolStripSeparator4, Me.cntclose, Me.cntexpand, Me.ToolStripSeparator5, Me.hankaku, Me.CNchar, Me.ToolStripSeparator6, Me.cntexe, Me.ToolStripSeparator11, Me.NodeConvert, Me.useFTP, Me.ToolStripSeparator18, Me.CODEFREAKToolStripMenuItem})
+        Me.ContextMenus.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cntparser, Me.dgedit, Me.ToolStripSeparator4, Me.cntclose, Me.cntexpand, Me.ToolStripSeparator5, Me.hankaku, Me.CNchar, Me.ToolStripSeparator6, Me.cntexe, Me.ToolStripSeparator11, Me.NodeConvert, Me.useFTP, Me.CODEFREAKToolStripMenuItem})
         Me.ContextMenus.Name = "ContextMenuStrip1"
-        Me.ContextMenus.Size = New System.Drawing.Size(185, 254)
+        Me.ContextMenus.Size = New System.Drawing.Size(185, 270)
         '
         'cntparser
         '
@@ -1091,28 +1090,24 @@ Partial Class MERGE
         Me.ftptab.Size = New System.Drawing.Size(153, 22)
         Me.ftptab.Text = "TAB転送"
         '
-        'ToolStripSeparator18
-        '
-        Me.ToolStripSeparator18.Name = "ToolStripSeparator18"
-        Me.ToolStripSeparator18.Size = New System.Drawing.Size(181, 6)
-        '
         'CODEFREAKToolStripMenuItem
         '
         Me.CODEFREAKToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.復号ToolStripMenuItem, Me.暗号化ToolStripMenuItem})
         Me.CODEFREAKToolStripMenuItem.Name = "CODEFREAKToolStripMenuItem"
         Me.CODEFREAKToolStripMenuItem.Size = New System.Drawing.Size(184, 22)
         Me.CODEFREAKToolStripMenuItem.Text = "CODEFREAK"
+        Me.CODEFREAKToolStripMenuItem.Visible = False
         '
         '復号ToolStripMenuItem
         '
         Me.復号ToolStripMenuItem.Name = "復号ToolStripMenuItem"
-        Me.復号ToolStripMenuItem.Size = New System.Drawing.Size(112, 22)
+        Me.復号ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.復号ToolStripMenuItem.Text = "復号"
         '
         '暗号化ToolStripMenuItem
         '
         Me.暗号化ToolStripMenuItem.Name = "暗号化ToolStripMenuItem"
-        Me.暗号化ToolStripMenuItem.Size = New System.Drawing.Size(112, 22)
+        Me.暗号化ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.暗号化ToolStripMenuItem.Text = "暗号化"
         '
         'iconset
@@ -1129,6 +1124,7 @@ Partial Class MERGE
         Me.GID_tb.AllowDrop = True
         Me.GID_tb.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.GID_tb.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper
         Me.GID_tb.Enabled = False
         Me.GID_tb.Font = New System.Drawing.Font("ＭＳ ゴシック", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.GID_tb.ImeMode = System.Windows.Forms.ImeMode.Disable
@@ -1880,7 +1876,6 @@ Partial Class MERGE
     Friend WithEvents URL編集ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator8 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents ブラウザ変更 As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripSeparator18 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents CODEFREAKToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents 復号ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents 暗号化ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem

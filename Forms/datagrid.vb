@@ -64,9 +64,7 @@ Public Class datagrid
                 mask = "[0-9A-F]{8} [0-9A-F]{4}"
             End If
 
-            Dim r As New System.Text.RegularExpressions.Regex( _
-    mask, _
-    System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+            Dim r As New System.Text.RegularExpressions.Regex(mask, System.Text.RegularExpressions.RegexOptions.IgnoreCase)
             Dim ed As System.Text.RegularExpressions.Match = r.Match(b1)
 
             Dim list As DataGridViewRow() = Nothing
@@ -340,9 +338,7 @@ Public Class datagrid
         End If
     End Sub
 
-    Private Sub DataGridView1_EditingControlShowing(ByVal sender As Object, _
-        ByVal e As DataGridViewEditingControlShowingEventArgs) _
-        Handles DataGridView1.EditingControlShowing
+    Private Sub DataGridView1_EditingControlShowing(ByVal sender As Object, ByVal e As DataGridViewEditingControlShowingEventArgs) Handles DataGridView1.EditingControlShowing
         '表示されているコントロールがDataGridViewTextBoxEditingControlか調べる
         If TypeOf e.Control Is DataGridViewTextBoxEditingControl Then
             Dim dgv As DataGridView = CType(sender, DataGridView)
@@ -1129,7 +1125,7 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
             Dim b As Integer = DataGridView1.FirstDisplayedCell.RowIndex
 
             Dim list As DataGridViewRow() = Nothing
-            Array.Resize(list, 3000)
+            Array.Resize(list, z)
             For i = 0 To z - 1
                 list(i) = CloneWithValues(DataGridView1.Rows(i))
                 list(i).Cells(2).Value = parse
@@ -1158,6 +1154,40 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
     End Function
 
     Dim dgaddress As String
+
+
+    'Function hex2str_rows2(ByVal float As String, ByVal list As DataGridViewRow, ByVal x As Integer) As String
+    '    Dim s As String = ""
+    '    If float = "DEC" Then
+    '        s = (Convert.ToInt64(list.Cells(x).Value.ToString, 16) And &HFFFFFFFF).ToString
+    '    ElseIf float = "DEC16BIT" Then
+    '        s = (Convert.ToInt64(list.Cells(x).Value.ToString, 16) And &HFFFF).ToString
+    '    ElseIf float = "BINARY32" Then
+    '        Dim bytes As Byte() = str2bin(list.Cells(x).Value.ToString)
+    '        If (bytes(3) And &H7F) > &H31 AndAlso (bytes(3) And &H7F) < &H52 Then
+    '            s = CStr(BitConverter.ToSingle(bytes, 0))
+    '        End If
+    '    ElseIf float = "BIN32>>16" Then
+    '        Dim ss As String = list.Cells(x).Value.ToString
+    '        Dim bytes As Byte() = str2bin(ss.Remove(0, ss.Length - 4).PadRight(8, "0"c))
+    '        If (bytes(3) And &H7F) > &H31 AndAlso (bytes(3) And &H7F) < &H52 Then
+    '            s = CStr(BitConverter.ToSingle(bytes, 0))
+    '        End If
+    '    ElseIf float = "BINARY16" Then
+    '        Dim ss As String = list.Cells(x).Value.ToString
+    '        Dim bytes As Byte() = str2bin(ss.Remove(0, ss.Length - 4).PadRight(8, "0"c))
+    '        Array.ConstrainedCopy(bytes, 2, bytes, 0, 2)
+    '        Array.Resize(bytes, 2)
+    '        If (bytes(1) And &H7F) < &H7C Then
+    '            Dim bytes2 As Byte() = str2bin(converthalffloat2(ss))
+    '            s = CStr(BitConverter.ToSingle(bytes2, 0))
+    '        End If
+    '    ElseIf float = "ASM" Then
+    '        s = decoders(list.Cells(x).Value.ToString, list.Index)
+    '        dgaddress = list.Cells(0).Value.ToString
+    '    End If
+    '    Return s
+    'End Function
 
     Function hex2str_rows(ByVal float As String, ByVal l As Integer, ByVal list As DataGridViewRow(), ByVal x As Integer) As DataGridViewRow()
         If float = "DEC" Then
@@ -6386,6 +6416,7 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
         CVTRPN.Checked = Not CVTRPN.Checked
         My.Settings.CVTRPNs = CVTRPN.Checked
     End Sub
+
 
 End Class
 
