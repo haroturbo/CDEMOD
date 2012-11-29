@@ -3010,4 +3010,9 @@ Public Class MERGE
     End Sub
 #End Region
 
+    Private Sub コードタイトルのみToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles コードタイトルのみToolStripMenuItem.Click
+        Dim save As New save_db
+        save.datel_hokan()
+
+    End Sub
 End Class

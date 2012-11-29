@@ -1842,4 +1842,32 @@ Public Class save_db
         Return True
     End Function
 
+
+    Public Sub datel_hokan()
+
+        Dim m As MERGE = MERGE
+        Dim sb As New StringBuilder
+        Dim n As TreeNode = m.codetree.SelectedNode
+
+        If n.Level = 0 Then
+
+        ElseIf n.Level > 0 Then
+            If n.Level = 2 Then
+                n = n.Parent
+            End If
+            sb.Append("・")
+            sb.Append(n.Text)
+            sb.Append("(")
+            sb.Append(n.Tag.ToString)
+            sb.AppendLine(")")
+
+            For Each n1 As TreeNode In n.Nodes
+
+                sb.AppendLine(n1.Text)
+            Next
+        End If
+
+        Clipboard.SetText(sb.ToString)
+    End Sub
+
 End Class

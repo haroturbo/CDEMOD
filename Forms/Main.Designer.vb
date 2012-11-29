@@ -205,6 +205,7 @@ Partial Class MERGE
         Me.curr_line = New System.Windows.Forms.Label()
         Me.コード形式 = New System.Windows.Forms.Label()
         Me.tt = New System.Windows.Forms.Label()
+        Me.コードタイトルのみToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.treeopen.SuspendLayout()
         Me.ContextMenus.SuspendLayout()
         Me.tool_menu.SuspendLayout()
@@ -1031,6 +1032,7 @@ Partial Class MERGE
         '
         'clipboad
         '
+        Me.clipboad.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.コードタイトルのみToolStripMenuItem})
         Me.clipboad.Name = "clipboad"
         Me.clipboad.Size = New System.Drawing.Size(182, 22)
         Me.clipboad.Text = "クリップボード"
@@ -1640,6 +1642,12 @@ Partial Class MERGE
         Me.tt.Text = "Label2"
         Me.tt.Visible = False
         '
+        'コードタイトルのみToolStripMenuItem
+        '
+        Me.コードタイトルのみToolStripMenuItem.Name = "コードタイトルのみToolStripMenuItem"
+        Me.コードタイトルのみToolStripMenuItem.Size = New System.Drawing.Size(184, 22)
+        Me.コードタイトルのみToolStripMenuItem.Text = "コードタイトルのみ"
+        '
         'MERGE
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
@@ -1879,5 +1887,6 @@ Partial Class MERGE
     Friend WithEvents CODEFREAKToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents 復号ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents 暗号化ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents コードタイトルのみToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 
 End Class
