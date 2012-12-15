@@ -1848,6 +1848,10 @@ Public Class save_db
         Dim m As MERGE = MERGE
         Dim sb As New StringBuilder
         Dim n As TreeNode = m.codetree.SelectedNode
+        Dim folder As Integer = 0
+        Dim check As Integer = 0
+        Dim r As Regex = New Regex("0xCF00000[0-2] 0x000000[0-9A-F]{2}")
+        Dim mt As Match
 
         If n.Level = 0 Then
 
@@ -1863,11 +1867,37 @@ Public Class save_db
 
             For Each n1 As TreeNode In n.Nodes
 
-                sb.AppendLine(n1.Text)
+                mt = r.Match(n1.Tag.ToString())
+                If mt.Success Then
+                    check = Convert.ToInt32(mt.Value.Substring(9, 1), 16)
+                    folder = Convert.ToInt32(mt.Value.Remove(0, 13), 16)
+
+                    If check = 1 Then
+                        sb.Append("※")
+                    End If
+                    sb.AppendLine(n1.Text)
+
+                else
+
+                If folder > 0 Then
+                    If check = 0 Then
+                        sb.Append("○")
+                    ElseIf check = 1 Then
+                        sb.Append("※")
+                    ElseIf check = 2 Then
+                        sb.Append("□")
+                    End If
+                    folder -= 1
+                End If
+
+                    sb.AppendLine(n1.Text)
+
+                End If
+
             Next
         End If
 
-        Clipboard.SetText(sb.ToString)
+        Clipboard.SetText(m.ConvANK(sb.ToString))
     End Sub
 
 End Class
