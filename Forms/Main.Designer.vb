@@ -143,6 +143,7 @@ Partial Class MERGE
         Me.ToolStripSeparator11 = New System.Windows.Forms.ToolStripSeparator()
         Me.NodeConvert = New System.Windows.Forms.ToolStripMenuItem()
         Me.clipboad = New System.Windows.Forms.ToolStripMenuItem()
+        Me.コードタイトルのみToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CMFexport = New System.Windows.Forms.ToolStripMenuItem()
         Me.SCMexport = New System.Windows.Forms.ToolStripMenuItem()
         Me.FCTXT = New System.Windows.Forms.ToolStripMenuItem()
@@ -205,7 +206,6 @@ Partial Class MERGE
         Me.curr_line = New System.Windows.Forms.Label()
         Me.コード形式 = New System.Windows.Forms.Label()
         Me.tt = New System.Windows.Forms.Label()
-        Me.コードタイトルのみToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.treeopen.SuspendLayout()
         Me.ContextMenus.SuspendLayout()
         Me.tool_menu.SuspendLayout()
@@ -946,7 +946,7 @@ Partial Class MERGE
         '
         Me.ContextMenus.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cntparser, Me.dgedit, Me.ToolStripSeparator4, Me.cntclose, Me.cntexpand, Me.ToolStripSeparator5, Me.hankaku, Me.CNchar, Me.ToolStripSeparator6, Me.cntexe, Me.ToolStripSeparator11, Me.NodeConvert, Me.useFTP, Me.CODEFREAKToolStripMenuItem})
         Me.ContextMenus.Name = "ContextMenuStrip1"
-        Me.ContextMenus.Size = New System.Drawing.Size(185, 270)
+        Me.ContextMenus.Size = New System.Drawing.Size(185, 248)
         '
         'cntparser
         '
@@ -1037,6 +1037,12 @@ Partial Class MERGE
         Me.clipboad.Size = New System.Drawing.Size(182, 22)
         Me.clipboad.Text = "クリップボード"
         '
+        'コードタイトルのみToolStripMenuItem
+        '
+        Me.コードタイトルのみToolStripMenuItem.Name = "コードタイトルのみToolStripMenuItem"
+        Me.コードタイトルのみToolStripMenuItem.Size = New System.Drawing.Size(184, 22)
+        Me.コードタイトルのみToolStripMenuItem.Text = "コードタイトルのみ"
+        '
         'CMFexport
         '
         Me.CMFexport.Name = "CMFexport"
@@ -1103,13 +1109,13 @@ Partial Class MERGE
         '復号ToolStripMenuItem
         '
         Me.復号ToolStripMenuItem.Name = "復号ToolStripMenuItem"
-        Me.復号ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.復号ToolStripMenuItem.Size = New System.Drawing.Size(112, 22)
         Me.復号ToolStripMenuItem.Text = "復号"
         '
         '暗号化ToolStripMenuItem
         '
         Me.暗号化ToolStripMenuItem.Name = "暗号化ToolStripMenuItem"
-        Me.暗号化ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.暗号化ToolStripMenuItem.Size = New System.Drawing.Size(112, 22)
         Me.暗号化ToolStripMenuItem.Text = "暗号化"
         '
         'iconset
@@ -1641,12 +1647,6 @@ Partial Class MERGE
         Me.tt.TabIndex = 36
         Me.tt.Text = "Label2"
         Me.tt.Visible = False
-        '
-        'コードタイトルのみToolStripMenuItem
-        '
-        Me.コードタイトルのみToolStripMenuItem.Name = "コードタイトルのみToolStripMenuItem"
-        Me.コードタイトルのみToolStripMenuItem.Size = New System.Drawing.Size(184, 22)
-        Me.コードタイトルのみToolStripMenuItem.Text = "コードタイトルのみ"
         '
         'MERGE
         '

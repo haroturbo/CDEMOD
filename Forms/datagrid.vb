@@ -814,6 +814,7 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
 
         If d < DataGridView1.RowCount - 1 Then
             DataGridView1.Rows.Insert(d + 1)
+
             For index As Int32 = 0 To 1
                 If m.PSX = False Then
                     DataGridView1.Rows(d + 1).Cells(index).Value = "0x00000000"
@@ -828,6 +829,8 @@ System.Text.RegularExpressions.RegexOptions.IgnoreCase)
                 DataGridView1.Focus()
             Next
         End If
+
+
     End Sub
 
     Private Sub 行削除ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)

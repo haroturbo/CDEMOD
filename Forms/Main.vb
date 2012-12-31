@@ -2918,10 +2918,9 @@ Public Class MERGE
             Else
                 temp += 1
             End If
-        End If
-        If e.KeyData = Keys.Left AndAlso temp > 1 AndAlso cl_tb.Text.Substring(cl_tb.SelectionStart - 2, 2) = vbCrLf Then
+        ElseIf e.KeyData = Keys.Left AndAlso temp > 1 AndAlso cl_tb.SelectionStart >= 2 AndAlso cl_tb.Text.Substring(cl_tb.SelectionStart - 2, 2) = vbCrLf Then
             temp -= 1
-        ElseIf e.KeyData = Keys.Right AndAlso cl_tb.SelectionStart < cl_tb.Text.Length AndAlso cl_tb.Text.Substring(cl_tb.SelectionStart, 2) = vbCrLf Then
+        ElseIf e.KeyData = Keys.Right AndAlso cl_tb.SelectionStart < cl_tb.Text.Length - 1 AndAlso cl_tb.Text.Substring(cl_tb.SelectionStart, 2) = vbCrLf Then
             temp += 1
         End If
         curr_line.Text = temp.ToString & "行目"
@@ -3015,4 +3014,5 @@ Public Class MERGE
         save.datel_hokan()
 
     End Sub
+
 End Class

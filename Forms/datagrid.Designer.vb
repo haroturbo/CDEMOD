@@ -24,6 +24,11 @@ Partial Class datagrid
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
+        Me.アドレス = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.値 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.編集タイプ = New System.Windows.Forms.DataGridViewComboBoxColumn()
+        Me.入力値 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.備考 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.CNVbikou = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.addline = New System.Windows.Forms.ToolStripMenuItem()
         Me.addmacro = New System.Windows.Forms.ToolStripMenuItem()
@@ -53,11 +58,7 @@ Partial Class datagrid
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
         Me.LOOKSORDER = New System.Windows.Forms.ToolStripMenuItem()
         Me.STACKORDER = New System.Windows.Forms.ToolStripMenuItem()
-        Me.アドレス = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.値 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.編集タイプ = New System.Windows.Forms.DataGridViewComboBoxColumn()
-        Me.入力値 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.備考 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.CNVbikou.SuspendLayout()
         Me.Panel1.SuspendLayout()
@@ -78,11 +79,63 @@ Partial Class datagrid
         Me.DataGridView1.Size = New System.Drawing.Size(441, 240)
         Me.DataGridView1.TabIndex = 0
         '
+        'アドレス
+        '
+        Me.アドレス.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
+        Me.アドレス.Frozen = True
+        Me.アドレス.HeaderText = "アドレス"
+        Me.アドレス.MaxInputLength = 10
+        Me.アドレス.Name = "アドレス"
+        Me.アドレス.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.アドレス.Width = 47
+        '
+        '値
+        '
+        Me.値.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
+        Me.値.Frozen = True
+        Me.値.HeaderText = "値"
+        Me.値.MaxInputLength = 10
+        Me.値.Name = "値"
+        Me.値.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.値.Width = 23
+        '
+        '編集タイプ
+        '
+        Me.編集タイプ.AutoComplete = False
+        Me.編集タイプ.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
+        Me.編集タイプ.Frozen = True
+        Me.編集タイプ.HeaderText = "編集タイプ"
+        Me.編集タイプ.Items.AddRange(New Object() {"DEC", "DEC16BIT", "BINARY32", "BIN32>>16", "BINARY16", "OR", "AND", "XOR", "ASM"})
+        Me.編集タイプ.Name = "編集タイプ"
+        Me.編集タイプ.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.編集タイプ.Width = 61
+        '
+        '入力値
+        '
+        Me.入力値.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
+        Me.入力値.Frozen = True
+        Me.入力値.HeaderText = "入力値　　　 "
+        Me.入力値.MaxInputLength = 11
+        Me.入力値.MinimumWidth = 88
+        Me.入力値.Name = "入力値"
+        Me.入力値.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.入力値.Width = 88
+        '
+        '備考
+        '
+        Me.備考.FillWeight = 200.0!
+        Me.備考.HeaderText = "備考　　　　"
+        Me.備考.MaxInputLength = 64
+        Me.備考.MinimumWidth = 80
+        Me.備考.Name = "備考"
+        Me.備考.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.備考.Width = 83
+        '
         'CNVbikou
         '
-        Me.CNVbikou.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.addline, Me.cut, Me.copy, Me.paste, Me.ToolStripSeparator1, Me.moveup, Me.movedown, Me.ToolStripSeparator2, Me.notetag, Me.appy})
+        Me.CNVbikou.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.appy, Me.ToolStripSeparator4, Me.addline, Me.cut, Me.copy, Me.paste, Me.ToolStripSeparator1, Me.moveup, Me.movedown, Me.ToolStripSeparator2, Me.notetag})
         Me.CNVbikou.Name = "CNVbikou"
-        Me.CNVbikou.Size = New System.Drawing.Size(156, 192)
+        Me.CNVbikou.Size = New System.Drawing.Size(156, 220)
         Me.CNVbikou.Text = "備考変換"
         '
         'addline
@@ -312,57 +365,10 @@ Partial Class datagrid
         Me.STACKORDER.ToolTipText = "関数引数順番がスタック昇順になります;" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "pow(①,②)→②,①,pow" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "logx(①,②)→②,①,logx" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "logy(①,②)→②,①,logy" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "at" & _
     "an2_(①,②)→②,①,atan2_" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "atan2ms_(①,②)→②,①,atan2ms_" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
-        'アドレス
+        'ToolStripSeparator4
         '
-        Me.アドレス.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
-        Me.アドレス.Frozen = True
-        Me.アドレス.HeaderText = "アドレス"
-        Me.アドレス.MaxInputLength = 10
-        Me.アドレス.Name = "アドレス"
-        Me.アドレス.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.アドレス.Width = 47
-        '
-        '値
-        '
-        Me.値.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
-        Me.値.Frozen = True
-        Me.値.HeaderText = "値"
-        Me.値.MaxInputLength = 10
-        Me.値.Name = "値"
-        Me.値.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.値.Width = 23
-        '
-        '編集タイプ
-        '
-        Me.編集タイプ.AutoComplete = False
-        Me.編集タイプ.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
-        Me.編集タイプ.Frozen = True
-        Me.編集タイプ.HeaderText = "編集タイプ"
-        Me.編集タイプ.Items.AddRange(New Object() {"DEC", "DEC16BIT", "BINARY32", "BIN32>>16", "BINARY16", "OR", "AND", "XOR", "ASM"})
-        Me.編集タイプ.Name = "編集タイプ"
-        Me.編集タイプ.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.編集タイプ.Width = 61
-        '
-        '入力値
-        '
-        Me.入力値.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
-        Me.入力値.Frozen = True
-        Me.入力値.HeaderText = "入力値　　　 "
-        Me.入力値.MaxInputLength = 11
-        Me.入力値.MinimumWidth = 88
-        Me.入力値.Name = "入力値"
-        Me.入力値.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.入力値.Width = 88
-        '
-        '備考
-        '
-        Me.備考.FillWeight = 200.0!
-        Me.備考.HeaderText = "備考　　　　"
-        Me.備考.MaxInputLength = 64
-        Me.備考.MinimumWidth = 80
-        Me.備考.Name = "備考"
-        Me.備考.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.備考.Width = 83
+        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(152, 6)
         '
         'datagrid
         '
@@ -423,4 +429,5 @@ Partial Class datagrid
     Friend WithEvents 編集タイプ As System.Windows.Forms.DataGridViewComboBoxColumn
     Friend WithEvents 入力値 As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents 備考 As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents ToolStripSeparator4 As System.Windows.Forms.ToolStripSeparator
 End Class
