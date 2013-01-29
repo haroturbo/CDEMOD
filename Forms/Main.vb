@@ -3015,4 +3015,70 @@ Public Class MERGE
 
     End Sub
 
+    Private Sub DATELゲームID修正ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DATELゲームID修正ToolStripMenuItem.Click
+        Dim s As String = ""
+        Dim r As Regex = New Regex("^[AXYZ][A-Z]{3}\-\d{5}")
+        Dim rm As Match
+        Dim a As Regex = New Regex("^000A\-\d{5}")
+        Dim am As Match
+        Dim s1(50) As String
+        Dim s2(50) As String
+
+
+        If File.Exists(Application.StartupPath & "\APP\DATEL_IDTABLE.txt") = False Then
+            If MessageBox.Show("DATEL_IDTABLE.txtがありません。http://mkijiro.googlecode.com/svn/trunk/CODEDITOR/CDEMOD/bin/Release/APP/ からダウンロードしますか？", "修正テーブルのダウンロード", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) = Windows.Forms.DialogResult.OK Then
+                Dim ch As checkupdate = New checkupdate
+                ch.getweb(Application.StartupPath & "\APP\DATEL_IDTABLE.txt", "http://mkijiro.googlecode.com/svn/trunk/CODEDITOR/CDEMOD/bin/Release/APP/DATEL_IDTABLE.txt", 1)
+            End If
+        End If
+
+        If File.Exists(Application.StartupPath & "\APP\DATEL_IDTABLE.txt") = True Then
+            Dim sr As StreamReader = New StreamReader(Application.StartupPath & "\APP\DATEL_IDTABLE.txt")
+            Dim ss(1) As String
+            Dim ct As Integer = 0
+            While sr.Peek > -1
+                ss = sr.ReadLine.Split(CChar(vbTab))
+                If ss(1).Length >= 10 Then
+                    s1(ct) = ss(0)
+                    s2(ct) = ss(1).Substring(0, 10)
+                    If ct > 50 Then
+                        Exit While
+                    End If
+                    ct += 1
+                End If
+            End While
+            Array.Resize(s1, ct)
+            Array.Resize(s2, ct)
+            sr.Close()
+        End If
+
+
+
+        Dim t As String = ""
+        For Each n As TreeNode In codetree.Nodes(0).Nodes
+            s = n.Tag.ToString
+            rm = r.Match(s)
+            am = a.Match(s)
+            If rm.Success Then
+                s = "U" & s.Substring(1, s.Length - 1)
+                n.Tag = s
+            End If
+            If am.Success Then
+                s = datelidtable(s, s1, s2)
+                't &= s & vbTab & n.Text & vbCrLf
+                n.Tag = s
+            End If
+
+            'cl_tb.Text = t
+        Next
+    End Sub
+
+    Private Function datelidtable(ByVal s As String, ByVal s1 As String(), ByVal s2 As String()) As String
+        For i = 0 To s1.Length - 1
+            If s = s1(i) Then
+                s = s2(i)
+            End If
+        Next
+        Return s
+    End Function
 End Class

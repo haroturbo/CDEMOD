@@ -119,7 +119,7 @@ Public Class checkupdate
 
     End Sub
 
-    Function getweb(ByVal filename3 As String, ByVal url As String, ByVal webmode As Integer) As String
+    Public Function getweb(ByVal filename3 As String, ByVal url As String, ByVal webmode As Integer) As String
 
         'WebRequestの作成
         Dim webreq As System.Net.HttpWebRequest = _

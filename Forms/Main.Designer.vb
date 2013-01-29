@@ -206,6 +206,8 @@ Partial Class MERGE
         Me.curr_line = New System.Windows.Forms.Label()
         Me.コード形式 = New System.Windows.Forms.Label()
         Me.tt = New System.Windows.Forms.Label()
+        Me.ToolStripSeparator18 = New System.Windows.Forms.ToolStripSeparator()
+        Me.DATELゲームID修正ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.treeopen.SuspendLayout()
         Me.ContextMenus.SuspendLayout()
         Me.tool_menu.SuspendLayout()
@@ -504,7 +506,7 @@ Partial Class MERGE
         '
         'codetreeview
         '
-        Me.codetreeview.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.paserToolStripMenuItem, Me.ToolStripSeparator7, Me.tree_collapse, Me.tree_expand, Me.ToolStripSeparator3, Me.str_wide, Me.str_narrow, Me.ToolStripSeparator14, Me.str_gbk, Me.han2kan, Me.kan2han, Me.ToolStripSeparator15, Me.MECAB半角カナToolStripMenuItem, Me.MECABでローマ字ToolStripMenuItem})
+        Me.codetreeview.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.paserToolStripMenuItem, Me.ToolStripSeparator7, Me.tree_collapse, Me.tree_expand, Me.ToolStripSeparator3, Me.str_wide, Me.str_narrow, Me.ToolStripSeparator14, Me.str_gbk, Me.han2kan, Me.kan2han, Me.ToolStripSeparator15, Me.MECAB半角カナToolStripMenuItem, Me.MECABでローマ字ToolStripMenuItem, Me.ToolStripSeparator18, Me.DATELゲームID修正ToolStripMenuItem})
         Me.codetreeview.Name = "codetreeview"
         Me.codetreeview.Size = New System.Drawing.Size(74, 22)
         Me.codetreeview.Text = "ツリー(&T)"
@@ -513,56 +515,56 @@ Partial Class MERGE
         'paserToolStripMenuItem
         '
         Me.paserToolStripMenuItem.Name = "paserToolStripMenuItem"
-        Me.paserToolStripMenuItem.Size = New System.Drawing.Size(237, 22)
+        Me.paserToolStripMenuItem.Size = New System.Drawing.Size(262, 22)
         Me.paserToolStripMenuItem.Text = "コードパーサー"
         Me.paserToolStripMenuItem.ToolTipText = "チートコードをまとめて追加してツリーに反映します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ツリーの一番上ファイル名を選択時；_S_G追加が有効になります" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ゲームタイトル名選択時；ゲームの末尾に追加" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "コード名選択時；選択箇所の次に挿入"
         '
         'ToolStripSeparator7
         '
         Me.ToolStripSeparator7.Name = "ToolStripSeparator7"
-        Me.ToolStripSeparator7.Size = New System.Drawing.Size(234, 6)
+        Me.ToolStripSeparator7.Size = New System.Drawing.Size(259, 6)
         '
         'tree_collapse
         '
         Me.tree_collapse.Name = "tree_collapse"
-        Me.tree_collapse.Size = New System.Drawing.Size(237, 22)
+        Me.tree_collapse.Size = New System.Drawing.Size(262, 22)
         Me.tree_collapse.Text = "全て折りたたむ"
         '
         'tree_expand
         '
         Me.tree_expand.Name = "tree_expand"
-        Me.tree_expand.Size = New System.Drawing.Size(237, 22)
+        Me.tree_expand.Size = New System.Drawing.Size(262, 22)
         Me.tree_expand.Text = "全て展開する"
         '
         'ToolStripSeparator3
         '
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
-        Me.ToolStripSeparator3.Size = New System.Drawing.Size(234, 6)
+        Me.ToolStripSeparator3.Size = New System.Drawing.Size(259, 6)
         '
         'str_wide
         '
         Me.str_wide.Name = "str_wide"
-        Me.str_wide.Size = New System.Drawing.Size(237, 22)
+        Me.str_wide.Size = New System.Drawing.Size(262, 22)
         Me.str_wide.Text = "半角カナ→全角カタカナ"
         Me.str_wide.ToolTipText = "半角カナを全角カタカナに変換します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "中国語GBKには半角カナが存在しないため半角のまま保存すると文字化けが発生します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
         'str_narrow
         '
         Me.str_narrow.Name = "str_narrow"
-        Me.str_narrow.Size = New System.Drawing.Size(237, 22)
+        Me.str_narrow.Size = New System.Drawing.Size(262, 22)
         Me.str_narrow.Text = "全角カナ/ひらがな→半角カナ"
         Me.str_narrow.ToolTipText = "全角カナ/ひらがなを半角カタカナに変換します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ARBINでは半角カナしか表示できません"
         '
         'ToolStripSeparator14
         '
         Me.ToolStripSeparator14.Name = "ToolStripSeparator14"
-        Me.ToolStripSeparator14.Size = New System.Drawing.Size(234, 6)
+        Me.ToolStripSeparator14.Size = New System.Drawing.Size(259, 6)
         '
         'str_gbk
         '
         Me.str_gbk.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GBKOP})
         Me.str_gbk.Name = "str_gbk"
-        Me.str_gbk.Size = New System.Drawing.Size(237, 22)
+        Me.str_gbk.Size = New System.Drawing.Size(262, 22)
         Me.str_gbk.Text = "中国語文字化け対策"
         Me.str_gbk.ToolTipText = "FREECHEAT/CMFUSIONで半角カナ以外の表示できない文字を代替文字かスペースで置換します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "対象；" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "・∋⊆⊇⊂⊃￢⇒⇔∀∃∂∇≪≫∬Å♯♭♪†‡¶⑪" & _
     "⑫⑬⑭⑮⑯⑰⑱⑲⑳㍉㌔㌢㍍㌘㌧㌃㌶㍑㍗㌍㌦㌣㌫㍊㌻㍻〝〟㏍㊤㊥㊦㊧㊨㍾㍽㍼"
@@ -576,31 +578,31 @@ Partial Class MERGE
         'han2kan
         '
         Me.han2kan.Name = "han2kan"
-        Me.han2kan.Size = New System.Drawing.Size(237, 22)
+        Me.han2kan.Size = New System.Drawing.Size(262, 22)
         Me.han2kan.Text = "繁体→簡体"
         '
         'kan2han
         '
         Me.kan2han.Name = "kan2han"
-        Me.kan2han.Size = New System.Drawing.Size(237, 22)
+        Me.kan2han.Size = New System.Drawing.Size(262, 22)
         Me.kan2han.Text = "簡体→繁体"
         '
         'ToolStripSeparator15
         '
         Me.ToolStripSeparator15.Name = "ToolStripSeparator15"
-        Me.ToolStripSeparator15.Size = New System.Drawing.Size(234, 6)
+        Me.ToolStripSeparator15.Size = New System.Drawing.Size(259, 6)
         '
         'MECAB半角カナToolStripMenuItem
         '
         Me.MECAB半角カナToolStripMenuItem.Name = "MECAB半角カナToolStripMenuItem"
-        Me.MECAB半角カナToolStripMenuItem.Size = New System.Drawing.Size(237, 22)
+        Me.MECAB半角カナToolStripMenuItem.Size = New System.Drawing.Size(262, 22)
         Me.MECAB半角カナToolStripMenuItem.Text = "MECABで半角カナ"
         Me.MECAB半角カナToolStripMenuItem.Visible = False
         '
         'MECABでローマ字ToolStripMenuItem
         '
         Me.MECABでローマ字ToolStripMenuItem.Name = "MECABでローマ字ToolStripMenuItem"
-        Me.MECABでローマ字ToolStripMenuItem.Size = New System.Drawing.Size(237, 22)
+        Me.MECABでローマ字ToolStripMenuItem.Size = New System.Drawing.Size(262, 22)
         Me.MECABでローマ字ToolStripMenuItem.Text = "MECABでローマ字"
         Me.MECABでローマ字ToolStripMenuItem.Visible = False
         '
@@ -1648,6 +1650,19 @@ Partial Class MERGE
         Me.tt.Text = "Label2"
         Me.tt.Visible = False
         '
+        'ToolStripSeparator18
+        '
+        Me.ToolStripSeparator18.Name = "ToolStripSeparator18"
+        Me.ToolStripSeparator18.Size = New System.Drawing.Size(259, 6)
+        '
+        'DATELゲームID修正ToolStripMenuItem
+        '
+        Me.DATELゲームID修正ToolStripMenuItem.Name = "DATELゲームID修正ToolStripMenuItem"
+        Me.DATELゲームID修正ToolStripMenuItem.Size = New System.Drawing.Size(262, 22)
+        Me.DATELゲームID修正ToolStripMenuItem.Text = "アクションリプレイ ゲームID修正"
+        Me.DATELゲームID修正ToolStripMenuItem.ToolTipText = "DATEL配信DBの改変されたID部分を元のIDに戻します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "000A-0000 アーカイブ系" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "A***-0000 DATEL改変ID部分" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "X***-0000" & _
+    " " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Y***-0000 " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
+        '
         'MERGE
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
@@ -1888,5 +1903,7 @@ Partial Class MERGE
     Friend WithEvents 復号ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents 暗号化ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents コードタイトルのみToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator18 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents DATELゲームID修正ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 
 End Class
