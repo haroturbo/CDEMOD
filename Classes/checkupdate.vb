@@ -122,22 +122,19 @@ Public Class checkupdate
     Public Function getweb(ByVal filename3 As String, ByVal url As String, ByVal webmode As Integer) As String
 
         'WebRequestの作成
-        Dim webreq As System.Net.HttpWebRequest = _
-            CType(System.Net.WebRequest.Create(url),  _
-                System.Net.HttpWebRequest)
+        Dim webreq As System.Net.WebRequest = System.Net.WebRequest.Create(url)
 
         'サーバーからの応答を受信するためのWebResponseを取得
         Dim webres As System.Net.HttpWebResponse = Nothing
         Try
             'サーバーからの応答を受信するためのWebResponseを取得
-            webres = CType(webreq.GetResponse(), System.Net.HttpWebResponse)
+            webres = CType(webreq.GetResponse(), Net.HttpWebResponse)
 
         Catch ex As System.Net.WebException
             'HTTPプロトコルエラーかどうか調べる
             If ex.Status = System.Net.WebExceptionStatus.ProtocolError Then
                 'HttpWebResponseを取得
-                Dim errres As System.Net.HttpWebResponse = _
-                    CType(ex.Response, System.Net.HttpWebResponse)
+                Dim errres As System.Net.HttpWebResponse = CType(ex.Response, System.Net.HttpWebResponse)
             Else
             End If
         End Try
@@ -148,13 +145,12 @@ Public Class checkupdate
             Return ""
         End If
 
-        Dim enc As System.Text.Encoding = _
-    System.Text.Encoding.GetEncoding(65001)
+        Dim enc As System.Text.Encoding = System.Text.Encoding.GetEncoding(65001)
         '応答データを受信するためのStreamを取得
         Dim strm As System.IO.Stream = webres.GetResponseStream()
         If webmode = 0 Then
             Dim sr As New System.IO.StreamReader(strm, enc)
-            '受信して表示
+            '受信して表示()
             Dim html As String = sr.ReadLine
 
             sr.Close()

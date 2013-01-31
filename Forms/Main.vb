@@ -2881,7 +2881,7 @@ Public Class MERGE
 
         GOOGLESVN.Checked = Not GOOGLESVN.Checked
         GITHUB.Checked = Not GOOGLESVN.Checked
-        My.Settings.updatesever = GOOGLESVN.Checked
+        My.Settings.updatesever = GITHUB.Checked
 
     End Sub
 
@@ -3023,6 +3023,11 @@ Public Class MERGE
         Dim am As Match
         Dim s1(50) As String
         Dim s2(50) As String
+
+
+        If Directory.Exists(Application.StartupPath & "\APP") = False Then
+            Directory.CreateDirectory(Application.StartupPath & "\APP")
+        End If
 
 
         If File.Exists(Application.StartupPath & "\APP\DATEL_IDTABLE.txt") = False Then
