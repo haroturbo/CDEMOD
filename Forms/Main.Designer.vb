@@ -78,6 +78,8 @@ Partial Class MERGE
         Me.ToolStripSeparator15 = New System.Windows.Forms.ToolStripSeparator()
         Me.MECAB半角カナToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MECABでローマ字ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator18 = New System.Windows.Forms.ToolStripSeparator()
+        Me.DATELゲームID修正ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.browsecodesite = New System.Windows.Forms.ToolStripMenuItem()
         Me.URL1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.URL2 = New System.Windows.Forms.ToolStripMenuItem()
@@ -206,8 +208,7 @@ Partial Class MERGE
         Me.curr_line = New System.Windows.Forms.Label()
         Me.コード形式 = New System.Windows.Forms.Label()
         Me.tt = New System.Windows.Forms.Label()
-        Me.ToolStripSeparator18 = New System.Windows.Forms.ToolStripSeparator()
-        Me.DATELゲームID修正ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.PAPARX01TEST = New System.Windows.Forms.ToolStripMenuItem()
         Me.treeopen.SuspendLayout()
         Me.ContextMenus.SuspendLayout()
         Me.tool_menu.SuspendLayout()
@@ -606,6 +607,19 @@ Partial Class MERGE
         Me.MECABでローマ字ToolStripMenuItem.Text = "MECABでローマ字"
         Me.MECABでローマ字ToolStripMenuItem.Visible = False
         '
+        'ToolStripSeparator18
+        '
+        Me.ToolStripSeparator18.Name = "ToolStripSeparator18"
+        Me.ToolStripSeparator18.Size = New System.Drawing.Size(259, 6)
+        '
+        'DATELゲームID修正ToolStripMenuItem
+        '
+        Me.DATELゲームID修正ToolStripMenuItem.Name = "DATELゲームID修正ToolStripMenuItem"
+        Me.DATELゲームID修正ToolStripMenuItem.Size = New System.Drawing.Size(262, 22)
+        Me.DATELゲームID修正ToolStripMenuItem.Text = "アクションリプレイ ゲームID修正"
+        Me.DATELゲームID修正ToolStripMenuItem.ToolTipText = "DATEL配信DBの改変されたID部分を元のIDに戻します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "000A-0000 アーカイブ系" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "A***-0000 DATEL改変ID部分" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "X***-0000" & _
+    " " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Y***-0000 " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
+        '
         'browsecodesite
         '
         Me.browsecodesite.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.URL1, Me.URL2, Me.URL3, Me.ToolStripSeparator16, Me.URL編集ToolStripMenuItem})
@@ -712,7 +726,7 @@ Partial Class MERGE
         '
         'menu_options
         '
-        Me.menu_options.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.options_ontop, Me.options_error, Me.menu_font, Me.ブラウザ変更, Me.grided_use, Me.fixedform, Me.FTPDsetting, Me.PBPHBHASH, Me.update_save_filepass, Me.autoupdater, Me.ToolStripSeparator8, Me.DBENCODE, Me.CFEDIT, Me.ARBINhanzen, Me.ARCUT})
+        Me.menu_options.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.options_ontop, Me.options_error, Me.menu_font, Me.ブラウザ変更, Me.grided_use, Me.fixedform, Me.FTPDsetting, Me.PBPHBHASH, Me.update_save_filepass, Me.autoupdater, Me.ToolStripSeparator8, Me.DBENCODE, Me.CFEDIT, Me.ARBINhanzen, Me.ARCUT, Me.PAPARX01TEST})
         Me.menu_options.Name = "menu_options"
         Me.menu_options.Size = New System.Drawing.Size(99, 22)
         Me.menu_options.Text = "オプション(&O)"
@@ -1650,18 +1664,12 @@ Partial Class MERGE
         Me.tt.Text = "Label2"
         Me.tt.Visible = False
         '
-        'ToolStripSeparator18
+        'PAPARX01TEST
         '
-        Me.ToolStripSeparator18.Name = "ToolStripSeparator18"
-        Me.ToolStripSeparator18.Size = New System.Drawing.Size(259, 6)
-        '
-        'DATELゲームID修正ToolStripMenuItem
-        '
-        Me.DATELゲームID修正ToolStripMenuItem.Name = "DATELゲームID修正ToolStripMenuItem"
-        Me.DATELゲームID修正ToolStripMenuItem.Size = New System.Drawing.Size(262, 22)
-        Me.DATELゲームID修正ToolStripMenuItem.Text = "アクションリプレイ ゲームID修正"
-        Me.DATELゲームID修正ToolStripMenuItem.ToolTipText = "DATEL配信DBの改変されたID部分を元のIDに戻します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "000A-0000 アーカイブ系" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "A***-0000 DATEL改変ID部分" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "X***-0000" & _
-    " " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Y***-0000 " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
+        Me.PAPARX01TEST.Name = "PAPARX01TEST"
+        Me.PAPARX01TEST.Size = New System.Drawing.Size(363, 22)
+        Me.PAPARX01TEST.Text = "ARBIN出力PAPARX01(NIGTHTY)"
+        Me.PAPARX01TEST.ToolTipText = "PAPARX01のフラグ出力てすと" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "不安定"
         '
         'MERGE
         '
@@ -1905,5 +1913,6 @@ Partial Class MERGE
     Friend WithEvents コードタイトルのみToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator18 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents DATELゲームID修正ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents PAPARX01TEST As System.Windows.Forms.ToolStripMenuItem
 
 End Class

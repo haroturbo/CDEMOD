@@ -938,6 +938,7 @@ Public Class save_db
         Dim tmp As Integer = 0
 
         Dim header() As Byte = Encoding.GetEncoding(932).GetBytes("PSPARC01")
+        Dim pheader() As Byte = Encoding.GetEncoding(932).GetBytes("PAPARX01")
         Dim nextoffset(1) As Byte
         Dim beforeoffset(1) As Byte
         Dim tocodehead(1) As Byte
@@ -968,8 +969,21 @@ Public Class save_db
         Dim codetlen As Integer = 0
         Dim nodect As Integer = 0
 
+
+        Dim outputpaparx As Boolean = m.PAPARX01TEST.Checked
+        Dim paparx_total As Integer = (m.codetree.GetNodeCount(True)) + 1
+        Dim paparx_hidden(paparx_total) As Byte
+        Dim paparx_toggle(paparx_total) As Byte
+        Dim paparx_folder(paparx_total) As Byte
+        Dim bincounter As Integer = 0
+        Dim bitshifter As Integer = 0
+
+        For k = 0 To paparx_total - 1
+            paparx_toggle(k) = 255
+        Next
+
         reset_errors() ' Clear prior save errors if any
-        Array.Resize(header, &H1C)
+        Array.Resize(header, 28)
 
         Try
 
@@ -978,13 +992,14 @@ Public Class save_db
                 back2 = i - back
                 back = i
                 arcutmsg = False
+                bitshifter = 1
+                bincounter += 1
 
                 gid = n.Tag.ToString
                 If gid.Length < 10 Then
                     gid = gid.PadRight(10, CChar("0"))
                 End If
                 gname = n.Text
-                
 
                 If Regex.IsMatch(gname, "[^\u0020-\u007f\uFF61-\uFF9F]", RegexOptions.ECMAScript) = True Then
                     errorct += 1
@@ -1032,8 +1047,19 @@ Public Class save_db
 
                     mode = n1.Tag.ToString.Substring(0, 1)
 
+                    If outputpaparx = True Then
+                        paparx_toggle(bincounter) = CByte(paparx_toggle(bincounter) Xor ((CInt(mode) And 1) << bitshifter))
+                        bitshifter += 1
+                        If bitshifter = 8 Then
+                            bincounter += 1
+                            bitshifter = 0
+                        End If
+                    End If
+
                     If mode = "2" Or mode = "3" Then
                         ccname = n1.Text.Trim
+
+
                     Else
                         ccname = n1.Text.Trim & "(CWC/TEMP)"
                     End If
@@ -1119,6 +1145,15 @@ Public Class save_db
                                     ElseIf z = 118 Then
 
                                         overflow = True
+                                        
+                                        If outputpaparx = True Then
+                                            paparx_toggle(bincounter) = CByte(paparx_toggle(bincounter) Xor ((CInt(mode) And 1) << bitshifter))
+                                            bitshifter += 1
+                                            If bitshifter = 8 Then
+                                                bincounter += 1
+                                                bitshifter = 0
+                                            End If
+                                        End If
 
                                         lline = BitConverter.GetBytes(z)
                                         Array.ConstrainedCopy(lline, 0, bs, i, 1)
@@ -1150,33 +1185,33 @@ Public Class save_db
                         End If
 
 
-                    If nullcode = True Then
-                        If arcmt = 0 Then
-                            errorct += 1
-                            write_errors(errorct, n.Text.Trim, ccname, "コード内容が空なので代替ダミーが追加されます")
-                        End If
-                        z = 1
-                        Array.ConstrainedCopy(dummy, 0, bs, i + l, 8)
+                        If nullcode = True Then
+                            If arcmt = 0 Then
+                                errorct += 1
+                                write_errors(errorct, n.Text.Trim, ccname, "コード内容が空なので代替ダミーが追加されます")
+                            End If
+                            z = 1
+                            Array.ConstrainedCopy(dummy, 0, bs, i + l, 8)
 
-                    End If
+                        End If
 
-                    If z > 0 Then
-                        lline = BitConverter.GetBytes(z)
-                        Array.ConstrainedCopy(lline, 0, bs, i, 1)
-                        k = (z * 8 + l) >> 2
-                        If n.Nodes.Count <> cend Then
-                            nextcode = BitConverter.GetBytes(k)
-                            Array.ConstrainedCopy(nextcode, 0, bs, i + 3, 1)
+                        If z > 0 Then
+                            lline = BitConverter.GetBytes(z)
+                            Array.ConstrainedCopy(lline, 0, bs, i, 1)
+                            k = (z * 8 + l) >> 2
+                            If n.Nodes.Count <> cend Then
+                                nextcode = BitConverter.GetBytes(k)
+                                Array.ConstrainedCopy(nextcode, 0, bs, i + 3, 1)
+                            End If
+                            i += (z * 8) + l
+                        Else
+                            cendplus -= 1
+                            Array.Resize(null, ccname.Length + 8)
+                            If n.Nodes.Count = cend Then
+                                Array.ConstrainedCopy(null, 0, bs, tmp + 3, 1)
+                            End If
+                            Array.ConstrainedCopy(null, 0, bs, i, null.Length)
                         End If
-                        i += (z * 8) + l
-                    Else
-                        cendplus -= 1
-                        Array.Resize(null, ccname.Length + 8)
-                        If n.Nodes.Count = cend Then
-                            Array.ConstrainedCopy(null, 0, bs, tmp + 3, 1)
-                        End If
-                        Array.ConstrainedCopy(null, 0, bs, i, null.Length)
-                    End If
                     Else
 
                         ' Error, code length was incorrect
@@ -1219,11 +1254,37 @@ Public Class save_db
             t = datel_hash(bs, 0, i)
             code = BitConverter.GetBytes(t)
             Array.ConstrainedCopy(code, 0, header, 12, 4)
+
+            If outputpaparx = True Then
+
+                bincounter += 1
+
+                t = datel_hash(paparx_hidden, 0, bincounter)
+                t = t + datel_hash(paparx_toggle, 0, bincounter)
+                t = t + datel_hash(paparx_folder, 0, bincounter)
+                Array.Resize(paparx_hidden, bincounter)
+                Array.Resize(paparx_toggle, bincounter)
+                Array.Resize(paparx_folder, bincounter)
+
+                code = BitConverter.GetBytes(t)
+                Array.ConstrainedCopy(code, 0, header, 20, 4)
+
+
+                code = BitConverter.GetBytes(bincounter * 2)
+                Array.ConstrainedCopy(code, 0, header, 24, 4)
+
+                Array.Resize(pheader, 16)
+                code = BitConverter.GetBytes(bincounter)
+                Array.ConstrainedCopy(code, 0, pheader, 12, 4)
+
+            End If
+
             t = datel_hash(header, 12, 16)
             code = BitConverter.GetBytes(t)
             Array.ConstrainedCopy(code, 0, header, 8, 4)
 
-            't = datel_hash(bs, &HF00, 4)
+
+
 
         Catch ex As Exception
             MessageBox.Show(ex.Message)
@@ -1231,6 +1292,16 @@ Public Class save_db
 
         fs.Write(header, 0, header.Length)
         fs.Write(bs, 0, bs.Length)
+
+        If outputpaparx = True Then
+
+            fs.Write(pheader, 0, pheader.Length)
+            fs.Write(paparx_hidden, 0, paparx_hidden.Length)
+            fs.Write(paparx_toggle, 0, paparx_hidden.Length)
+            fs.Write(paparx_folder, 0, paparx_hidden.Length)
+
+        End If
+
         fs.Close()
 
 

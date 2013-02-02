@@ -2037,6 +2037,7 @@ Public Class load_db
         Dim file As New FileStream(filename, FileMode.Open, FileAccess.Read)
         Dim DATEL_AR As Boolean = False
         Dim Code(CInt(file.Length)) As Byte
+        Dim fsize = file.Length
         Dim binsize(3) As Byte
         Dim binstr(3) As Byte
         Dim arheader As String = Nothing
@@ -2052,31 +2053,50 @@ Public Class load_db
             arheader = arheader.Substring(0, 8)
             Array.ConstrainedCopy(Code, 16, binsize, 0, 4)
             size = BitConverter.ToInt32(binsize, 0)
-            If arheader = "PSPARC01" Then 'AndAlso size = file.Length Then
+            If arheader = "PSPARC01" Then
                 'ARCを抜いたへっだのはっしゅ
                 Array.ConstrainedCopy(Code, 8, binstr, 0, 4)
                 hex = BitConverter.ToUInt32(binstr, 0)
-                digit(1) = hex.ToString("X")
+                digit(1) = hex.ToString("X8")
 
                 'コード部ばいなりのはっしゅ
                 Array.ConstrainedCopy(Code, 12, binstr, 0, 4)
                 hex = BitConverter.ToUInt32(binstr, 0)
-                digit(0) = hex.ToString("X")
+                digit(0) = hex.ToString("X8")
 
                 'JADでおｋ
                 z = datel_hash(Code, 12, 16)
-                hash(1) = Convert.ToString(z, 16).ToUpper
+                z = CUInt(z And &HFFFFFFFF)
+                hash(1) = z.ToString("X8")
 
                 z = datel_hash(Code, 28, size)
-                hash(0) = Convert.ToString(z, 16).ToUpper
+                z = CUInt(z And &HFFFFFFFF)
+                hash(0) = z.ToString("X8")
 
-                'z = datel_hash(Code, &HF9B4 + 16 + &HB4, &HB4)
-                'Dim h As String = Convert.ToString(z, 16).ToUpper
+                If MERGE.PAPARX01TEST.Checked = True AndAlso size + (BitConverter.ToUInt32(Code, 24) >> 1) * 3 + 44 = fsize Then
+
+                    Dim psparx As Integer = size + 28
+                    Dim paplen As Integer = BitConverter.ToInt32(Code, psparx + 12)
+
+                    psparx += 16
+                    z = datel_hash(Code, psparx, paplen)
+                    psparx += paplen
+                    z = z + datel_hash(Code, psparx, paplen)
+                    psparx += paplen
+                    z = z + datel_hash(Code, psparx, paplen)
+                    z = CUInt(z And &HFFFFFFFF)
+                    Dim paparxs As String = z.ToString("X8")
+
+                    If z = BitConverter.ToUInt32(Code, 20) AndAlso paplen * 2 = BitConverter.ToUInt32(Code, 24) Then
+                        MessageBox.Show(paparxs & ",ヘッダのPAPARXHASH(0x14)とDATEL式PAPARX３ブロックハッシュ合計値が一致しました.PAPARX書くブロックの長さ=0x" & paplen.ToString("X"), "ハッシュ一致")
+                    End If
+                End If
 
                 'PAPARX01有りがあわないようなのでチェック修正
                 If hash(0) = digit(0) AndAlso hash(1) = digit(1) Then
                     DATEL_AR = True
                 End If
+
             End If
         End If
 

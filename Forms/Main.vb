@@ -3086,4 +3086,9 @@ Public Class MERGE
         Next
         Return s
     End Function
+
+    Private Sub PAPARX01TEST_Click(sender As Object, e As EventArgs) Handles PAPARX01TEST.Click
+        PAPARX01TEST.Checked = Not PAPARX01TEST.Checked
+
+    End Sub
 End Class
