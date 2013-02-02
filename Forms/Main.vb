@@ -3060,6 +3060,9 @@ Public Class MERGE
 
 
         Dim t As String = ""
+
+        codetree.BeginUpdate()
+
         For Each n As TreeNode In codetree.Nodes(0).Nodes
             s = n.Tag.ToString
             rm = r.Match(s)
@@ -3076,6 +3079,9 @@ Public Class MERGE
 
             'cl_tb.Text = t
         Next
+
+        codetree.EndUpdate()
+
     End Sub
 
     Private Function datelidtable(ByVal s As String, ByVal s1 As String(), ByVal s2 As String()) As String
@@ -3093,10 +3099,11 @@ Public Class MERGE
     End Sub
 
     Private Sub ARの自動ソート防止ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ARの自動ソート防止.Click
-        Dim i As Integer = 0
 
         Dim gn As String = ""
         Dim tn As TreeNode = codetree.Nodes(0)
+
+        codetree.BeginUpdate()
 
         For k = 0 To tn.Nodes.Count - 1
             gn = tn.Nodes(k).Text
@@ -3104,6 +3111,8 @@ Public Class MERGE
                 tn.Nodes(k).Text = k.ToString("D4") & "_" & gn
             End If
         Next
+
+        codetree.EndUpdate()
 
         Beep()
 
@@ -3114,12 +3123,15 @@ Public Class MERGE
         Dim gn As String = ""
         Dim tn As TreeNode = codetree.Nodes(0)
 
+        codetree.BeginUpdate()
         For k = 0 To tn.Nodes.Count - 1
             gn = tn.Nodes(k).Text
             If Regex.IsMatch(gn, "^\d\d\d\d_", RegexOptions.ECMAScript) = True Then
                 tn.Nodes(k).Text = gn.Substring(5, gn.Length - 5)
             End If
         Next
+
+        codetree.EndUpdate()
 
         Beep()
 
