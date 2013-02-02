@@ -3091,4 +3091,38 @@ Public Class MERGE
         PAPARX01TEST.Checked = Not PAPARX01TEST.Checked
 
     End Sub
+
+    Private Sub ARの自動ソート防止ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ARの自動ソート防止.Click
+        Dim i As Integer = 0
+
+        Dim gn As String = ""
+        Dim tn As TreeNode = codetree.Nodes(0)
+
+        For k = 0 To tn.Nodes.Count - 1
+            gn = tn.Nodes(k).Text
+            If Regex.IsMatch(gn, "^\d\d\d\d_", RegexOptions.ECMAScript) = False Then
+                tn.Nodes(k).Text = k.ToString("D4") & "_" & gn
+            End If
+        Next
+
+        Beep()
+
+    End Sub
+
+    Private Sub AR自動ソート防止番号を除去ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AR自動ソート防止番号を除去.Click
+
+        Dim gn As String = ""
+        Dim tn As TreeNode = codetree.Nodes(0)
+
+        For k = 0 To tn.Nodes.Count - 1
+            gn = tn.Nodes(k).Text
+            If Regex.IsMatch(gn, "^\d\d\d\d_", RegexOptions.ECMAScript) = True Then
+                tn.Nodes(k).Text = gn.Substring(5, gn.Length - 5)
+            End If
+        Next
+
+        Beep()
+
+    End Sub
+
 End Class

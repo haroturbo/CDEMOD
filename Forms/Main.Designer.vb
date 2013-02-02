@@ -48,6 +48,9 @@ Partial Class MERGE
         Me.Sort_GTitle2 = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator10 = New System.Windows.Forms.ToolStripSeparator()
         Me.gname_country = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ソート防止番号ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ARの自動ソート防止 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AR自動ソート防止番号を除去 = New System.Windows.Forms.ToolStripMenuItem()
         Me.codepage_select = New System.Windows.Forms.ToolStripMenuItem()
         Me.SJIS = New System.Windows.Forms.ToolStripMenuItem()
         Me.GBK = New System.Windows.Forms.ToolStripMenuItem()
@@ -125,6 +128,7 @@ Partial Class MERGE
         Me.CFEDIT = New System.Windows.Forms.ToolStripMenuItem()
         Me.ARBINhanzen = New System.Windows.Forms.ToolStripMenuItem()
         Me.ARCUT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.PAPARX01TEST = New System.Windows.Forms.ToolStripMenuItem()
         Me.ヘルプHToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.オンラインヘルプToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.バージョン情報ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -208,7 +212,6 @@ Partial Class MERGE
         Me.curr_line = New System.Windows.Forms.Label()
         Me.コード形式 = New System.Windows.Forms.Label()
         Me.tt = New System.Windows.Forms.Label()
-        Me.PAPARX01TEST = New System.Windows.Forms.ToolStripMenuItem()
         Me.treeopen.SuspendLayout()
         Me.ContextMenus.SuspendLayout()
         Me.tool_menu.SuspendLayout()
@@ -322,7 +325,7 @@ Partial Class MERGE
         '
         'menu_sort
         '
-        Me.menu_sort.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.sort_GID, Me.name_sort})
+        Me.menu_sort.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.sort_GID, Me.name_sort, Me.ソート防止番号ToolStripMenuItem})
         Me.menu_sort.Name = "menu_sort"
         Me.menu_sort.Size = New System.Drawing.Size(62, 22)
         Me.menu_sort.Text = "整列(&S)"
@@ -333,7 +336,7 @@ Partial Class MERGE
         Me.sort_GID.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Sort_GID１, Me.Sort_GID2, Me.ToolStripSeparator9, Me.gid_country})
         Me.sort_GID.Image = CType(resources.GetObject("sort_GID.Image"), System.Drawing.Image)
         Me.sort_GID.Name = "sort_GID"
-        Me.sort_GID.Size = New System.Drawing.Size(126, 22)
+        Me.sort_GID.Size = New System.Drawing.Size(152, 22)
         Me.sort_GID.Text = "ゲームID"
         '
         'Sort_GID１
@@ -369,7 +372,7 @@ Partial Class MERGE
         Me.name_sort.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Sort_GTitle1, Me.Sort_GTitle2, Me.ToolStripSeparator10, Me.gname_country})
         Me.name_sort.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.abc
         Me.name_sort.Name = "name_sort"
-        Me.name_sort.Size = New System.Drawing.Size(126, 22)
+        Me.name_sort.Size = New System.Drawing.Size(152, 22)
         Me.name_sort.Text = "ゲーム名"
         '
         'Sort_GTitle1
@@ -399,6 +402,25 @@ Partial Class MERGE
         Me.gname_country.Size = New System.Drawing.Size(160, 22)
         Me.gname_country.Text = "日→米→欧→他"
         Me.gname_country.ToolTipText = "ゲームIDを判断基準にして国ごとにわけてゲーム名で昇順ソートします"
+        '
+        'ソート防止番号ToolStripMenuItem
+        '
+        Me.ソート防止番号ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ARの自動ソート防止, Me.AR自動ソート防止番号を除去})
+        Me.ソート防止番号ToolStripMenuItem.Name = "ソート防止番号ToolStripMenuItem"
+        Me.ソート防止番号ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.ソート防止番号ToolStripMenuItem.Text = "ソート防止"
+        '
+        'ARの自動ソート防止
+        '
+        Me.ARの自動ソート防止.Name = "ARの自動ソート防止"
+        Me.ARの自動ソート防止.Size = New System.Drawing.Size(236, 22)
+        Me.ARの自動ソート防止.Text = "AR自動ソート防止番号を付加"
+        '
+        'AR自動ソート防止番号を除去
+        '
+        Me.AR自動ソート防止番号を除去.Name = "AR自動ソート防止番号を除去"
+        Me.AR自動ソート防止番号を除去.Size = New System.Drawing.Size(236, 22)
+        Me.AR自動ソート防止番号を除去.Text = "AR自動ソート防止番号を除去"
         '
         'codepage_select
         '
@@ -617,8 +639,9 @@ Partial Class MERGE
         Me.DATELゲームID修正ToolStripMenuItem.Name = "DATELゲームID修正ToolStripMenuItem"
         Me.DATELゲームID修正ToolStripMenuItem.Size = New System.Drawing.Size(262, 22)
         Me.DATELゲームID修正ToolStripMenuItem.Text = "アクションリプレイ ゲームID修正"
-        Me.DATELゲームID修正ToolStripMenuItem.ToolTipText = "DATEL配信DBの改変されたID部分を元のIDに戻します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "000A-0000 アーカイブ系" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "A***-0000 DATEL改変ID部分" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "X***-0000" & _
-    " " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Y***-0000 " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
+        Me.DATELゲームID修正ToolStripMenuItem.ToolTipText = "DATEL配信DBの改変されたID部分を元のIDに戻します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "000A-0000 アーカイブ系、APPフォルダにあるDATEL_IDTABLE.txtでマッチした" & _
+    "IDに変えます" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "A***-0000 DATEL改変ID一部分をUに戻す" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "X***-0000 DATEL改変ID一部分をUに戻す" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Y***-0000 DAT" & _
+    "EL改変ID一部分をUに戻す"
         '
         'browsecodesite
         '
@@ -922,6 +945,13 @@ Partial Class MERGE
         Me.ARCUT.Size = New System.Drawing.Size(363, 22)
         Me.ARCUT.Text = "ARBIN出力時最後のコードの場合118行カットしない"
         Me.ARCUT.ToolTipText = resources.GetString("ARCUT.ToolTipText")
+        '
+        'PAPARX01TEST
+        '
+        Me.PAPARX01TEST.Name = "PAPARX01TEST"
+        Me.PAPARX01TEST.Size = New System.Drawing.Size(363, 22)
+        Me.PAPARX01TEST.Text = "ARBIN出力PAPARX01(NIGTHTY)"
+        Me.PAPARX01TEST.ToolTipText = "PAPARX01のフラグ出力てすと" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "保存時のみ実行コードのフラグ反映対応" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ARソート防止が必須"
         '
         'ヘルプHToolStripMenuItem
         '
@@ -1664,13 +1694,6 @@ Partial Class MERGE
         Me.tt.Text = "Label2"
         Me.tt.Visible = False
         '
-        'PAPARX01TEST
-        '
-        Me.PAPARX01TEST.Name = "PAPARX01TEST"
-        Me.PAPARX01TEST.Size = New System.Drawing.Size(363, 22)
-        Me.PAPARX01TEST.Text = "ARBIN出力PAPARX01(NIGTHTY)"
-        Me.PAPARX01TEST.ToolTipText = "PAPARX01のフラグ出力てすと" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "不安定"
-        '
         'MERGE
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
@@ -1914,5 +1937,8 @@ Partial Class MERGE
     Friend WithEvents ToolStripSeparator18 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents DATELゲームID修正ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents PAPARX01TEST As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ソート防止番号ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ARの自動ソート防止 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents AR自動ソート防止番号を除去 As System.Windows.Forms.ToolStripMenuItem
 
 End Class

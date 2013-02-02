@@ -976,7 +976,9 @@ Public Class save_db
         Dim paparx_toggle(paparx_total) As Byte
         Dim paparx_folder(paparx_total) As Byte
         Dim bincounter As Integer = 0
-        Dim bitshifter As Integer = 0
+
+        '最初はダミーなので飛ばすよう1にしておく
+        Dim bitshifter As Integer = 1
 
         For k = 0 To paparx_total - 1
             paparx_toggle(k) = 255
@@ -992,8 +994,12 @@ Public Class save_db
                 back2 = i - back
                 back = i
                 arcutmsg = False
+                'bitshifterがあればフラグポインタを++、最初はダミーなので必ず++
+                If bitshifter > 0 Then
+                    bincounter += 1
+                End If
+                '最初の1bitはゲーム全体をさすので飛ばす
                 bitshifter = 1
-                bincounter += 1
 
                 gid = n.Tag.ToString
                 If gid.Length < 10 Then
@@ -1145,7 +1151,7 @@ Public Class save_db
                                     ElseIf z = 118 Then
 
                                         overflow = True
-                                        
+
                                         If outputpaparx = True Then
                                             paparx_toggle(bincounter) = CByte(paparx_toggle(bincounter) Xor ((CInt(mode) And 1) << bitshifter))
                                             bitshifter += 1
@@ -1259,23 +1265,23 @@ Public Class save_db
 
                 bincounter += 1
 
-                t = datel_hash(paparx_hidden, 0, bincounter)
-                t = t + datel_hash(paparx_toggle, 0, bincounter)
-                t = t + datel_hash(paparx_folder, 0, bincounter)
-                Array.Resize(paparx_hidden, bincounter)
-                Array.Resize(paparx_toggle, bincounter)
-                Array.Resize(paparx_folder, bincounter)
+            t = datel_hash(paparx_hidden, 0, bincounter)
+            t = t + datel_hash(paparx_toggle, 0, bincounter)
+            t = t + datel_hash(paparx_folder, 0, bincounter)
+            Array.Resize(paparx_hidden, bincounter)
+            Array.Resize(paparx_toggle, bincounter)
+            Array.Resize(paparx_folder, bincounter)
 
-                code = BitConverter.GetBytes(t)
-                Array.ConstrainedCopy(code, 0, header, 20, 4)
+            code = BitConverter.GetBytes(t)
+            Array.ConstrainedCopy(code, 0, header, 20, 4)
 
 
-                code = BitConverter.GetBytes(bincounter * 2)
-                Array.ConstrainedCopy(code, 0, header, 24, 4)
+            code = BitConverter.GetBytes(bincounter * 2)
+            Array.ConstrainedCopy(code, 0, header, 24, 4)
 
-                Array.Resize(pheader, 16)
-                code = BitConverter.GetBytes(bincounter)
-                Array.ConstrainedCopy(code, 0, pheader, 12, 4)
+            Array.Resize(pheader, 16)
+            code = BitConverter.GetBytes(bincounter)
+            Array.ConstrainedCopy(code, 0, pheader, 12, 4)
 
             End If
 
