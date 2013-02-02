@@ -3137,4 +3137,11 @@ Public Class MERGE
 
     End Sub
 
+    Private Sub ARMAX2ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ARMAX2.Click, ARTOOLBATTERY.Click
+
+        ARMAX2.Checked = Not ARMAX2.Checked
+        ARTOOLBATTERY.Checked = Not ARMAX2.Checked
+
+    End Sub
+
 End Class

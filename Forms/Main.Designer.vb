@@ -212,6 +212,8 @@ Partial Class MERGE
         Me.curr_line = New System.Windows.Forms.Label()
         Me.コード形式 = New System.Windows.Forms.Label()
         Me.tt = New System.Windows.Forms.Label()
+        Me.ARMAX2 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ARTOOLBATTERY = New System.Windows.Forms.ToolStripMenuItem()
         Me.treeopen.SuspendLayout()
         Me.ContextMenus.SuspendLayout()
         Me.tool_menu.SuspendLayout()
@@ -336,7 +338,7 @@ Partial Class MERGE
         Me.sort_GID.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Sort_GID１, Me.Sort_GID2, Me.ToolStripSeparator9, Me.gid_country})
         Me.sort_GID.Image = CType(resources.GetObject("sort_GID.Image"), System.Drawing.Image)
         Me.sort_GID.Name = "sort_GID"
-        Me.sort_GID.Size = New System.Drawing.Size(152, 22)
+        Me.sort_GID.Size = New System.Drawing.Size(136, 22)
         Me.sort_GID.Text = "ゲームID"
         '
         'Sort_GID１
@@ -372,7 +374,7 @@ Partial Class MERGE
         Me.name_sort.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Sort_GTitle1, Me.Sort_GTitle2, Me.ToolStripSeparator10, Me.gname_country})
         Me.name_sort.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.abc
         Me.name_sort.Name = "name_sort"
-        Me.name_sort.Size = New System.Drawing.Size(152, 22)
+        Me.name_sort.Size = New System.Drawing.Size(136, 22)
         Me.name_sort.Text = "ゲーム名"
         '
         'Sort_GTitle1
@@ -407,7 +409,7 @@ Partial Class MERGE
         '
         Me.ソート防止番号ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ARの自動ソート防止, Me.AR自動ソート防止番号を除去})
         Me.ソート防止番号ToolStripMenuItem.Name = "ソート防止番号ToolStripMenuItem"
-        Me.ソート防止番号ToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.ソート防止番号ToolStripMenuItem.Size = New System.Drawing.Size(136, 22)
         Me.ソート防止番号ToolStripMenuItem.Text = "ソート防止"
         '
         'ARの自動ソート防止
@@ -948,6 +950,7 @@ Partial Class MERGE
         '
         'PAPARX01TEST
         '
+        Me.PAPARX01TEST.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ARMAX2, Me.ARTOOLBATTERY})
         Me.PAPARX01TEST.Name = "PAPARX01TEST"
         Me.PAPARX01TEST.Size = New System.Drawing.Size(363, 22)
         Me.PAPARX01TEST.Text = "ARBIN出力PAPARX01(NIGTHTY)"
@@ -1694,6 +1697,20 @@ Partial Class MERGE
         Me.tt.Text = "Label2"
         Me.tt.Visible = False
         '
+        'ARMAX2
+        '
+        Me.ARMAX2.Checked = True
+        Me.ARMAX2.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.ARMAX2.Name = "ARMAX2"
+        Me.ARMAX2.Size = New System.Drawing.Size(189, 22)
+        Me.ARMAX2.Text = "ARMAX2"
+        '
+        'ARTOOLBATTERY
+        '
+        Me.ARTOOLBATTERY.Name = "ARTOOLBATTERY"
+        Me.ARTOOLBATTERY.Size = New System.Drawing.Size(189, 22)
+        Me.ARTOOLBATTERY.Text = "AR(TOOLBATTERY)"
+        '
         'MERGE
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
@@ -1940,5 +1957,7 @@ Partial Class MERGE
     Friend WithEvents ソート防止番号ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ARの自動ソート防止 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents AR自動ソート防止番号を除去 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ARMAX2 As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ARTOOLBATTERY As System.Windows.Forms.ToolStripMenuItem
 
 End Class

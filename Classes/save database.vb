@@ -980,6 +980,12 @@ Public Class save_db
         '最初はダミーなので飛ばすよう1にしておく
         Dim bitshifter As Integer = 1
 
+        'ARTOOLBATTERYはダミーなしっぽいので修正
+        If m.ARMAX2.Checked = False Then
+            bitshifter = 0
+        End If
+
+
         For k = 0 To paparx_total - 1
             paparx_toggle(k) = 255
         Next
@@ -1265,23 +1271,23 @@ Public Class save_db
 
                 bincounter += 1
 
-            t = datel_hash(paparx_hidden, 0, bincounter)
-            t = t + datel_hash(paparx_toggle, 0, bincounter)
-            t = t + datel_hash(paparx_folder, 0, bincounter)
-            Array.Resize(paparx_hidden, bincounter)
-            Array.Resize(paparx_toggle, bincounter)
-            Array.Resize(paparx_folder, bincounter)
+                t = datel_hash(paparx_hidden, 0, bincounter)
+                t = t + datel_hash(paparx_toggle, 0, bincounter)
+                t = t + datel_hash(paparx_folder, 0, bincounter)
+                Array.Resize(paparx_hidden, bincounter)
+                Array.Resize(paparx_toggle, bincounter)
+                Array.Resize(paparx_folder, bincounter)
 
-            code = BitConverter.GetBytes(t)
-            Array.ConstrainedCopy(code, 0, header, 20, 4)
+                code = BitConverter.GetBytes(t)
+                Array.ConstrainedCopy(code, 0, header, 20, 4)
 
 
-            code = BitConverter.GetBytes(bincounter * 2)
-            Array.ConstrainedCopy(code, 0, header, 24, 4)
+                code = BitConverter.GetBytes(bincounter * 2)
+                Array.ConstrainedCopy(code, 0, header, 24, 4)
 
-            Array.Resize(pheader, 16)
-            code = BitConverter.GetBytes(bincounter)
-            Array.ConstrainedCopy(code, 0, pheader, 12, 4)
+                Array.Resize(pheader, 16)
+                code = BitConverter.GetBytes(bincounter)
+                Array.ConstrainedCopy(code, 0, pheader, 12, 4)
 
             End If
 
