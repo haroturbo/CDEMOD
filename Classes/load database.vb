@@ -1312,6 +1312,9 @@ Public Class load_db
             End If
         End If
 
+
+        Dim logger As StringBuilder = New StringBuilder
+
         Try
 
             While i < datellen
@@ -1322,14 +1325,25 @@ Public Class load_db
                 While k < blocklen
                     If parsemode = False Then
 
-                        If arbitshifter <> 0 Then
+
+                        If arbitshifter > 0 Then
                             arflagct += 1
                         End If
+
+                        logger.Append(arbitshifter.ToString)
+                        logger.Append(",")
+                        logger.Append(arflagct.ToString)
+                        logger.Append(", ")
+
                         arbitshifter = 1
 
                         Array.ConstrainedCopy(bs, i + 7, id, 0, 10)
                         str = Encoding.GetEncoding(932).GetString(id)
                         str = str.PadRight(10, " "c)
+
+
+                        logger.Append(str)
+
                         gnode = New TreeNode(str)
                         With gnode
                             .Name = Nothing
@@ -1344,6 +1358,10 @@ Public Class load_db
                         str = str.Replace(vbNullChar, "")
                         gnode.Text = str
                         gnode.Name = str
+
+
+                        logger.AppendLine(str)
+
                         k = CInt(bs(i + 4))
                         arblockct = CInt(bs(i + 5)) + CInt(bs(i + 6)) << 8
                         If arblockct = 0 Then
@@ -1435,7 +1453,7 @@ Public Class load_db
             reset_toolbar()
         End If
 
-        Dim a As String = bs(psparx + arflagct).ToString("X")
+        Dim a As String = logger.ToString()
 
 
         m.progbar.Visible = False

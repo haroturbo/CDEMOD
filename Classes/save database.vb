@@ -1070,8 +1070,6 @@ Public Class save_db
 
                     If mode = "2" Or mode = "3" Then
                         ccname = n1.Text.Trim
-
-
                     Else
                         ccname = n1.Text.Trim & "(CWC/TEMP)"
                     End If
@@ -1113,6 +1111,14 @@ Public Class save_db
                     If arcmt > 0 Then
                         arcmt -= 1
 
+                        z = 0
+                        k = l >> 2
+                        If n.Nodes.Count <> cend Then
+                            nextcode = BitConverter.GetBytes(k)
+                            Array.ConstrainedCopy(nextcode, 0, bs, i + 3, 1)
+                        End If
+                        i += l
+
                     ElseIf mode = "2" Or mode = "3" Then
                         buf = n1.Tag.ToString.Split(CChar(vbLf))
 
@@ -1122,6 +1128,7 @@ Public Class save_db
 
                             If s.Length > 2 Then
                                 If s.Contains("#") = True Then
+
                                 ElseIf Regex.IsMatch(s, "^0x[0-9A-Fa-f]{8} 0x[0-9A-Fa-f]{8}", RegexOptions.ECMAScript) = True Then
 
                                     nullcode = False
