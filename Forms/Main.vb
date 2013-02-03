@@ -37,6 +37,12 @@ Public Class MERGE
             Me.Height = My.Settings.maintate
         End If
 
+
+        ARTOOLBATTERY.Checked = My.Settings.artoolbattery
+        ARMAX2.Checked = Not My.Settings.artoolbattery
+        PAPARX01TEST.Checked = My.Settings.arpaparx
+        PREVENTSORT.Checked = My.Settings.preventsort
+
         cpstring.Checked = My.Settings.checkcpstr
         GBKOP.Checked = My.Settings.GBKOP
         CFEDIT.Checked = My.Settings.cfid
@@ -384,6 +390,13 @@ Public Class MERGE
             If CODEFREAK = True Then
                 s.save_cf(database, 1201)
             ElseIf DATEL = True Then
+
+                
+                If PAPARX01TEST.Checked = True AndAlso PREVENTSORT.Checked = True Then
+                    RM_ARPREVENTSORT(sender, e)
+                    ARPREVENTSORT(sender, e)
+                End If
+
                 If ARBINhanzen.Checked = True Then
                     codetree.BeginUpdate()
                     Dim n As TreeNode = CType(codetree.Nodes(0).Clone(), TreeNode)
@@ -491,6 +504,12 @@ Public Class MERGE
         If save_file.ShowDialog = Windows.Forms.DialogResult.OK And save_file.FileName <> Nothing Then
 
             database = save_file.FileName
+            If PAPARX01TEST.Checked = True AndAlso PREVENTSORT.Checked = True Then
+                RM_ARPREVENTSORT(sender, e)
+
+                ARPREVENTSORT(sender, e)
+            End If
+
             If ARBINhanzen.Checked = True Then
                 codetree.BeginUpdate()
                 Dim n As TreeNode = CType(codetree.Nodes(0).Clone(), TreeNode)
@@ -3095,10 +3114,11 @@ Public Class MERGE
 
     Private Sub PAPARX01TEST_Click(sender As Object, e As EventArgs) Handles PAPARX01TEST.Click
         PAPARX01TEST.Checked = Not PAPARX01TEST.Checked
+        My.Settings.arpaparx = PAPARX01TEST.Checked
 
     End Sub
 
-    Private Sub ARの自動ソート防止ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ARの自動ソート防止.Click
+    Private Sub ARPREVENTSORT(sender As Object, e As EventArgs) Handles ARの自動ソート防止.Click
 
         Dim gn As String = ""
         Dim tn As TreeNode = codetree.Nodes(0)
@@ -3111,14 +3131,11 @@ Public Class MERGE
                 tn.Nodes(k).Text = k.ToString("D4") & "_" & gn
             End If
         Next
-
         codetree.EndUpdate()
-
-        Beep()
 
     End Sub
 
-    Private Sub AR自動ソート防止番号を除去ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AR自動ソート防止番号を除去.Click
+    Private Sub RM_ARPREVENTSORT(sender As Object, e As EventArgs) Handles AR自動ソート防止番号を除去.Click
 
         Dim gn As String = ""
         Dim tn As TreeNode = codetree.Nodes(0)
@@ -3130,10 +3147,8 @@ Public Class MERGE
                 tn.Nodes(k).Text = gn.Substring(5, gn.Length - 5)
             End If
         Next
-
         codetree.EndUpdate()
 
-        Beep()
 
     End Sub
 
@@ -3141,6 +3156,13 @@ Public Class MERGE
 
         ARMAX2.Checked = Not ARMAX2.Checked
         ARTOOLBATTERY.Checked = Not ARMAX2.Checked
+        My.Settings.artoolbattery = ARMAX2.Checked
+
+    End Sub
+
+    Private Sub PREVENTSORT_Click(sender As Object, e As EventArgs) Handles PREVENTSORT.Click
+        PREVENTSORT.Checked = Not PREVENTSORT.Checked
+        My.Settings.preventsort = PREVENTSORT.Checked
 
     End Sub
 

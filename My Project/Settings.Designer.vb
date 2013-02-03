@@ -210,30 +210,30 @@ Namespace My
             End Set
         End Property
         
-        <Global.System.Configuration.UserScopedSettingAttribute(), _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
-         Global.System.Configuration.DefaultSettingValueAttribute("http://ijiro.daiwa-hotcom.com/mogura/writelog.php?dl=http://ijiro.daiwa-hotcom.co" & _
-            "m/data/IJIRO/CDEMOD/bin/Release/CDE_CP932_FM4.exe")> _
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("http://ijiro.daiwa-hotcom.com/mogura/writelog.php?dl=http://ijiro.daiwa-hotcom.co"& _ 
+            "m/data/IJIRO/CDEMOD/bin/Release/CDE_CP932_FM4.exe")>  _
         Public Property download() As String
             Get
-                Return CType(Me("download"), String)
+                Return CType(Me("download"),String)
             End Get
-            Set(value As String)
+            Set
                 Me("download") = value
             End Set
         End Property
-
-        <Global.System.Configuration.UserScopedSettingAttribute(), _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
-         Global.System.Configuration.DefaultSettingValueAttribute("KAKASI" & Global.Microsoft.VisualBasic.ChrW(9) & "APP\kakasi.bat" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "MECAB" & Global.Microsoft.VisualBasic.ChrW(9) & "APP\kanahenkan.bat" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "PMETAN変換" & Global.Microsoft.VisualBasic.ChrW(9) & "APP\pme.bat" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "TEMPAR鶴" & Global.Microsoft.VisualBasic.ChrW(9) & "AP" & _
-            "P\temp.bat" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Wget" & Global.Microsoft.VisualBasic.ChrW(9) & "APP\wget.bat" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "2CH" & Global.Microsoft.VisualBasic.ChrW(9) & "C:\Program Files (x86)\Jane Style\Jane2ch.exe" & _
-            "" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "PSPへコードコピー" & Global.Microsoft.VisualBasic.ChrW(9) & "APP\cp.bat")> _
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("KAKASI"&Global.Microsoft.VisualBasic.ChrW(9)&"APP\kakasi.bat"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"MECAB"&Global.Microsoft.VisualBasic.ChrW(9)&"APP\kanahenkan.bat"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"PMETAN変換"&Global.Microsoft.VisualBasic.ChrW(9)&"APP\pme.bat"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"TEMPAR鶴"&Global.Microsoft.VisualBasic.ChrW(9)&"AP"& _ 
+            "P\temp.bat"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"Wget"&Global.Microsoft.VisualBasic.ChrW(9)&"APP\wget.bat"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"2CH"&Global.Microsoft.VisualBasic.ChrW(9)&"C:\Program Files (x86)\Jane Style\Jane2ch.exe"& _ 
+            ""&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"PSPへコードコピー"&Global.Microsoft.VisualBasic.ChrW(9)&"APP\cp.bat")>  _
         Public Property apps() As String
             Get
-                Return CType(Me("apps"), String)
+                Return CType(Me("apps"),String)
             End Get
-            Set(value As String)
-                Me("apps") = Value
+            Set
+                Me("apps") = value
             End Set
         End Property
         
@@ -716,6 +716,42 @@ Namespace My
             End Get
             Set
                 Me("arbincut") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property arpaparx() As Boolean
+            Get
+                Return CType(Me("arpaparx"),Boolean)
+            End Get
+            Set
+                Me("arpaparx") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property artoolbattery() As Boolean
+            Get
+                Return CType(Me("artoolbattery"),Boolean)
+            End Get
+            Set
+                Me("artoolbattery") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property preventsort() As Boolean
+            Get
+                Return CType(Me("preventsort"),Boolean)
+            End Get
+            Set
+                Me("preventsort") = value
             End Set
         End Property
     End Class

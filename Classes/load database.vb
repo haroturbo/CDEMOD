@@ -1269,7 +1269,49 @@ Public Class load_db
         Dim parsemode As Boolean = False
         Dim nextcode As Integer = 0
         Dim sb As New System.Text.StringBuilder()
+
+        Dim fsize As Long = file.Length
+        Dim size As Integer = BitConverter.ToInt32(bs, 16)
+        Dim paplen2 As Integer = BitConverter.ToInt32(bs, 24)
+        Dim z As UInteger = 0
+        Dim PAPARX_OK As Boolean = False
+        Dim arflagct As Integer = 0
+        Dim arbitshifter As Integer = 0
+        Dim psparx As Integer = 0
+        Dim paplen As Integer = 0
+        Dim arblockct As Integer = 0
+
         counts(0) = datellen \ 32
+
+        If MERGE.ARMAX2.Checked Then
+            arbitshifter = 1
+        End If
+
+        If MERGE.PAPARX01TEST.Checked = True AndAlso size + (paplen2 >> 1) * 3 + 44 = fsize Then
+
+            psparx = size + 28
+            paplen = BitConverter.ToInt32(bs, psparx + 12)
+
+            psparx += 16
+            z = datel_hash(bs, psparx, paplen)
+            psparx += paplen
+            z = z + datel_hash(bs, psparx, paplen)
+            psparx += paplen
+            z = z + datel_hash(bs, psparx, paplen)
+            z = CUInt(z And &HFFFFFFFF)
+            Dim paparxs As String = z.ToString("X8")
+
+            If z = BitConverter.ToUInt32(bs, 20) AndAlso paplen * 2 = BitConverter.ToUInt32(bs, 24) Then
+                PAPARX_OK = True
+                psparx -= paplen
+
+            ElseIf paplen * 2 <> BitConverter.ToUInt32(bs, 24) Then
+                MessageBox.Show("PAPARX各ブロックの長さがヘッダ情報と一致しません,0x" & paplen.ToString("X"), "長さ不一致")
+            Else
+                MessageBox.Show(paparxs & ",ヘッダのPAPARXHASH(0x14)と実際のDATEL計算式PAPARX３ブロックハッシュ合計値が一致しません.PAPARX各ブロックの長さ=0x" & paplen.ToString("X"), "ハッシュ不一致")
+            End If
+        End If
+
         Try
 
             While i < datellen
@@ -1279,6 +1321,12 @@ Public Class load_db
                 End If
                 While k < blocklen
                     If parsemode = False Then
+
+                        If arbitshifter <> 0 Then
+                            arflagct += 1
+                        End If
+                        arbitshifter = 1
+
                         Array.ConstrainedCopy(bs, i + 7, id, 0, 10)
                         str = Encoding.GetEncoding(932).GetString(id)
                         str = str.PadRight(10, " "c)
@@ -1297,11 +1345,13 @@ Public Class load_db
                         gnode.Text = str
                         gnode.Name = str
                         k = CInt(bs(i + 4))
-                        l = CInt(bs(i + 5)) + CInt(bs(i + 6)) << 8
-                        If l = 0 Then
+                        arblockct = CInt(bs(i + 5)) + CInt(bs(i + 6)) << 8
+                        If arblockct = 0 Then
                             Exit While
                         End If
                         parsemode = True
+
+
                     ElseIf parsemode = True Then
                         codeline = CInt(bs(i + k))
                         l = CInt(bs(i + k + 1)) - 1
@@ -1313,7 +1363,22 @@ Public Class load_db
                         cnode.ImageIndex = 2
                         gnode.Nodes.Add(cnode)
                         sb.Clear()
-                        sb.Append("2")
+                        If PAPARX_OK = True Then
+
+                            If (bs(psparx + arflagct) And (1 << arbitshifter)) = 0 Then
+                                sb.Append("3")
+                            Else
+                                sb.Append("2")
+                            End If
+                            arbitshifter += 1
+                            If arbitshifter = 8 Then
+                                arflagct += 1
+                                arbitshifter = 0
+                            End If
+
+                        Else
+                            sb.Append("2")
+                        End If
                         sb.Append(vbCrLf)
                         l = CInt(bs(i + k + 2)) << 2
                         While codeline > 0
@@ -1370,10 +1435,12 @@ Public Class load_db
             reset_toolbar()
         End If
 
+        Dim a As String = bs(psparx + arflagct).ToString("X")
 
-            m.progbar.Visible = False
-            file.Close()
-            memory.FlushMemory() ' Force a garbage collection after all the memory processing
+
+        m.progbar.Visible = False
+        file.Close()
+        memory.FlushMemory() ' Force a garbage collection after all the memory processing
 
     End Sub
 
@@ -2046,6 +2113,8 @@ Public Class load_db
         Dim hash(1) As String
         Dim digit(1) As String
         Dim z As UInteger = 0
+
+
         If file.ReadByte = &H50 Then
             file.Seek(0, SeekOrigin.Begin)
             file.Read(Code, 0, CInt(file.Length))
@@ -2073,24 +2142,6 @@ Public Class load_db
                 z = CUInt(z And &HFFFFFFFF)
                 hash(0) = z.ToString("X8")
 
-                If MERGE.PAPARX01TEST.Checked = True AndAlso size + (BitConverter.ToUInt32(Code, 24) >> 1) * 3 + 44 = fsize Then
-
-                    Dim psparx As Integer = size + 28
-                    Dim paplen As Integer = BitConverter.ToInt32(Code, psparx + 12)
-
-                    psparx += 16
-                    z = datel_hash(Code, psparx, paplen)
-                    psparx += paplen
-                    z = z + datel_hash(Code, psparx, paplen)
-                    psparx += paplen
-                    z = z + datel_hash(Code, psparx, paplen)
-                    z = CUInt(z And &HFFFFFFFF)
-                    Dim paparxs As String = z.ToString("X8")
-
-                    If z = BitConverter.ToUInt32(Code, 20) AndAlso paplen * 2 = BitConverter.ToUInt32(Code, 24) Then
-                        MessageBox.Show(paparxs & ",ヘッダのPAPARXHASH(0x14)とDATEL式PAPARX３ブロックハッシュ合計値が一致しました.PAPARX書くブロックの長さ=0x" & paplen.ToString("X"), "ハッシュ一致")
-                    End If
-                End If
 
                 'PAPARX01有りがあわないようなのでチェック修正
                 If hash(0) = digit(0) AndAlso hash(1) = digit(1) Then

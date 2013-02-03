@@ -129,6 +129,10 @@ Partial Class MERGE
         Me.ARBINhanzen = New System.Windows.Forms.ToolStripMenuItem()
         Me.ARCUT = New System.Windows.Forms.ToolStripMenuItem()
         Me.PAPARX01TEST = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ARMAX2 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ARTOOLBATTERY = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator19 = New System.Windows.Forms.ToolStripSeparator()
+        Me.PREVENTSORT = New System.Windows.Forms.ToolStripMenuItem()
         Me.ヘルプHToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.オンラインヘルプToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.バージョン情報ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -212,8 +216,6 @@ Partial Class MERGE
         Me.curr_line = New System.Windows.Forms.Label()
         Me.コード形式 = New System.Windows.Forms.Label()
         Me.tt = New System.Windows.Forms.Label()
-        Me.ARMAX2 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ARTOOLBATTERY = New System.Windows.Forms.ToolStripMenuItem()
         Me.treeopen.SuspendLayout()
         Me.ContextMenus.SuspendLayout()
         Me.tool_menu.SuspendLayout()
@@ -950,11 +952,36 @@ Partial Class MERGE
         '
         'PAPARX01TEST
         '
-        Me.PAPARX01TEST.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ARMAX2, Me.ARTOOLBATTERY})
+        Me.PAPARX01TEST.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ARMAX2, Me.ARTOOLBATTERY, Me.ToolStripSeparator19, Me.PREVENTSORT})
         Me.PAPARX01TEST.Name = "PAPARX01TEST"
         Me.PAPARX01TEST.Size = New System.Drawing.Size(363, 22)
         Me.PAPARX01TEST.Text = "ARBIN出力PAPARX01(NIGTHTY)"
         Me.PAPARX01TEST.ToolTipText = "PAPARX01のフラグ出力てすと" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "保存時のみ実行コードのフラグ反映対応" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ARソート防止が必須"
+        '
+        'ARMAX2
+        '
+        Me.ARMAX2.Checked = True
+        Me.ARMAX2.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.ARMAX2.Name = "ARMAX2"
+        Me.ARMAX2.Size = New System.Drawing.Size(284, 22)
+        Me.ARMAX2.Text = "ARMAX2"
+        '
+        'ARTOOLBATTERY
+        '
+        Me.ARTOOLBATTERY.Name = "ARTOOLBATTERY"
+        Me.ARTOOLBATTERY.Size = New System.Drawing.Size(284, 22)
+        Me.ARTOOLBATTERY.Text = "AR(TOOLBATTERY)"
+        '
+        'ToolStripSeparator19
+        '
+        Me.ToolStripSeparator19.Name = "ToolStripSeparator19"
+        Me.ToolStripSeparator19.Size = New System.Drawing.Size(281, 6)
+        '
+        'PREVENTSORT
+        '
+        Me.PREVENTSORT.Name = "PREVENTSORT"
+        Me.PREVENTSORT.Size = New System.Drawing.Size(284, 22)
+        Me.PREVENTSORT.Text = "保存時ARのソート防止番号を付加する"
         '
         'ヘルプHToolStripMenuItem
         '
@@ -1697,20 +1724,6 @@ Partial Class MERGE
         Me.tt.Text = "Label2"
         Me.tt.Visible = False
         '
-        'ARMAX2
-        '
-        Me.ARMAX2.Checked = True
-        Me.ARMAX2.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.ARMAX2.Name = "ARMAX2"
-        Me.ARMAX2.Size = New System.Drawing.Size(189, 22)
-        Me.ARMAX2.Text = "ARMAX2"
-        '
-        'ARTOOLBATTERY
-        '
-        Me.ARTOOLBATTERY.Name = "ARTOOLBATTERY"
-        Me.ARTOOLBATTERY.Size = New System.Drawing.Size(189, 22)
-        Me.ARTOOLBATTERY.Text = "AR(TOOLBATTERY)"
-        '
         'MERGE
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
@@ -1959,5 +1972,7 @@ Partial Class MERGE
     Friend WithEvents AR自動ソート防止番号を除去 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ARMAX2 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ARTOOLBATTERY As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator19 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents PREVENTSORT As System.Windows.Forms.ToolStripMenuItem
 
 End Class

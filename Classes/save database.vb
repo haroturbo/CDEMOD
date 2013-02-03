@@ -1269,7 +1269,9 @@ Public Class save_db
 
             If outputpaparx = True Then
 
-                bincounter += 1
+                If bitshifter <> 0 Then
+                    bincounter += 1
+                End If
 
                 t = datel_hash(paparx_hidden, 0, bincounter)
                 t = t + datel_hash(paparx_toggle, 0, bincounter)
