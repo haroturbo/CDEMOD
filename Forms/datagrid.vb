@@ -115,7 +115,7 @@ Public Class datagrid
             End While
 
 
-            mask = "<DGMODE[0-9]{1,3}='.*?'>"
+            mask = "<DGMODE[0-9]{1,3}='(DEC|DEC16BIT|BINARY(32|16)|BIN32>>16|X?OR|AND|ASM)'>"
             Dim dm As New System.Text.RegularExpressions.Regex(mask, System.Text.RegularExpressions.RegexOptions.IgnoreCase)
             Dim dg_mode As System.Text.RegularExpressions.Match = dm.Match(m.dmtext.Text)
             Dim mode As String = ""
@@ -605,7 +605,7 @@ Public Class datagrid
                     sl.Append("<DGLINE" & Convert.ToString(k + 1) & "='" & DataGridView1.Rows(k).Cells(4).Value.ToString & "'>")
                 End If
             End If
-            If DataGridView1.Rows(k).Cells(2).Value.ToString.Contains("DEC") = False Then
+            If DataGridView1.Rows(k).Cells(2).Value.ToString <> "DEC" Then
                 sm.Append("<DGMODE" & Convert.ToString(k + 1) & "='" & DataGridView1.Rows(k).Cells(2).Value.ToString & "'>")
             End If
             k += 1

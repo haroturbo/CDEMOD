@@ -43,6 +43,7 @@ Public Class load_db
             Dim NULLCODE As Boolean = False
             Dim cwcar As String = "_L"
             Dim z As Integer = 0
+            Dim cp As Integer = 2
 
             m.codetree.Nodes.Add(Path.GetFileNameWithoutExtension(filename)).ImageIndex = 0 ' Add the root node and set its icon
             m.progbar.Value = 0 ' Reset the progress bar
@@ -99,19 +100,17 @@ Public Class load_db
                                 NULLCODE = False
                                 cwcar = buffer(0).Substring(0, 3)
                                 If cwcar = "_M " Then
-                                    z = Integer.Parse(code.ToString.Substring(0, 1))
                                     code.Remove(0, 1)
-                                    z = z And 1
-                                    z = 2 Or z
-                                    code.Insert(0, z.ToString())
+                                    z = cp And 1
+                                    z = 4 Or z
+                                    code.Insert(0, Convert.ToChar(z))
 
                                 ElseIf cwcar = "_N " Then
-                                    z = Integer.Parse(code.ToString.Substring(0, 1))
                                     code.Remove(0, 1)
+                                    z = cp And 1
+                                    z = 8 Or z
+                                    code.Insert(0, Convert.ToChar(z))
 
-                                    z = z And 1
-                                    z = 4 Or z
-                                    code.Insert(0, z.ToString())
                                 End If
                                 cwcar = buffer(0).Substring(0, 2)
                                 '_L 0x12345678 0x12345678 24文字
@@ -130,12 +129,15 @@ Public Class load_db
                                 End If
                                 code.Clear()
                                 cmt.Clear()
-
-                                If buffer(0).Substring(2, 1) = "1" Then
-                                    code.AppendLine("1")
+                                
+                                If buffer(0).Substring(2, 1) = "0" Then
+                                    cp = 2
                                 Else
-                                    code.AppendLine("0")
+                                    cp = 3
                                 End If
+
+                                code.AppendLine(Convert.ToChar(cp))
+
 
                                 cnode = New TreeNode(buffer(0).Substring(3, buffer(0).Length - 3).Trim)
                                 cnode.Name = buffer(0).Substring(3, buffer(0).Length - 3).Trim
@@ -207,11 +209,14 @@ Public Class load_db
                                 code.Clear()
                                 cmt.Clear()
 
-                                If buffer(0).Substring(2, 1) = "1" Then
-                                    code.AppendLine("1")
+                                
+                                If buffer(0).Substring(2, 1) = "0" Then
+                                    cp = 2
                                 Else
-                                    code.AppendLine("0")
+                                    cp = 3
                                 End If
+
+                                code.AppendLine(Convert.ToChar(cp))
 
                                 cnode = New TreeNode(buffer(0).Substring(3, buffer(0).Length - 3).Trim)
                                 cnode.Name = buffer(0).Substring(3, buffer(0).Length - 3).Trim
@@ -224,19 +229,17 @@ Public Class load_db
                                 skip = False
                                 cwcar = buffer(0).Substring(0, 3)
                                 If cwcar = "_M " Then
-                                    z = Integer.Parse(code.ToString.Substring(0, 1))
                                     code.Remove(0, 1)
-                                    z = z And 1
-                                    z = 2 Or z
-                                    code.Insert(0, z.ToString())
+                                    z = cp And 1
+                                    z = 4 Or z
+                                    code.Insert(0, Convert.ToChar(z))
 
                                 ElseIf cwcar = "_N " Then
-                                    z = Integer.Parse(code.ToString.Substring(0, 1))
                                     code.Remove(0, 1)
 
-                                    z = z And 1
-                                    z = 4 Or z
-                                    code.Insert(0, z.ToString())
+                                    z = cp And 1
+                                    z = 8 Or z
+                                    code.Insert(0, Convert.ToChar(z))
                                 End If
 
                                 '_L 0x12345678 0x12345678 24文字
@@ -443,6 +446,7 @@ Public Class load_db
             buffer(0) = Nothing
             gnode.Text = Nothing
             cnode.Text = Nothing
+            Dim cp As Integer = 2
             m.codetree.Nodes.Add(Path.GetFileNameWithoutExtension(filename)).ImageIndex = 0 ' Add the root node and set its icon
             m.progbar.Visible = True ' Show the progress bar and reset it's value
             m.progbar.Value = 0 ' Reset the progress bar
@@ -497,13 +501,15 @@ Public Class load_db
                                 End If
                                 code.Clear()
                                 cmt.Clear()
-
-
-                                If buffer(0).Substring(2, 1) = "1" Then
-                                    code.AppendLine("1")
+                                
+                                If buffer(0).Substring(2, 1) = "0" Then
+                                    cp = 2
                                 Else
-                                    code.AppendLine("0")
+                                    cp = 3
                                 End If
+
+                                code.AppendLine(Convert.ToChar(cp))
+
 
                                 cnode = New TreeNode(buffer(0).Substring(3, buffer(0).Length - 3).Trim)
                                 cnode.Name = buffer(0).Substring(3, buffer(0).Length - 3).Trim
@@ -744,6 +750,7 @@ Public Class load_db
         Dim i As Integer = 0
         Dim n As Integer = 0
         Dim sb As New System.Text.StringBuilder()
+        Dim defcwc As String = Convert.ToChar(2)
         counts(0) = cfdatlen \ 36
 
         Try
@@ -809,7 +816,7 @@ Public Class load_db
                         cnode.Name = str.Trim
                         cnode.ImageIndex = 2
                         gnode.Nodes.Add(cnode)
-                        b6 = "0" & vbCrLf
+                        b6 = defcwc & vbCrLf
                         counts(1) += 1
 
                     ElseIf bs(i) = &H43 AndAlso bs(i + 1) = &H20 Then 'C コード内容
@@ -910,6 +917,7 @@ Public Class load_db
         Dim ss As String() = s.Split(CChar("ਊ"))
         Dim head As String = ""
         Dim sbb As String = ""
+        Dim defcwc As String = Convert.ToChar(2)
 
         Try
             For i = 0 To ss.Length - 1
@@ -931,7 +939,7 @@ Public Class load_db
                     ElseIf (head = "䴠") Then
                         cnode = New TreeNode("(M)")
                         cnode.Name = "(M)"
-                        cnode.ImageIndex = 2
+                        cnode.ImageIndex = 4
                         gnode.Tag = cf2sceid(cfid, s)
                         s = s.Insert(8, " 0x")
                         sb.AppendLine("0")
@@ -951,7 +959,7 @@ Public Class load_db
                             cnode = New TreeNode(s)
                             cnode.Name = s
                             cnode.ImageIndex = 2
-                            sb.AppendLine("0")
+                            sb.AppendLine(defcwc)
                             gnode.Nodes.Add(cnode)
                         End If
 
@@ -1027,6 +1035,7 @@ Public Class load_db
         Dim line As Integer = 0
         Dim erct As Integer = 0
         Dim gnode = New TreeNode(gname)
+        Dim cp As Integer = 2
 
         If m.codetree.Nodes.Count >= 1 And b1 <> Nothing Then
             m.codetree.BeginUpdate()
@@ -1043,7 +1052,7 @@ Public Class load_db
 
                 If s.Length >= 2 Then
                     If selnode1stlv = 0 AndAlso s.Substring(0, 2) = "_S" Then
-                        If havegame = True AndAlso nullcode = False Then
+                        If havegame = True Then
                             add = True
                             i = 0
                         End If
@@ -1079,67 +1088,76 @@ Public Class load_db
                         End If
 
 
-                        ElseIf s.Substring(0, 2) = "_C" Then
-                            nullcode = True
-                            s = s.PadRight(3, "0"c)
-                            If i = 0 Then
-                                If s.Substring(2, 1) = "0" Then
-                                    code = "0" & vbCrLf
-                                Else
-                                    code = "1" & vbCrLf
-                                End If
-                                cname = s.Substring(3, s.Length - 3).Trim
+                    ElseIf s.Substring(0, 2) = "_C" Then
+                        nullcode = True
+                        s = s.PadRight(3, "0"c)
+
+                        If i = 0 Then
+
+                            If s.Substring(2, 1) = "0" Then
+                                cp = 2
                             Else
-                                add = True
-                                If nullcode = True Then
-                                    code2 &= "0" & vbCrLf
-                                End If
-                                code = code & coment
-                                If s.Substring(2, 1) = "0" Then
-                                    code2 = "0" & vbCrLf
-                                Else
-                                    code2 = "1" & vbCrLf
-                                End If
-                                cname2 = s.Substring(3, s.Length - 3).Trim
+                                cp = 3
                             End If
-                            i += 1
+                            code = Convert.ToChar(cp) & vbCrLf
+                            cname = s.Substring(3, s.Length - 3).Trim
 
-                        ElseIf s.Substring(0, 2) = "_L" Or s.Substring(0, 2) = "_M" Or s.Substring(0, 2) = "_N" Then
-                            nullcode = False
-                            s = s.Replace(vbCr, "")
-                            If m.PSX = True Then
-                                s = s.PadRight(17, "0"c)
-                                '_L 12345678 1234
-                                If s.Substring(2, 1) = " " And s.Substring(11, 1) = " " Then
-                                    code &= s.Substring(3, 13).Trim & vbCrLf
-                                End If
+                        Else
+                            add = True
+
+                            code = code & coment
+
+                            If s.Substring(2, 1) = "0" Then
+                                cp = 2
                             Else
-                                s = s.PadRight(24, "0"c)
-                                '_L 0x12345678 0x12345678
-                                If s.Substring(3, 2) = "0x" And s.Substring(14, 2) = "0x" Then
-                                    If s.Substring(0, 2) = "_M" Then
-                                        z = Integer.Parse(code.Substring(0, 1))
-                                        code = code.Remove(0, 1)
-                                        z = 2 Or z
-                                        code = code.Insert(0, z.ToString())
-                                    ElseIf s.Substring(0, 2) = "_N" Then
-                                        z = Integer.Parse(code.Substring(0, 1))
-                                        code = code.Remove(0, 1)
-                                        z = 4 Or z
-                                        code = code.Insert(0, z.ToString())
-                                    End If
-                                    code &= s.Substring(3, 21).Trim & vbCrLf
+                                cp = 3
+                            End If
+                            code2 = Convert.ToChar(cp) & vbCrLf
+                            cname2 = s.Substring(3, s.Length - 3).Trim
+                        End If
+                        i += 1
+
+                    ElseIf s.Substring(0, 2) = "_L" Or s.Substring(0, 2) = "_M" Or s.Substring(0, 2) = "_N" Then
+                        nullcode = False
+
+                        s = s.Trim
+
+                        If m.PSX = True Then
+                            s = s.PadRight(17, "0"c)
+                            '_L 12345678 1234
+                            If s.Substring(2, 1) = " " And s.Substring(11, 1) = " " Then
+                                code &= s.Substring(3, 13).Trim & vbCrLf
+                            End If
+                        Else
+                            s = s.PadRight(24, "0"c)
+                            '_L 0x12345678 0x12345678
+                            If s.Substring(3, 2) = "0x" And s.Substring(14, 2) = "0x" Then
+                                If s.Substring(0, 2) = "_M" Then
+
+                                    code = code.Remove(0, 1)
+                                    cp = cp And 1
+                                    z = 4 Or cp
+                                    code = code.Insert(0, Convert.ToChar(z))
+
+                                ElseIf s.Substring(0, 2) = "_N" Then
+                                    code = code.Remove(0, 1)
+                                    cp = cp And 1
+                                    z = 8 Or cp
+                                    code = code.Insert(0, Convert.ToChar(z))
                                 End If
 
+                                code &= s.Substring(3, 21).Trim & vbCrLf
                             End If
-
-                        ElseIf s.Substring(0, 1) = "#" Then
-
-                            s = s.Replace("#", "")
-                            coment &= "#" & s.Trim & vbCrLf
 
                         End If
+
+                    ElseIf s.Substring(0, 1) = "#" Then
+
+                        s = s.Replace("#", "")
+                        coment &= "#" & s.Trim & vbCrLf
+
                     End If
+                End If
 
 
                 If add = True Then
@@ -1164,7 +1182,7 @@ Public Class load_db
                         End Select
 
                     Catch ex As Exception
-
+                        MessageBox.Show(ex.Message)
                     End Try
 
                     code = code2
@@ -1278,8 +1296,12 @@ Public Class load_db
         Dim arflagct As Integer = 0
         Dim arbitshifter As Integer = 0
         Dim psparx As Integer = 0
+        Dim psparx1 As Integer = 0
+        Dim psparx2 As Integer = 0
         Dim paplen As Integer = 0
         Dim arblockct As Integer = 0
+        Dim cflag As Integer = 0
+        Dim defar As String = Convert.ToChar(4)
 
         counts(0) = datellen \ 32
 
@@ -1294,16 +1316,15 @@ Public Class load_db
 
             psparx += 16
             z = datel_hash(bs, psparx, paplen)
-            psparx += paplen
-            z = z + datel_hash(bs, psparx, paplen)
-            psparx += paplen
-            z = z + datel_hash(bs, psparx, paplen)
+            psparx1 = psparx + paplen
+            z = z + datel_hash(bs, psparx1, paplen)
+            psparx2 = psparx1 + paplen
+            z = z + datel_hash(bs, psparx2, paplen)
             z = CUInt(z And &HFFFFFFFF)
             Dim paparxs As String = z.ToString("X8")
 
             If z = BitConverter.ToUInt32(bs, 20) AndAlso paplen * 2 = BitConverter.ToUInt32(bs, 24) Then
                 PAPARX_OK = True
-                psparx -= paplen
 
             ElseIf paplen * 2 <> BitConverter.ToUInt32(bs, 24) Then
                 MessageBox.Show("PAPARX各ブロックの長さがヘッダ情報と一致しません,0x" & paplen.ToString("X"), "長さ不一致")
@@ -1313,7 +1334,7 @@ Public Class load_db
         End If
 
 
-        Dim logger As StringBuilder = New StringBuilder
+        'Dim logger As StringBuilder = New StringBuilder
 
         Try
 
@@ -1330,10 +1351,11 @@ Public Class load_db
                             arflagct += 1
                         End If
 
-                        logger.Append(arbitshifter.ToString)
-                        logger.Append(",")
-                        logger.Append(arflagct.ToString)
-                        logger.Append(", ")
+                        'logger.Append(arbitshifter.ToString)
+                        'logger.Append(",")
+                        'logger.Append(arflagct.ToString)
+                        'logger.Append(", ")
+
 
                         arbitshifter = 1
 
@@ -1342,7 +1364,7 @@ Public Class load_db
                         str = str.PadRight(10, " "c)
 
 
-                        logger.Append(str)
+                        'logger.Append(str)
 
                         gnode = New TreeNode(str)
                         With gnode
@@ -1350,6 +1372,8 @@ Public Class load_db
                             .Tag = str
                             .ImageIndex = 1
                         End With
+
+
                         m.codetree.Nodes(0).Nodes.Add(gnode)
                         k = CInt(bs(i + 4)) - 18
                         Array.Resize(gname, k)
@@ -1359,8 +1383,12 @@ Public Class load_db
                         gnode.Text = str
                         gnode.Name = str
 
+                        If (bs(psparx + arflagct) And 1) <> 0 Then
+                            gnode.Name = "HIDDEN"
+                            gnode.ImageIndex = 5
+                        End If
 
-                        logger.AppendLine(str)
+                        'logger.AppendLine(str)
 
                         k = CInt(bs(i + 4))
                         arblockct = CInt(bs(i + 5)) + CInt(bs(i + 6)) << 8
@@ -1383,21 +1411,33 @@ Public Class load_db
                         sb.Clear()
                         If PAPARX_OK = True Then
 
-                            If (bs(psparx + arflagct) And (1 << arbitshifter)) = 0 Then
-                                sb.Append("3")
-                            Else
-                                sb.Append("2")
+                            cflag = 4
+
+                            If (bs(psparx2 + arflagct) And (1 << arbitshifter)) <> 0 Then
+                                cflag += 64
+                                cnode.ImageIndex = 6
                             End If
+                            If (bs(psparx + arflagct) And (1 << arbitshifter)) <> 0 Then
+                                cflag += 16
+                                cnode.ImageIndex = 4
+                            End If
+                            If (bs(psparx1 + arflagct) And (1 << arbitshifter)) = 0 Then
+                                cflag += 1
+                            End If
+
                             arbitshifter += 1
                             If arbitshifter = 8 Then
                                 arflagct += 1
                                 arbitshifter = 0
                             End If
 
+                            sb.AppendLine(Convert.ToChar(cflag))
+
                         Else
-                            sb.Append("2")
+                            sb.AppendLine(defar)
                         End If
-                        sb.Append(vbCrLf)
+
+
                         l = CInt(bs(i + k + 2)) << 2
                         While codeline > 0
                             Array.ConstrainedCopy(bs, i + k + l, code, 0, 4)
@@ -1453,7 +1493,7 @@ Public Class load_db
             reset_toolbar()
         End If
 
-        Dim a As String = logger.ToString()
+        'Dim a As String = logger.ToString()
 
 
         m.progbar.Visible = False

@@ -117,63 +117,66 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="sony_playstation1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Icons\sony playstation.ico;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="new_" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Icons\new.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="sony_psp" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Icons\sony psp.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="save_game" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Icons\save_game.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="psp_menu" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Icons\psp_menu.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="sony_playstation" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Icons\sony playstation.ico;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="save" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Icons\save.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="remove_game" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Icons\remove_game.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="remove_PSX_game" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Icons\remove_PSX_game.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="alwaystop" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Icons\alwaystop.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="save_PSX_game" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Icons\save_PSX_game.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="add_PSX_game" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Icons\add_PSX_game.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="add_game" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Icons\add_game.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="abc" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Icons\abc.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ip1" xml:space="preserve">
-    <value>開始アドレスが終了アドレスを超えてます</value>
-  </data>
   <data name="ip2" xml:space="preserve">
     <value>有効なローカルアドレスを入力してください
 クラスA:10.0.0.0-10.255.255.255
 クラスB:172.16.0.0-172.31.255.255
 クラスC:192.168.0.0-192.168.255.255</value>
   </data>
-  <data name="ftpf" xml:space="preserve">
-    <value>PSPFTPDサーバーが見つかりませんでした</value>
+  <data name="ip1" xml:space="preserve">
+    <value>開始アドレスが終了アドレスを超えてます</value>
   </data>
   <data name="ftps" xml:space="preserve">
     <value>PSPFTPDサーバーが見つかりました
 </value>
+  </data>
+  <data name="ftpf" xml:space="preserve">
+    <value>PSPFTPDサーバーが見つかりませんでした</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="new_" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icons\new.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="psp_menu" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icons\psp_menu.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="save_PSX_game" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icons\save_PSX_game.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="save" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icons\save.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="save_game" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icons\save_game.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="remove_game" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icons\remove_game.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="alwaystop" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icons\alwaystop.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="abc" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icons\abc.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="remove_PSX_game" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icons\remove_PSX_game.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="add_PSX_game" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icons\add_PSX_game.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="sony_playstation" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icons\sony playstation.ico;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="sony_playstation1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icons\sony playstation.ico;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="sony_psp" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icons\sony psp.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="add_game" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icons\add_game.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="nosort" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icons\nosort.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

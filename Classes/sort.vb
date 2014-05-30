@@ -33,7 +33,7 @@ Class sort
             Dim sb As New System.Text.StringBuilder()
             b2 = n.Index.ToString
             If mode = 8 Then
-                b3 = n.Name
+                b3 = n.Text
                 sb.Append(b3)
             Else
                 sb.Append(b1)

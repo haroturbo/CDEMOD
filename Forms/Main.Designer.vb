@@ -216,6 +216,8 @@ Partial Class MERGE
         Me.curr_line = New System.Windows.Forms.Label()
         Me.コード形式 = New System.Windows.Forms.Label()
         Me.tt = New System.Windows.Forms.Label()
+        Me.HIDDEN = New System.Windows.Forms.CheckBox()
+        Me.FOLDER = New System.Windows.Forms.CheckBox()
         Me.treeopen.SuspendLayout()
         Me.ContextMenus.SuspendLayout()
         Me.tool_menu.SuspendLayout()
@@ -340,7 +342,7 @@ Partial Class MERGE
         Me.sort_GID.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Sort_GID１, Me.Sort_GID2, Me.ToolStripSeparator9, Me.gid_country})
         Me.sort_GID.Image = CType(resources.GetObject("sort_GID.Image"), System.Drawing.Image)
         Me.sort_GID.Name = "sort_GID"
-        Me.sort_GID.Size = New System.Drawing.Size(136, 22)
+        Me.sort_GID.Size = New System.Drawing.Size(176, 22)
         Me.sort_GID.Text = "ゲームID"
         '
         'Sort_GID１
@@ -376,7 +378,7 @@ Partial Class MERGE
         Me.name_sort.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Sort_GTitle1, Me.Sort_GTitle2, Me.ToolStripSeparator10, Me.gname_country})
         Me.name_sort.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.abc
         Me.name_sort.Name = "name_sort"
-        Me.name_sort.Size = New System.Drawing.Size(136, 22)
+        Me.name_sort.Size = New System.Drawing.Size(176, 22)
         Me.name_sort.Text = "ゲーム名"
         '
         'Sort_GTitle1
@@ -410,21 +412,24 @@ Partial Class MERGE
         'ソート防止番号ToolStripMenuItem
         '
         Me.ソート防止番号ToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ARの自動ソート防止, Me.AR自動ソート防止番号を除去})
+        Me.ソート防止番号ToolStripMenuItem.Image = Global.CWcheat_Database_Editor.My.Resources.Resources.nosort
         Me.ソート防止番号ToolStripMenuItem.Name = "ソート防止番号ToolStripMenuItem"
-        Me.ソート防止番号ToolStripMenuItem.Size = New System.Drawing.Size(136, 22)
-        Me.ソート防止番号ToolStripMenuItem.Text = "ソート防止"
+        Me.ソート防止番号ToolStripMenuItem.Size = New System.Drawing.Size(176, 22)
+        Me.ソート防止番号ToolStripMenuItem.Text = "AR自動ソート防止"
         '
         'ARの自動ソート防止
         '
         Me.ARの自動ソート防止.Name = "ARの自動ソート防止"
         Me.ARの自動ソート防止.Size = New System.Drawing.Size(236, 22)
         Me.ARの自動ソート防止.Text = "AR自動ソート防止番号を付加"
+        Me.ARの自動ソート防止.ToolTipText = "アクションリプレイで自動ソートされないよう" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "コードタイトル先頭に4桁番号をつけてブロックします" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "//実行後" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "DB1" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "DB2" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "↓" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "0000_DB1" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "0001_DB2"
         '
         'AR自動ソート防止番号を除去
         '
         Me.AR自動ソート防止番号を除去.Name = "AR自動ソート防止番号を除去"
         Me.AR自動ソート防止番号を除去.Size = New System.Drawing.Size(236, 22)
         Me.AR自動ソート防止番号を除去.Text = "AR自動ソート防止番号を除去"
+        Me.AR自動ソート防止番号を除去.ToolTipText = "コードタイトル先頭についた4桁番号を除去します" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "//実行後" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "0000_DB1" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "0001_DB2" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "↓" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "DB1" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "DB2"
         '
         'codepage_select
         '
@@ -898,6 +903,7 @@ Partial Class MERGE
         Me.GOOGLESVN.Name = "GOOGLESVN"
         Me.GOOGLESVN.Size = New System.Drawing.Size(194, 22)
         Me.GOOGLESVN.Text = "GOOGLESVNからDL"
+        Me.GOOGLESVN.ToolTipText = "実験版含む最新版"
         '
         'ToolStripSeparator8
         '
@@ -955,8 +961,8 @@ Partial Class MERGE
         Me.PAPARX01TEST.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ARMAX2, Me.ARTOOLBATTERY, Me.ToolStripSeparator19, Me.PREVENTSORT})
         Me.PAPARX01TEST.Name = "PAPARX01TEST"
         Me.PAPARX01TEST.Size = New System.Drawing.Size(363, 22)
-        Me.PAPARX01TEST.Text = "ARBIN出力PAPARX01(NIGTHTY)"
-        Me.PAPARX01TEST.ToolTipText = "PAPARX01のフラグ出力てすと" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "保存時のみ実行コードのフラグ反映対応" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ARソート防止が必須"
+        Me.PAPARX01TEST.Text = "ARBINのPAPARX01フラグ対応"
+        Me.PAPARX01TEST.ToolTipText = "PAPARX01の実行状態フラグの読込保存を有効にします" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ただし保存はARソート防止番号付けないと多分フラグがずれるので注意"
         '
         'ARMAX2
         '
@@ -965,12 +971,14 @@ Partial Class MERGE
         Me.ARMAX2.Name = "ARMAX2"
         Me.ARMAX2.Size = New System.Drawing.Size(284, 22)
         Me.ARMAX2.Text = "ARMAX2"
+        Me.ARMAX2.ToolTipText = "アクションリプレイMAX２"
         '
         'ARTOOLBATTERY
         '
         Me.ARTOOLBATTERY.Name = "ARTOOLBATTERY"
         Me.ARTOOLBATTERY.Size = New System.Drawing.Size(284, 22)
         Me.ARTOOLBATTERY.Text = "AR(TOOLBATTERY)"
+        Me.ARTOOLBATTERY.ToolTipText = "アクションリプレイ バッテリー改造版"
         '
         'ToolStripSeparator19
         '
@@ -982,6 +990,9 @@ Partial Class MERGE
         Me.PREVENTSORT.Name = "PREVENTSORT"
         Me.PREVENTSORT.Size = New System.Drawing.Size(284, 22)
         Me.PREVENTSORT.Text = "保存時ARのソート防止番号を付加する"
+        Me.PREVENTSORT.ToolTipText = "アクションリプレイはBIN読み込み時必ずソートを実行するため" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "ソート妨害しないとフラグがばらばらになってしまいます" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "//AR強制自動ソートの仕様" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "DB " & _
+    "YY" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "DB XX" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "FLAG YY XX" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "↓" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "DB XX" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "DB YY" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "FLAG YY XX  <=フラグの方は変わらないのでXXにYYのフラグが適用さ" & _
+    "れてしまう"
         '
         'ヘルプHToolStripMenuItem
         '
@@ -1202,6 +1213,9 @@ Partial Class MERGE
         Me.iconset.Images.SetKeyName(1, "sony psp.png")
         Me.iconset.Images.SetKeyName(2, "code title.png")
         Me.iconset.Images.SetKeyName(3, "code selected.png")
+        Me.iconset.Images.SetKeyName(4, "code_hidden")
+        Me.iconset.Images.SetKeyName(5, "hide_game.png")
+        Me.iconset.Images.SetKeyName(6, "zip.png")
         '
         'GID_tb
         '
@@ -1506,7 +1520,7 @@ Partial Class MERGE
         Me.button_list.Enabled = False
         Me.button_list.FormattingEnabled = True
         Me.button_list.Items.AddRange(New Object() {"セレクト", "スタート", "↑", "→", "↓", "←", "Lトリガー", "Rトリガー", "△", "○", "Ｘ", "□", "HOME", "HOLD", "ミュート", "スクリーン", "音量+", "音量-", "WLAN UP", "REMOTE HOLD"})
-        Me.button_list.Location = New System.Drawing.Point(519, 207)
+        Me.button_list.Location = New System.Drawing.Point(520, 210)
         Me.button_list.Name = "button_list"
         Me.button_list.Size = New System.Drawing.Size(260, 200)
         Me.button_list.TabIndex = 9
@@ -1515,7 +1529,7 @@ Partial Class MERGE
         '
         Me.inverse_chk.AutoSize = True
         Me.inverse_chk.Enabled = False
-        Me.inverse_chk.Location = New System.Drawing.Point(561, 190)
+        Me.inverse_chk.Location = New System.Drawing.Point(555, 190)
         Me.inverse_chk.Name = "inverse_chk"
         Me.inverse_chk.Size = New System.Drawing.Size(73, 16)
         Me.inverse_chk.TabIndex = 17
@@ -1717,12 +1731,32 @@ Partial Class MERGE
         'tt
         '
         Me.tt.AutoSize = True
-        Me.tt.Location = New System.Drawing.Point(522, 416)
+        Me.tt.Location = New System.Drawing.Point(522, 419)
         Me.tt.Name = "tt"
         Me.tt.Size = New System.Drawing.Size(38, 12)
         Me.tt.TabIndex = 36
         Me.tt.Text = "Label2"
         Me.tt.Visible = False
+        '
+        'HIDDEN
+        '
+        Me.HIDDEN.AutoSize = True
+        Me.HIDDEN.Location = New System.Drawing.Point(657, 133)
+        Me.HIDDEN.Name = "HIDDEN"
+        Me.HIDDEN.Size = New System.Drawing.Size(45, 16)
+        Me.HIDDEN.TabIndex = 37
+        Me.HIDDEN.Text = "隠し"
+        Me.HIDDEN.UseVisualStyleBackColor = True
+        '
+        'FOLDER
+        '
+        Me.FOLDER.AutoSize = True
+        Me.FOLDER.Location = New System.Drawing.Point(701, 132)
+        Me.FOLDER.Name = "FOLDER"
+        Me.FOLDER.Size = New System.Drawing.Size(59, 16)
+        Me.FOLDER.TabIndex = 38
+        Me.FOLDER.Text = "フォルダ"
+        Me.FOLDER.UseVisualStyleBackColor = True
         '
         'MERGE
         '
@@ -1730,6 +1764,8 @@ Partial Class MERGE
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoScroll = True
         Me.ClientSize = New System.Drawing.Size(779, 561)
+        Me.Controls.Add(Me.FOLDER)
+        Me.Controls.Add(Me.HIDDEN)
         Me.Controls.Add(Me.tt)
         Me.Controls.Add(Me.curr_line)
         Me.Controls.Add(Me.dmtext)
@@ -1974,5 +2010,7 @@ Partial Class MERGE
     Friend WithEvents ARTOOLBATTERY As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator19 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents PREVENTSORT As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents HIDDEN As System.Windows.Forms.CheckBox
+    Friend WithEvents FOLDER As System.Windows.Forms.CheckBox
 
 End Class

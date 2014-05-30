@@ -43,6 +43,16 @@ Public Class MERGE
         PAPARX01TEST.Checked = My.Settings.arpaparx
         PREVENTSORT.Checked = My.Settings.preventsort
 
+
+        If PAPARX01TEST.Checked = True Then
+            HIDDEN.Visible = True
+            FOLDER.Visible = True
+        Else
+            HIDDEN.Visible = False
+            FOLDER.Visible = False
+        End If
+
+
         cpstring.Checked = My.Settings.checkcpstr
         GBKOP.Checked = My.Settings.GBKOP
         CFEDIT.Checked = My.Settings.cfid
@@ -572,6 +582,11 @@ Public Class MERGE
         DATAGRID.Enabled = False
         dgedit.Enabled = False
         PSF.Enabled = False
+        HIDDEN.Enabled = False
+        FOLDER.Enabled = False
+        save_gc.Enabled = False
+        save_cc.Enabled = False
+
 
         USELIST.Enabled = False
         SHIFLIST.Enabled = False
@@ -629,6 +644,10 @@ Public Class MERGE
         DATAGRID.Enabled = False
         dgedit.Enabled = False
         NodeConvert.Visible = True
+        HIDDEN.Enabled = True
+        FOLDER.Enabled = False
+        save_gc.Enabled = True
+        save_cc.Enabled = False
 
         PSF.Enabled = True
         USELIST.Enabled = False
@@ -686,6 +705,10 @@ Public Class MERGE
         USELIST.Enabled = True
         SHIFLIST.Enabled = True
         SELECTLIST.Enabled = True
+        FOLDER.Enabled = True
+        HIDDEN.Enabled = True
+        save_gc.Enabled = False
+        save_cc.Enabled = True
 
         NodeConvert.Visible = True
         DATAGRID.Enabled = True
@@ -1709,6 +1732,15 @@ Public Class MERGE
                     .Text = GT_tb.Text
                     .Tag = GID_tb.Text
                 End With
+
+                If HIDDEN.Checked Then
+                    tv.Name = "HIDDEN"
+                    tv.ImageIndex = 5
+                Else
+                    tv.ImageIndex = 1
+                End If
+
+
                 If GID_tb.Text.Length = 13 AndAlso tv.Nodes.Count > 0 AndAlso tv.Nodes(0).Text = "(M)" Then
                     Dim save As New save_db
                     Dim bytesData As Byte() = Encoding.GetEncoding(1252).GetBytes(GID_tb.Text.Remove(4, 1))
@@ -1736,25 +1768,35 @@ Public Class MERGE
             Dim buffer As String = Nothing
             Dim i As Integer = 0
             Dim b5 As String = cmt_tb.Text
+            Dim cflag As Integer = 0
+
             cl_tb.Text = Nothing
             cmt_tb.Text = Nothing
-            If off_rd.Checked = True Then
                 If PSPAR.Checked = True Then
-                    buffer = "2" & vbCrLf
+                    cflag = 4
                 ElseIf TEMP.Checked = True Then
-                    buffer = "4" & vbCrLf
+                    cflag = 8
                 Else
-                    buffer = "0" & vbCrLf
-                End If
-            Else
-                If PSPAR.Checked = True Then
-                    buffer = "3" & vbCrLf
-                ElseIf TEMP.Checked = True Then
-                    buffer = "5" & vbCrLf
-                Else
-                    buffer = "1" & vbCrLf
-                End If
+                    cflag = 2
             End If
+
+            If on_rd.Checked = True Then
+                cflag += 1
+            End If
+
+            codetree.SelectedNode.ImageIndex = 2
+
+            If FOLDER.Checked = True Then
+                cflag += 64
+                codetree.SelectedNode.ImageIndex = 6
+            End If
+            If HIDDEN.Checked = True Then
+                cflag += 16
+                codetree.SelectedNode.ImageIndex = 4
+            End If
+
+
+            'buffer = Convert.ToChar(cflag) & vbCrLf
 
             If PSX = True Then
                 Dim r As New System.Text.RegularExpressions.Regex("[0-9a-fA-F]{8} [0-9a-zA-Z?]{4}", System.Text.RegularExpressions.RegexOptions.IgnoreCase)
@@ -1813,8 +1855,16 @@ Public Class MERGE
                     Next
                 End If
 
-                buffer &= "#" & dgtext.Text.Trim & vbCrLf
-                buffer &= "#" & dmtext.Text.Trim & vbCrLf
+                If (dgtext.Text.Trim <> "") Then
+                    buffer &= "#" & dgtext.Text.Trim & vbCrLf
+                End If
+
+                If (dmtext.Text.Trim <> "") Then
+                    buffer &= "#" & dmtext.Text.Trim & vbCrLf
+                End If
+
+
+                buffer = Convert.ToChar(cflag) & vbCrLf & buffer
 
 
                 If codetree.SelectedNode.Index = 0 AndAlso codetree.SelectedNode.Text = "(M)" Then
@@ -2114,6 +2164,10 @@ Public Class MERGE
         Dim sdm As New StringBuilder
         Dim scmt As New StringBuilder
         Dim scode As New StringBuilder
+        Dim cp As Byte() = Nothing
+        HIDDEN.Checked = False
+        FOLDER.Checked = False
+        inverse_chk.Checked = False
 
         Select Case codetree.SelectedNode.Level
 
@@ -2121,10 +2175,18 @@ Public Class MERGE
                 codetree.SelectedNode.SelectedImageIndex = 0
                 resets_level1() ' Sets appropriate access to code editing
             Case Is = 1
-                codetree.SelectedNode.SelectedImageIndex = 1
+
                 GID_tb.Text = codetree.SelectedNode.Tag.ToString.Trim
                 GT_tb.Text = codetree.SelectedNode.Text.Trim
                 resets_level2() ' Sets appropriate access to code editing
+
+                If codetree.SelectedNode.Name = "HIDDEN" Then
+                    HIDDEN.Checked = True
+                    codetree.SelectedNode.SelectedImageIndex = 5
+                Else
+                    codetree.SelectedNode.SelectedImageIndex = 1
+                End If
+
             Case Is = 2
                 Dim b1 As String = codetree.SelectedNode.Tag.ToString
                 Dim b2 As String() = b1.Split(CChar(vbCrLf))
@@ -2145,21 +2207,36 @@ Public Class MERGE
 
                     If i = 0 Then ' If on the first line, check if the code is enabled by default
 
-                        If s = "1" Or s = "3" Or s = "5" Then
+
+                        cp = Encoding.ASCII.GetBytes(s)
+
+                        If (cp(0) And 1) <> 0 Then
                             on_rd.Checked = True
                         Else
                             off_rd.Checked = True
                         End If
 
-                        If s = "4" Or s = "5" Then
+                        If (cp(0) And 8) = 8 Then
                             TEMP.Checked = True
-                        ElseIf s = "2" Or s = "3" Then
+                        ElseIf (cp(0) And 4) = 4 Then
                             PSPAR.Checked = True
-                        ElseIf s = "0" Or s = "1" Then
-                            CWC.Checked = True
-                        End If
 
-                        skip = True
+                            Else
+                                CWC.Checked = True
+                            End If
+
+                            If (cp(0) And 64) <> 0 Then
+                                FOLDER.Checked = True
+                                codetree.SelectedNode.SelectedImageIndex = 6
+                            End If
+
+                            If (cp(0) And 16) <> 0 Then
+                                HIDDEN.Checked = True
+                                codetree.SelectedNode.SelectedImageIndex = 4
+                            End If
+
+
+                            skip = True
 
                     End If
 
@@ -3115,6 +3192,14 @@ Public Class MERGE
     Private Sub PAPARX01TEST_Click(sender As Object, e As EventArgs) Handles PAPARX01TEST.Click
         PAPARX01TEST.Checked = Not PAPARX01TEST.Checked
         My.Settings.arpaparx = PAPARX01TEST.Checked
+        If PAPARX01TEST.Checked = True Then
+            HIDDEN.Visible = True
+            FOLDER.Visible = True
+        Else
+            HIDDEN.Visible = False
+            FOLDER.Visible = False
+        End If
+
 
     End Sub
 

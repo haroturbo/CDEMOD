@@ -334,6 +334,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Icons\nosort.png" />
     <None Include="Icons\save.png" />
     <None Include="Icons\alwaystop.png" />
     <None Include="Icons\abc.png" />
