@@ -44,10 +44,10 @@ Partial Class version
         Me.LinkLabel1.AutoSize = True
         Me.LinkLabel1.Location = New System.Drawing.Point(61, 111)
         Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(73, 12)
+        Me.LinkLabel1.Size = New System.Drawing.Size(47, 12)
         Me.LinkLabel1.TabIndex = 1
         Me.LinkLabel1.TabStop = True
-        Me.LinkLabel1.Text = "GOOGLESVN"
+        Me.LinkLabel1.Text = "GITHUB"
         Me.LinkLabel1.TextAlign = System.Drawing.ContentAlignment.TopCenter
         '
         'Label2
@@ -55,9 +55,9 @@ Partial Class version
         Me.Label2.AutoSize = True
         Me.Label2.Location = New System.Drawing.Point(39, 85)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(124, 12)
+        Me.Label2.Size = New System.Drawing.Size(130, 12)
         Me.Label2.TabIndex = 2
-        Me.Label2.Text = "BUILD:2014/05/31 5:29"
+        Me.Label2.Text = "BUILD:2016/06/06 22:44"
         '
         'CDEupdate
         '

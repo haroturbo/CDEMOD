@@ -70,7 +70,6 @@ Public Class MERGE
         codetree.Font = My.Settings.codetree
 
         GITHUB.Checked = My.Settings.updatesever
-        GOOGLESVN.Checked = Not GITHUB.Checked
 
 
         If My.Settings.savetype = True Then
@@ -2802,6 +2801,12 @@ Public Class MERGE
         s.clipboad("SCM")
     End Sub
 
+
+    Private Sub INI出力UTF8のみToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles INI出力UTF8のみToolStripMenuItem.Click
+        Dim s As New save_db
+        s.clipboad("INI")
+    End Sub
+
     Private Sub TAB出力ToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TABexport.Click
         Dim s As New save_db
         s.save_tab("TAB")
@@ -2973,11 +2978,8 @@ Public Class MERGE
 
     End Sub
 
-    Private Sub GOOGLE_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GOOGLESVN.Click
+    Private Sub GOOGLE_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
-        GOOGLESVN.Checked = Not GOOGLESVN.Checked
-        GITHUB.Checked = Not GOOGLESVN.Checked
-        My.Settings.updatesever = GITHUB.Checked
 
     End Sub
 
@@ -2990,8 +2992,7 @@ Public Class MERGE
 
     Private Sub GITHUB_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GITHUB.Click
 
-        GITHUB.Checked = Not GITHUB.Checked
-        GOOGLESVN.Checked = Not GITHUB.Checked
+        GITHUB.Checked = GITHUB.Checked
         My.Settings.updatesever = GITHUB.Checked
 
     End Sub

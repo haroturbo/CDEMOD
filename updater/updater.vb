@@ -17,9 +17,9 @@ Public Class updater
             sr.Close()
 
             'ダウンロードするファイル
-            '            Dim url As String = "http://unzu127xp.pa.land.to/mogura/writelog.php?dl=http://unzu127xp.pa.land.to/data/IJIRO/CDEMOD/bin/Release/CDE_CP932_FM4.exe"
+            'Dim url As String = "http://unzu127xp.pa.land.to/mogura/writelog.php?dl=http://unzu127xp.pa.land.to/data/IJIRO/CDEMOD/bin/Release/CDE_CP932_FM4.exe"
 
-            Dim url As String = "http://mkijiro.googlecode.com/svn/trunk/CODEDITOR/CDEMOD/bin/Release/CDE_CP932_FM4.exe"
+            Dim url As String = "https://github.com/haroturbo/CDEMOD/raw/master/bin/Release/CDE_CP932_FM4.exe"
 
             '保存先のファイル名
             Dim fileName As String = s

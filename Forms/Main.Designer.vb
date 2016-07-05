@@ -120,7 +120,6 @@ Partial Class MERGE
         Me.releasedate = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator12 = New System.Windows.Forms.ToolStripSeparator()
         Me.GITHUB = New System.Windows.Forms.ToolStripMenuItem()
-        Me.GOOGLESVN = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator8 = New System.Windows.Forms.ToolStripSeparator()
         Me.DBENCODE = New System.Windows.Forms.ToolStripMenuItem()
         Me.ENCTRING = New System.Windows.Forms.ToolStripMenuItem()
@@ -154,9 +153,10 @@ Partial Class MERGE
         Me.NodeConvert = New System.Windows.Forms.ToolStripMenuItem()
         Me.clipboad = New System.Windows.Forms.ToolStripMenuItem()
         Me.コードタイトルのみToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.INI出力UTF8のみToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CMFexport = New System.Windows.Forms.ToolStripMenuItem()
-        Me.SCMexport = New System.Windows.Forms.ToolStripMenuItem()
         Me.FCTXT = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SCMexport = New System.Windows.Forms.ToolStripMenuItem()
         Me.TABexport = New System.Windows.Forms.ToolStripMenuItem()
         Me.useFTP = New System.Windows.Forms.ToolStripMenuItem()
         Me.ftpdb = New System.Windows.Forms.ToolStripMenuItem()
@@ -869,7 +869,7 @@ Partial Class MERGE
         '
         'autoupdater
         '
-        Me.autoupdater.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.samename, Me.releasedate, Me.ToolStripSeparator12, Me.GITHUB, Me.GOOGLESVN})
+        Me.autoupdater.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.samename, Me.releasedate, Me.ToolStripSeparator12, Me.GITHUB})
         Me.autoupdater.Name = "autoupdater"
         Me.autoupdater.Size = New System.Drawing.Size(363, 22)
         Me.autoupdater.Text = "起動時最新版チェック"
@@ -897,13 +897,6 @@ Partial Class MERGE
         Me.GITHUB.Name = "GITHUB"
         Me.GITHUB.Size = New System.Drawing.Size(194, 22)
         Me.GITHUB.Text = "GITHUBからDL"
-        '
-        'GOOGLESVN
-        '
-        Me.GOOGLESVN.Name = "GOOGLESVN"
-        Me.GOOGLESVN.Size = New System.Drawing.Size(194, 22)
-        Me.GOOGLESVN.Text = "GOOGLESVNからDL"
-        Me.GOOGLESVN.ToolTipText = "実験版含む最新版"
         '
         'ToolStripSeparator8
         '
@@ -1019,7 +1012,7 @@ Partial Class MERGE
         Me.codetree.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.codetree.ContextMenuStrip = Me.ContextMenus
-        Me.codetree.Font = New System.Drawing.Font("ＭＳ ゴシック", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.codetree.Font = New System.Drawing.Font("MS Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.codetree.ImageIndex = 0
         Me.codetree.ImageList = Me.iconset
         Me.codetree.LabelEdit = True
@@ -1112,7 +1105,7 @@ Partial Class MERGE
         '
         'NodeConvert
         '
-        Me.NodeConvert.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.clipboad, Me.CMFexport, Me.SCMexport, Me.FCTXT, Me.TABexport})
+        Me.NodeConvert.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.clipboad, Me.INI出力UTF8のみToolStripMenuItem, Me.CMFexport, Me.FCTXT, Me.SCMexport, Me.TABexport})
         Me.NodeConvert.Name = "NodeConvert"
         Me.NodeConvert.Size = New System.Drawing.Size(184, 22)
         Me.NodeConvert.Text = "変換"
@@ -1121,8 +1114,9 @@ Partial Class MERGE
         '
         Me.clipboad.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.コードタイトルのみToolStripMenuItem})
         Me.clipboad.Name = "clipboad"
-        Me.clipboad.Size = New System.Drawing.Size(182, 22)
+        Me.clipboad.Size = New System.Drawing.Size(184, 22)
         Me.clipboad.Text = "クリップボード"
+        Me.clipboad.ToolTipText = "くりっぷぼーどにこぴーします"
         '
         'コードタイトルのみToolStripMenuItem
         '
@@ -1130,29 +1124,40 @@ Partial Class MERGE
         Me.コードタイトルのみToolStripMenuItem.Size = New System.Drawing.Size(184, 22)
         Me.コードタイトルのみToolStripMenuItem.Text = "コードタイトルのみ"
         '
+        'INI出力UTF8のみToolStripMenuItem
+        '
+        Me.INI出力UTF8のみToolStripMenuItem.Name = "INI出力UTF8のみToolStripMenuItem"
+        Me.INI出力UTF8のみToolStripMenuItem.Size = New System.Drawing.Size(184, 22)
+        Me.INI出力UTF8のみToolStripMenuItem.Text = "INI出力(UTF8のみ)"
+        Me.INI出力UTF8のみToolStripMenuItem.ToolTipText = "ppsspp用こーどふぁいるを出力します"
+        '
         'CMFexport
         '
         Me.CMFexport.Name = "CMFexport"
-        Me.CMFexport.Size = New System.Drawing.Size(182, 22)
+        Me.CMFexport.Size = New System.Drawing.Size(184, 22)
         Me.CMFexport.Text = "CMF出力"
-        '
-        'SCMexport
-        '
-        Me.SCMexport.Name = "SCMexport"
-        Me.SCMexport.Size = New System.Drawing.Size(182, 22)
-        Me.SCMexport.Text = "SCM出力"
+        Me.CMFexport.ToolTipText = "CMFUSIOn用こーどふぁいるを出力します"
         '
         'FCTXT
         '
         Me.FCTXT.Name = "FCTXT"
-        Me.FCTXT.Size = New System.Drawing.Size(182, 22)
+        Me.FCTXT.Size = New System.Drawing.Size(184, 22)
         Me.FCTXT.Text = "FCTXT出力"
+        Me.FCTXT.ToolTipText = "FREECHEAT用こーどふぁいるを出力します"
+        '
+        'SCMexport
+        '
+        Me.SCMexport.Name = "SCMexport"
+        Me.SCMexport.Size = New System.Drawing.Size(184, 22)
+        Me.SCMexport.Text = "SCM出力"
+        Me.SCMexport.ToolTipText = "SCM用こーどふぁいるを出力します"
         '
         'TABexport
         '
         Me.TABexport.Name = "TABexport"
-        Me.TABexport.Size = New System.Drawing.Size(182, 22)
+        Me.TABexport.Size = New System.Drawing.Size(184, 22)
         Me.TABexport.Text = "TAB出力(GBKのみ)"
+        Me.TABexport.ToolTipText = "cheatmaster用こーどふぁいるを出力します"
         '
         'useFTP
         '
@@ -1224,7 +1229,7 @@ Partial Class MERGE
             Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.GID_tb.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper
         Me.GID_tb.Enabled = False
-        Me.GID_tb.Font = New System.Drawing.Font("ＭＳ ゴシック", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.GID_tb.Font = New System.Drawing.Font("MS Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.GID_tb.ImeMode = System.Windows.Forms.ImeMode.Disable
         Me.GID_tb.Location = New System.Drawing.Point(321, 131)
         Me.GID_tb.MaxLength = 13
@@ -1239,7 +1244,7 @@ Partial Class MERGE
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GT_tb.Enabled = False
-        Me.GT_tb.Font = New System.Drawing.Font("ＭＳ ゴシック", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.GT_tb.Font = New System.Drawing.Font("MS Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.GT_tb.Location = New System.Drawing.Point(321, 95)
         Me.GT_tb.MaxLength = 72
         Me.GT_tb.Name = "GT_tb"
@@ -1278,7 +1283,7 @@ Partial Class MERGE
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.CT_tb.Enabled = False
-        Me.CT_tb.Font = New System.Drawing.Font("ＭＳ ゴシック", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.CT_tb.Font = New System.Drawing.Font("MS Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.CT_tb.Location = New System.Drawing.Point(321, 169)
         Me.CT_tb.MaxLength = 72
         Me.CT_tb.Name = "CT_tb"
@@ -1303,7 +1308,7 @@ Partial Class MERGE
         Me.cl_tb.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.cl_tb.Enabled = False
-        Me.cl_tb.Font = New System.Drawing.Font("ＭＳ ゴシック", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.cl_tb.Font = New System.Drawing.Font("MS Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.cl_tb.ImeMode = System.Windows.Forms.ImeMode.Disable
         Me.cl_tb.Location = New System.Drawing.Point(321, 207)
         Me.cl_tb.MaxLength = 0
@@ -1353,7 +1358,7 @@ Partial Class MERGE
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cmt_tb.Enabled = False
-        Me.cmt_tb.Font = New System.Drawing.Font("ＭＳ ゴシック", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
+        Me.cmt_tb.Font = New System.Drawing.Font("MS Gothic", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(128, Byte))
         Me.cmt_tb.Location = New System.Drawing.Point(321, 460)
         Me.cmt_tb.MaxLength = 0
         Me.cmt_tb.Multiline = True
@@ -1956,7 +1961,6 @@ Partial Class MERGE
     Friend WithEvents releasedate As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents samename As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator12 As System.Windows.Forms.ToolStripSeparator
-    Friend WithEvents GOOGLESVN As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MECAB半角カナToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MECABでローマ字ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents saveas_actionreplay As System.Windows.Forms.ToolStripMenuItem
@@ -2012,5 +2016,6 @@ Partial Class MERGE
     Friend WithEvents PREVENTSORT As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents HIDDEN As System.Windows.Forms.CheckBox
     Friend WithEvents FOLDER As System.Windows.Forms.CheckBox
+    Friend WithEvents INI出力UTF8のみToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 
 End Class

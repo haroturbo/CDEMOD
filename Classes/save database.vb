@@ -1514,7 +1514,7 @@ Public Class save_db
                                         cwcar = "_N "
                                     End If
                                     b1 &= "_C0 " & n1.Text.Trim & vbCrLf
-                                    If MODE <> "CLIP" AndAlso s = "0" AndAlso m.PSX = False Then
+                                    If MODE <> "CLIP" AndAlso cwcar = "_L " AndAlso m.PSX = False Then
                                         If nullcode = True Then
                                             scm &= "$ $2 $(FFFFFFFF FFFFFFFF)" & vbCrLf
                                         End If
@@ -1540,7 +1540,7 @@ Public Class save_db
                                         cwcar = "_N "
                                     End If
                                     b1 &= "_C1 " & n1.Text.Trim & vbCrLf
-                                    If MODE <> "CLIP" AndAlso s = "1" AndAlso m.PSX = False Then
+                                    If MODE <> "CLIP" AndAlso cwcar = "_L " AndAlso m.PSX = False Then
                                         If nullcode = True Then
                                             scm &= "$ $2 $(FFFFFFFF FFFFFFFF)" & vbCrLf
                                         End If
@@ -1572,57 +1572,60 @@ Public Class save_db
                                         scmclose = True
                                         nullcode = False
                                         If out = True AndAlso m.PSX = False Then
-                                            If (s.Substring(3, 1) = "4" Or s.Substring(3, 1) = "8" Or s.Substring(3, 1) = "5" Or s.Substring(3, 3) = "305" Or s.Substring(3, 3) = "306") _
-                                                AndAlso line = 0 Then
-                                                scm &= "$ $2 $(" & s.Trim.Replace("0x", "") & " "
-                                                line = 4
-                                            ElseIf s.Substring(3, 1) = "6" AndAlso line = 0 Then
-                                                scm &= "$ $2 $(" & s.Trim.Replace("0x", "") & " "
-                                                line = 6
-                                            ElseIf s.Substring(3, 2) = "F0" AndAlso line = 0 Then
-                                                scm &= "$暗号不可 $2 $(FFFFFFFF FFFFFFFF)" & vbCrLf
-                                                line = 15
-                                                nnnn = Convert.ToInt32(s.Substring(9, 2), 16)
-                                            ElseIf line = 15 Then
-                                                If nnnn > 0 Then
-                                                    nnnn -= 1
-                                                Else
-                                                    line = 0
-                                                End If
-                                            ElseIf line = 6 Then
-                                                If CInt(s.Substring(10, 1)) > 1 Then
-                                                    scm &= s.Trim.Replace("0x", "") & " "
-                                                    nnnn = CInt(s.Substring(10, 1))
-                                                    line = 9
-                                                Else
-                                                    scm &= s.Trim.Replace("0x", "") & ")" & vbCrLf
-                                                    line = 0
-                                                End If
-                                            ElseIf line = 9 Then
-                                                If s.Substring(3, 1) = "2" Or s.Substring(3, 1) = "3" Then
-                                                    scm &= s.Trim.Replace("0x", "") & ")" & vbCrLf
-                                                    nnnn = nnnn \ 2 - 1
+
+                                            If MODE = "SCM" Then
+                                                If (s.Substring(2, 1) = "4" Or s.Substring(2, 1) = "8" Or s.Substring(2, 1) = "5" Or s.Substring(2, 3) = "305" Or s.Substring(2, 3) = "306") _
+                                                    AndAlso line = 0 Then
+                                                    scm &= "$ $2 $(" & s.Trim.Replace("0x", "") & " "
+                                                    line = 4
+                                                ElseIf s.Substring(2, 1) = "6" AndAlso line = 0 Then
+                                                    scm &= "$ $2 $(" & s.Trim.Replace("0x", "") & " "
+                                                    line = 6
+                                                ElseIf s.Substring(2, 2) = "F0" AndAlso line = 0 Then
+                                                    scm &= "$暗号不可 $2 $(FFFFFFFF FFFFFFFF)" & vbCrLf
+                                                    line = 15
+                                                    nnnn = Convert.ToInt32(s.Substring(9, 2), 16)
+                                                ElseIf line = 15 Then
                                                     If nnnn > 0 Then
-                                                        line = 2
+                                                        nnnn -= 1
                                                     Else
                                                         line = 0
                                                     End If
-                                                Else
+                                                ElseIf line = 6 Then
+                                                    If CInt(s.Substring(9, 1)) > 1 Then
+                                                        scm &= s.Trim.Replace("0x", "") & " "
+                                                        nnnn = CInt(s.Substring(9, 1))
+                                                        line = 9
+                                                    Else
+                                                        scm &= s.Trim.Replace("0x", "") & ")" & vbCrLf
+                                                        line = 0
+                                                    End If
+                                                ElseIf line = 9 Then
+                                                    If s.Substring(2, 1) = "2" Or s.Substring(2, 1) = "3" Then
+                                                        scm &= s.Trim.Replace("0x", "") & ")" & vbCrLf
+                                                        nnnn = nnnn \ 2 - 1
+                                                        If nnnn > 0 Then
+                                                            line = 2
+                                                        Else
+                                                            line = 0
+                                                        End If
+                                                    Else
+                                                        scm &= s.Trim.Replace("0x", "") & ")" & vbCrLf
+                                                        line = 0
+                                                    End If
+                                                ElseIf line = 2 Then
+                                                    If nnnn > 0 Then
+                                                        scm &= "$└ $2 $(" & s.Trim.Replace("0x", "") & ")" & vbCrLf
+                                                    Else
+                                                        scm &= "$ $2 $(" & s.Trim.Replace("0x", "") & ")" & vbCrLf
+                                                        line = 0
+                                                    End If
+                                                ElseIf line = 4 Then
                                                     scm &= s.Trim.Replace("0x", "") & ")" & vbCrLf
                                                     line = 0
-                                                End If
-                                            ElseIf line = 2 Then
-                                                If nnnn > 0 Then
-                                                    scm &= "$└ $2 $(" & s.Trim.Replace("0x", "") & ")" & vbCrLf
                                                 Else
                                                     scm &= "$ $2 $(" & s.Trim.Replace("0x", "") & ")" & vbCrLf
-                                                    line = 0
                                                 End If
-                                            ElseIf line = 4 Then
-                                                scm &= s.Trim.Replace("0x", "") & ")" & vbCrLf
-                                                line = 0
-                                            Else
-                                                scm &= "$ $2 $(" & s.Trim.Replace("0x", "") & ")" & vbCrLf
                                             End If
 
                                             cmf &= cwcar & s.Trim & vbCrLf
@@ -1709,6 +1712,10 @@ Public Class save_db
                     filename &= ".txt"
 
                     writers(enc1, fctxt, filename)
+                ElseIf MODE = "INI" Then
+                    filename &= ".ini"
+                    filename = filename.Replace("-", "")
+                    writers(65001, cmf, filename) 'utf8だけ()
 
                 ElseIf MODE = "CMF" Then
                     filename &= ".cmf"
@@ -1723,7 +1730,7 @@ Public Class save_db
             End If
 
         Catch ex As Exception
-            MessageBox.Show(ex.Message)
+            MessageBox.Show(ex.Message & b1)
         End Try
 
     End Sub
@@ -1883,6 +1890,11 @@ Public Class save_db
                 tw.Write(bs, 0, bs.Length)
                 tw.Close()
             End If
+        ElseIf enc1 = 65001 Then
+
+            Dim tw As New StreamWriter(filename, False, System.Text.Encoding.GetEncoding(65001))
+            tw.Write(basetxt)
+            tw.Close()
 
         Else
 

@@ -22,12 +22,8 @@ Public Class version
     Private Sub LinkLabel1_LinkClicked(ByVal sender As System.Object, ByVal e As System.Windows.Forms.LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
         Dim m As MERGE
         m = CType(Me.Owner, MERGE)
-        If My.Settings.updatesever = False Then
-            Process.Start(m.browser, "http://code.google.com/p/mkijiro/source/browse/#svn%2Ftrunk%2FCODEDITOR%2FCDEMOD")
-        Else
+        Process.Start(m.browser, "https://github.com/haroturbo/CDEMOD")
 
-            Process.Start(m.browser, "https://github.com/haroturbo/CDEMOD")
-        End If
     End Sub
 
     Private Sub CDEupate_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CDEupdate.Click
