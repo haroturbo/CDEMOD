@@ -1,41 +1,52 @@
-https://web.archive.org/web/20210226034927/http://ijiro.daiwa-hotcom.com/data/CDE.html
+CWCheat Database Editor (CDEMOD) ドキュメント
+概要
+CDEMOD は、PSP 用のチートコード管理ツール「CWCheat」のデータベースファイル（cheat.db）を編集・管理するための Windows アプリケーションです。Visual Basic .NET で開発されており、GUI ベースでチートコードの追加・編集・削除が可能です。また、形態素解析エンジン MeCab を活用した日本語処理機能も搭載されています。
 
-📄 プロジェクト概要
-CDEMOD は、PSP 用チートツール「CWCheat」のデータベースを編集・管理するための Windows アプリケーションです。Visual Basic .NET で開発されており、GUI ベースで操作できます。日本語形態素解析エンジン MeCab を利用していることから、日本語データの処理にも対応していると考えられます。
+主な機能
+cheat.db ファイルの読み込みと保存
 
-📁 主なディレクトリとファイル構成
-Classes/, Forms/, Icons/: アプリケーションの主要なクラス、フォーム、アイコンなどのリソースが含まれています。
+ゲームタイトルやコードの追加・編集・削除
 
-CWcheat Database Editor.sln, CWcheat Database Editor.vbproj: Visual Studio 用のソリューションおよびプロジェクトファイルです。
+チートコードのカテゴリ分けと整理
 
-MecabDotNet.dll, libmecab.dll: MeCab を .NET から利用するためのラッパーおよびネイティブライブラリです。
+MeCab を用いた日本語タイトルの解析と表示
 
-updater/: アップデート関連の処理を行うモジュールが含まれている可能性があります。
+GUI による直感的な操作
 
-bin/Release/: ビルド済みの実行ファイルが出力されるディレクトリです。
+システム要件
+Windows 7 以降（Windows 10 推奨）
 
-🛠️ ビルド手順
-Visual Studio の準備: Visual Studio（推奨バージョンは 2010 以降）をインストールします。
+.NET Framework 4.0 以上
 
-リポジトリのクローン: 以下のコマンドでリポジトリをクローンします。
+MeCab ライブラリ（libmecab.dll および MecabDotNet.dll）
 
-bash
-コピーする
-編集する
-git clone https://github.com/haroturbo/CDEMOD.git
-プロジェクトの読み込み: CWcheat Database Editor.sln を Visual Studio で開きます。
+インストール方法
+GitHub リポジトリ からリポジトリをクローンまたは ZIP でダウンロードします。
 
-依存関係の確認: MecabDotNet.dll および libmecab.dll がプロジェクトに正しく参照されていることを確認します。
+Visual Studio を使用して CWcheat Database Editor.sln を開きます。
 
-ビルドの実行: 「ビルド」メニューから「ソリューションのビルド」を選択し、ビルドを実行します。
-GitHub
+必要に応じて libmecab.dll および MecabDotNet.dll をプロジェクトに追加します。
 
-🧩 主な機能（推定）
-CWCheat 用チートコードの追加・編集・削除
+プロジェクトをビルドし、実行可能ファイルを生成します。
 
-チートデータベースのインポートおよびエクスポート
+使用方法
+アプリケーションを起動します。
 
-日本語データの処理（MeCab を利用）
+メニューから cheat.db ファイルを開きます。
 
-GUI ベースの直感的な操作
+ゲームタイトルやチートコードを追加・編集・削除します。
+
+編集が完了したら、cheat.db ファイルを保存します。
+
+注意事項
+cheat.db ファイルのバックアップを取ってから編集を行ってください。
+
+MeCab を使用する場合、適切な辞書ファイルが必要です。
+
+本ツールは非公式のものであり、使用による問題については自己責任でお願いします。
+
+参考リンク
+GitHub リポジトリ: https://github.com/haroturbo/CDEMOD
+
+アーカイブされた公式ドキュメント: https://web.archive.org/web/20210226034927/http://ijiro.daiwa-hotcom.com/data/CDE.html
 
